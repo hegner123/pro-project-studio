@@ -45,13 +45,8 @@ app.use(
 );
 app.use(bodyParser.json());
 
-// DB Config
-const db =  process.env.MONGODB_URI || require("./config/keys").mongoURI;
-
 // Connect to MongoDB
-mongoose
-  .connect(
-    db,
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_wgbbwk93:80c2npv1lu9cgq6f99crf8jqip@ds129459.mlab.com:29459/heroku_wgbbwk93' ,
     { useNewUrlParser: true }
   )
   .then(() => console.log("MongoDB successfully connected"))
