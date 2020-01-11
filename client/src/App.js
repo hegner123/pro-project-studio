@@ -16,9 +16,7 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./components/dashboard/Dashboard";
 import Profile from "./components/dashboard/Profile";
 
-//From Act 11
-import Books from "./pages/Books";
-import Detail from "./pages/Detail";
+
 // import NoMatch from "./pages/NoMatch";
 
 import "./App.css";
@@ -54,8 +52,8 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/forgotpassword" component={ForgotPassword} />
 
-            <Route exact path="/books" component={Books} />
-            <Route exact path="/books/:id" component={Detail} />
+            
+            
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/profile" component={Profile} />

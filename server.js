@@ -8,7 +8,7 @@ const cors = require('cors');
 const users = require("./routes/api/users");
 
 //From Activity 11
-const routes = require("./routes");
+// const routes = require("./routes");
 
 const app = express();
 
@@ -66,7 +66,7 @@ require("./config/passport")(passport);
 app.use("/api/users", users);
 
 // Routes from Activity 11 file
-app.use(routes);
+// app.use(routes);
 
 const port = process.env.PORT || 5000;
 
