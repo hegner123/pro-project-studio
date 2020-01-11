@@ -5,6 +5,7 @@ const passport = require("passport");
 const multer = require('multer');
 const cors = require('cors');
 
+
 const users = require("./routes/api/users");
 
 //From Activity 11
@@ -16,7 +17,7 @@ app.use(express.static('public'))
 app.use(cors());
 
 // Multer Upload
-var storage = multer.diskStorage({
+let storage = multer.diskStorage({
   destination: (req, file, cb) => {
   cb(null, 'public/images/uploads') //this is where the file's going to be placed
 },
@@ -45,7 +46,7 @@ app.use(
 app.use(bodyParser.json());
 
 // DB Config
-const db = require("./config/keys").mongoURI;
+const db =  process.env.MONGODB_URI || require("./config/keys").mongoURI;
 
 // Connect to MongoDB
 mongoose

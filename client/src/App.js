@@ -52,8 +52,6 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/forgotpassword" component={ForgotPassword} />
 
-            
-            
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/profile" component={Profile} />
