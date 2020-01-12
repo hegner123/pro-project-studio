@@ -1,0 +1,21 @@
+.resultBox {
+  overflow: auto;
+  border: 1px black solid;
+  padding: 10px;
+  
+}
+h3 {
+  width: auto;
+}
+img {
+  float: left;
+  margin-right: 10px;
+}
+.summary {
+  clear: right;
+}
+button {
+  float: right;
+  margin: 5px;
+  
+}

@@ -1,9 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require('path')
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const multer = require('multer');
 const cors = require('cors');
+
 
 const users = require("./routes/api/users");
 
@@ -26,7 +28,7 @@ router.use(function(req, res) {
 });
 
 // Multer Upload
-var storage = multer.diskStorage({
+let storage = multer.diskStorage({
   destination: (req, file, cb) => {
   cb(null, 'public/images/uploads') //this is where the file's going to be placed
 },
@@ -54,15 +56,11 @@ app.use(
 );
 app.use(bodyParser.json());
 
-// DB Config
-const db = require("./config/keys").mongoURI;
-
 // Connect to MongoDB
-mongoose
-  .connect(
-    db,
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_wgbbwk93:80c2npv1lu9cgq6f99crf8jqip@ds129459.mlab.com:29459/heroku_wgbbwk93' ,
     { useNewUrlParser: true,
-      useCreateIndex: true, }
+      useUnifiedTopology: true,
+      useCreateIndex:true }
   )
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
@@ -73,12 +71,21 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-// Routes
-app.use("/api/users", users);
+
 
 // Routes from Activity 11 file
-// app.use(routes);
+app.use("/api/users", users);
+console.log(process.env.PORT);
 
-const port = process.env.PORT || 5000;
+// ... other app.use middleware 
+app.use(express.static(path.join(__dirname, "client", "build")));
+
+// ...
+// Right before your app.listen(), add this:
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+const port =   process.env.PORT || 3001;
+
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
