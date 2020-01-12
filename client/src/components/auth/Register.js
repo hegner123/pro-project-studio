@@ -61,12 +61,9 @@ class Register extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col s8 offset-s2">
-            <Link to="/" className="btn-flat waves-effect">
-              <i className="material-icons left">keyboard_backspace</i> Back to
-              home
-            </Link>
-            <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+          <div className="col-12 col-md-6 form-group text-white mx-auto">
+            <Link to="/" className="">Back to home</Link>
+            <div className="">
               <h4>
                 <b>Register</b> below
               </h4>
@@ -75,42 +72,42 @@ class Register extends Component {
               </p>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.email}
                   error={errors.email}
                   id="email"
                   type="email"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.email
                   })}
                 />
                 <label htmlFor="email">Email</label>
-                <span className="red-text">{errors.email}</span>
+                <span className="text-danger">{errors.email}</span>
               </div>
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.password}
                   error={errors.password}
                   id="password"
                   type="password"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.password
                   })}
                 />
                 <label htmlFor="password">Password</label>
-                <span className="red-text">{errors.password}</span>
+                <span className="text-danger">{errors.password}</span>
               </div>
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.password2}
                   error={errors.password2}
                   id="password2"
                   type="password"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.password2
                   })}
                 />
@@ -118,59 +115,59 @@ class Register extends Component {
                 <span className="red-text">{errors.password2}</span>
               </div>
               {/* First name */}
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.firstName}
                   error={errors.firstName}
                   id="firstName"
                   type="text"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.firstName
                   })}
                 />
                 <label htmlFor="name">First Name</label>
-                <span className="red-text">{errors.firstName}</span>
+                <span className="text-danger">{errors.firstName}</span>
               </div>
               {/* Last name */}
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.lastName}
                   error={errors.lastName}
                   id="lastName"
                   type="text"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.lastName
                   })}
                 />
                 <label htmlFor="name">Last Name</label>
-                <span className="red-text">{errors.lastName}</span>
+                <span className="text-danger">{errors.lastName}</span>
               </div>
               {/* Company name */}
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.companyName}
                   error={errors.companyName}
                   id="companyName"
                   type="text"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.companyName
                   })}
                 />
                 <label htmlFor="name">Company Name</label>
-                <span className="red-text">{errors.companyName}</span>
+                <span className="text-danger">{errors.companyName}</span>
               </div>
               {/* Phone Number */}
-              <div className="input-field col s12">
+              <div className="">
                 <input
                   onChange={this.onChange}
                   value={this.state.phoneNumber}
                   error={errors.phoneNumber}
                   id="phoneNumber"
                   type="text"
-                  className={classnames("", {
+                  className={classnames("form-control", {
                     invalid: errors.phoneNumber
                   })}
                 />
@@ -178,16 +175,10 @@ class Register extends Component {
                 <span className="red-text">{errors.phoneNumber}</span>
               </div>
 
-              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
+              <div className="">
                 <button
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                  className="btn bg-light"
                 >
                   Sign up
                 </button>
