@@ -16,26 +16,26 @@ const app = express();
 app.use(express.static('public'))
 app.use(cors());
 
-// // Multer Upload
-// let storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//   cb(null, 'public/images/uploads') //this is where the file's going to be placed
-// },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + '-' + file.originalname)
-// }
-// });
-// const upload = multer({ storage })
+// Multer Upload
+let storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+  cb(null, 'public/images/uploads') //this is where the file's going to be placed
+},
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname)
+}
+});
+const upload = multer({ storage })
 
-// // Upload Route for files
-// app.post('/upload', upload.single('image'), (req, res) => {
-// 	if (req.file)
-// 		res.json({
-// 			imageUrl: `images/uploads/${req.file.filename}`
-// 	});
-// 	else
-// 		res.status("409").json("No Files to Upload.");
-// });
+// Upload Route for files
+app.post('/upload', upload.single('image'), (req, res) => {
+	if (req.file)
+		res.json({
+			imageUrl: `images/uploads/${req.file.filename}`
+	});
+	else
+		res.status("409").json("No Files to Upload.");
+});
 
 // Bodyparser middleware
 app.use(
@@ -60,12 +60,18 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-// Routes
-app.use("/api/users", users);
+
 
 // Routes from Activity 11 file
-// app.use(routes);
+app.use("/api/users", users);
 
-const port =  3001 || process.env.PORT;
+const port =   findPort(process.env.PORT);
+
+function findPort(hPort){
+  if (process.env.PORT = 5000){
+    return hPort - 1;
+  }
+  
+}
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
