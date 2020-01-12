@@ -75,7 +75,7 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-const port =   process.env.PORT || 3000;
+const port =   process.env.PORT || 3001;
 
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
