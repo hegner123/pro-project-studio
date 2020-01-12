@@ -64,8 +64,9 @@ require("./config/passport")(passport);
 
 // Routes from Activity 11 file
 app.use("/api/users", users);
+console.log(process.env.PORT);
+const port =   process.env.PORT || findPort(process.env.PORT);
 
-const port =   findPort(process.env.PORT);
 
 function findPort(hPort){
   if (process.env.PORT = 5000){
