@@ -20,6 +20,11 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
 
+// If no API routes are hit, send the React app
+router.use(function(req, res) {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
 // Multer Upload
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
