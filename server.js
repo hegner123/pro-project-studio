@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require('path')
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const multer = require('multer');
@@ -65,14 +66,16 @@ require("./config/passport")(passport);
 // Routes from Activity 11 file
 app.use("/api/users", users);
 console.log(process.env.PORT);
-const port =   process.env.PORT || findPort(process.env.PORT);
 
+// ... other app.use middleware 
+app.use(express.static(path.join(__dirname, "client", "build")));
 
-function findPort(hPort){
-  if (process.env.PORT = 5000){
-    return hPort - 1;
-  }
-  
-}
+// ...
+// Right before your app.listen(), add this:
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+const port =   process.env.PORT || 3000;
+
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));
