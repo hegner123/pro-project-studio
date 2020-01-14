@@ -6,10 +6,10 @@ router.route("/")
   .get(projectController.findAll)
   // .post(projectController.create);
 
-// // Matches with "/api/books/:id"
-// router
-//   .route("/:id")
-//   .get(booksController.findById)
+// Matches with "/api/projects/:id"
+router
+  .route("/:id")
+  .get(projectController.findById)
 //   .put(booksController.update)
 //   .delete(booksController.remove);
 

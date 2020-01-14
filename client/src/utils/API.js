@@ -4,11 +4,11 @@ export default {
   // Gets all projects
   getProjects: function() {
     return axios.get("/api/projects");
+  },
+    // Gets the book with the given id
+  getProject: function(id) {
+    return axios.get("/api/projects/" + id);
   }
-  //   // Gets the book with the given id
-//   getBook: function(id) {
-//     return axios.get("/api/books/" + id);
-//   },
 //   // Deletes the book with the given id
 //   deleteBook: function(id) {
 //     return axios.delete("/api/books/" + id);

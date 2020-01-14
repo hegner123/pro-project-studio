@@ -17,7 +17,8 @@ const ProjectSchema = new Schema({
             })]
         })],
   members: {type: Array, default: []},
-  total_arrangements: Number
+  total_arrangements: Number,
+  companyName: String
 });
 
 module.exports = Project = mongoose.model("projects", ProjectSchema);

@@ -15,7 +15,7 @@ app.use(express.static('public'))
 app.use(cors());
 
 const routes = require("./routes");
-app.use(routes);
+
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
@@ -57,9 +57,9 @@ app.use(
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pro-project-studio" ,
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mernauth" ,
     { useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useUnifiedTopology: true,
       useCreateIndex:true }
   )
   .then(() => console.log("MongoDB successfully connected"))
@@ -72,15 +72,16 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use("/api/users", users);
+app.use(routes);
 
-// ... other app.use middleware
-app.use(express.static(path.join(__dirname, "client", "build")));
+// // ... other app.use middleware
+// app.use(express.static(path.join(__dirname, "client", "build")));
 
-// ...
-// Right before your app.listen(), add this:
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
+// // ...
+// // Right before your app.listen(), add this:
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
 const port =   process.env.PORT || 5000;
 
 
