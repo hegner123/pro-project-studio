@@ -6,16 +6,16 @@ const passport = require("passport");
 const multer = require('multer');
 const cors = require('cors');
 
-
 const users = require("./routes/api/users");
-
-//From Activity 11
-// const routes = require("./routes");
+const router = require("express").Router();
 
 const app = express();
 
 app.use(express.static('public'))
 app.use(cors());
+
+const routes = require("./routes");
+app.use(routes);
 
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
@@ -57,7 +57,7 @@ app.use(
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_wgbbwk93:80c2npv1lu9cgq6f99crf8jqip@ds129459.mlab.com:29459/heroku_wgbbwk93' ,
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mernauth" ,
     { useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex:true }
@@ -85,7 +85,7 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-const port =   process.env.PORT || 3001;
+const port =   process.env.PORT || 5000;
 
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

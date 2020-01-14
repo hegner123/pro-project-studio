@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 
 
-const projectSchema = new Schema({
+const ProjectSchema = new Schema({
   title: { type: String, required: true },
   song: [ new Schema ({
             song_title: String,
@@ -20,6 +20,4 @@ const projectSchema = new Schema({
   total_arrangements: Number
 });
 
-const Project = mongoose.model("Project", projectSchema);
-
-module.exports = Project;
+module.exports = Project = mongoose.model("projects", ProjectSchema);
