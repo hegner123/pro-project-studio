@@ -6,16 +6,26 @@ const passport = require("passport");
 const multer = require('multer');
 const cors = require('cors');
 
-
 const users = require("./routes/api/users");
-
-//From Activity 11
-// const routes = require("./routes");
+const router = require("express").Router();
 
 const app = express();
 
 app.use(express.static('public'))
 app.use(cors());
+
+const routes = require("./routes");
+
+
+// Serve up static assets (usually on heroku)
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+}
+
+// If no API routes are hit, send the React app
+router.use(function(req, res) {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 // Multer Upload
 let storage = multer.diskStorage({
@@ -47,9 +57,9 @@ app.use(
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pro-project-studio" ,
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mernauth" ,
     { useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useUnifiedTopology: true,
       useCreateIndex:true }
   )
   .then(() => console.log("MongoDB successfully connected"))
@@ -62,16 +72,17 @@ app.use(passport.initialize());
 require("./config/passport")(passport);
 
 app.use("/api/users", users);
+app.use(routes);
 
-// ... other app.use middleware
-app.use(express.static(path.join(__dirname, "client", "build")));
+// // ... other app.use middleware
+// app.use(express.static(path.join(__dirname, "client", "build")));
 
-// ...
-// Right before your app.listen(), add this:
-app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-const port =   process.env.PORT || 3001;
+// // ...
+// // Right before your app.listen(), add this:
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
+const port =   process.env.PORT || 5000;
 
 
 app.listen(port, () => console.log(`Server up and running on port ${port} !`));

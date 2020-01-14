@@ -3,11 +3,35 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 
+import API from "../../utils/API";
+import ProjectComponent from "./ProjectComponent";
+
 class Dashboard extends Component {
+
+  state = {
+    projects: []
+  };
+
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
   };
+
+  componentDidMount() {
+    this.loadProjects();
+  }
+
+  loadProjects = () => {
+    API.getProjects()
+      .then(res => {
+        this.setState({ projects: res.data });
+        console.log(("project array" + JSON.stringify(this.state.projects)));
+        console.log(("project array first item" + this.state.projects[0].title));
+      })
+
+      .catch(err => console.log(err));
+  };
+
 
   render() {
     const { user } = this.props.auth;
@@ -28,6 +52,16 @@ class Dashboard extends Component {
             </button>
           </div>
         </div>
+
+        <h3>Projects</h3>
+           
+           {this.state.projects.map(project => (
+             <ProjectComponent
+               title={project.title}
+             />
+           
+           )) }      
+
       </div>
     );
   }

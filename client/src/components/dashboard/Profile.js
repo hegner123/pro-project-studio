@@ -59,7 +59,7 @@ class Profile extends Component {
         <div className="row">
           <div className="landing-copy col s12 center-align">
             <h4>
-              <b>Hey there,</b> {user.name.split(" ")[0]}
+              <b>Hey there,</b> {user.firstName.split(" ")[0]}
               <p className="flow-text grey-text text-darken-1">
                 You are now at profile page!
               </p>

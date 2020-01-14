@@ -13,11 +13,11 @@ const UserSchema = new Schema({
   },
   companyName: {
     type: String,
-    required: true
+    required: false
   },
   phoneNumber: {
     type: String,
-    required: true
+    required: false
   },
   email: {
     type: String,
@@ -30,12 +30,13 @@ const UserSchema = new Schema({
   date: {
     type: Date,
     default: Date.now
-  },
-  role: {
-    type: String,
-    default: 'Admin'
-  },
-  projects: []
+  }
+  // ,
+  // role: {
+  //   type: String,
+  //   default: 'Admin'
+  // },
+  // projects: {type: Array, default: []}
 });
 
 module.exports = User = mongoose.model("users", UserSchema);

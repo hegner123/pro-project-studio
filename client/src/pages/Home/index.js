@@ -18,7 +18,7 @@ to keep track of your recording projects.</h3>
          </div>
 
          <div className="col-6 d-flex">
-           <img src= {Image} className="landing-page-img" />
+           <img src= {Image} alt="logo" className="landing-page-img" />
          </div>
 
        </div>
