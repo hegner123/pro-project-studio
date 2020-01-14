@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import Table from "../../components/Table";
 import "./css/style.css";
 
 class Dashboard extends Component {
@@ -21,7 +22,7 @@ class Dashboard extends Component {
           </div>
           <div className="dashboard-box">
           <div className="col-12 text-center m-auto">
-
+      <Table/>
             <button
               onClick={this.onLogoutClick}
               className="btn btn-dark bg-dark mt-5"
