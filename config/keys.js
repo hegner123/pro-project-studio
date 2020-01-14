@@ -1,4 +1,4 @@
 module.exports = {
-  mongoURI: "mongodb://localhost/mernauth",
+  mongoURI: "mongodb://localhost/pro-project-studio",
   secretOrKey: "secret"
 };

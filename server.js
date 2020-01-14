@@ -47,7 +47,7 @@ app.use(
 app.use(bodyParser.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://heroku_wgbbwk93:80c2npv1lu9cgq6f99crf8jqip@ds129459.mlab.com:29459/heroku_wgbbwk93' ,
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pro-project-studio" ,
     { useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex:true }
@@ -61,13 +61,9 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-
-
-// Routes from Activity 11 file
 app.use("/api/users", users);
-console.log(process.env.PORT);
 
-// ... other app.use middleware 
+// ... other app.use middleware
 app.use(express.static(path.join(__dirname, "client", "build")));
 
 // ...
