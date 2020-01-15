@@ -26,7 +26,7 @@ class Dashboard extends Component {
     API.getProjects()
       .then(res => {
         this.setState({ projects: res.data });
-        console.log(("project array" + JSON.stringify(this.state.projects)));
+        // console.log(("project array" + JSON.stringify(this.state.projects)));
       })
 
       .catch(err => console.log(err));
