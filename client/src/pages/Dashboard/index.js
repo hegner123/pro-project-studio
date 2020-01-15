@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import Table from "../../components/Table";
-import "./css/style.css";
+// import Table from "../../components/Table";
+import "./style.css";
 import API from "../../utils/API";
-import ProjectComponent from "./ProjectComponent";
+import ProjectComponent from "../../components/ProjectComponent";
 
 
 class Dashboard extends Component {
@@ -41,32 +41,31 @@ class Dashboard extends Component {
       <div className="container text-white">
         <div className="row">
           <div className="dashboard-header col-12">
-            <h1>{user.firstName.split(" ")[0]}</h1>
-            <button
-              onClick={this.onLogoutClick}
-              className="btn btn-dark bg-dark mt-5"
-            >
-              Logout
-            </button>
+            <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
           </div>
           <div className="dashboard-box">
           {/* <h3>Projects</h3> */}
           <div className="project-container">
-
            {this.state.projects.map(project => (
              <ProjectComponent
                title={project.title}
                company = {project.companyName}
                key={project._id}
                id = {project._id}
-
              />
 
            )) }
 
           </div>
           </div>
+          <button
+              onClick={this.onLogoutClick}
+              className="btn btn-dark bg-dark mt-5"
+            >
+              Logout
+            </button>
         </div>
+
       </div>
     );
   }

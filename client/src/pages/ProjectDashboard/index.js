@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import "./css/style.css";
+import "./style.css";
 import API from "../../utils/API";
-import ProjectDetail from "./ProjectDetail";
+import ProjectDetail from "../../components/ProjectDetails";
+
 
 class ProjectDashboard extends Component {
   state = {
@@ -27,6 +28,8 @@ class ProjectDashboard extends Component {
       .catch(err => console.log(err));
   }
 
+
+
   // loadProjects = () => {
   //   API.getProjects()
   //     .then(res => {
@@ -40,14 +43,17 @@ class ProjectDashboard extends Component {
 
 
   render() {
-    const { user } = this.props.auth;
 
     return (
       <div className="container text-white">
         <div className="row">
 
+          <ProjectDetail
+           members = {this.state.project.members}
+           projectTitle = {this.state.project.title}/>
+          </div>
         </div>
-      </div>
+
     );
   }
 }

@@ -13,7 +13,7 @@ class Landing extends Component {
            <div className="header">
              <h1 className="text-white">Pro-Project Studio</h1>
              <h3 className="text-white">Make it easy for you and your clients
-to keep track of your recording projects.</h3>
+              to keep track of your recording projects.</h3>
            </div>
          </div>
 
