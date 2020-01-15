@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import "./css/style.css";
+import "./style.css";
 import API from "../../utils/API";
-import ProjectDetail from "./ProjectDetail";
-import Table from "../../components/table";
+// import ProjectDetail from "../../components/ProjectDetails";
+// import Table from "../../components/Table";
 import HeatMap from "react-heatmap-grid";
 
 class ProjectDashboard extends Component {
@@ -60,48 +60,52 @@ class ProjectDashboard extends Component {
 
 
 
+
+
   render() {
     const { user } = this.props.auth;
     console.log("render, this.state.data", this.state.data);
 
     return (
-      <div className="container text-white">
+      <div className="container">
         <div className="row">
                     <div className="dashboard-box">
-         
-          <div className="project-container">
+          <div className="project-container col-12">
             <h3>{this.state.project.title}</h3>
-            <div>
-            <div style={{ fontSize: "13px" }}>
-          <HeatMap
-            xLabels={this.state.songList}
-            yLabels={this.state.arrangement}
-            // xLabels={['test1', 'test2']}
-            // yLabels={['test3', 'test4']}
-            // data={[[1, 2], [3, 4]]}
-            xLabelsLocation={"bottom"}
-            //xLabelsVisibility={xLabelsVisibility}
-            xLabelWidth={60}
-            data={new Array(this.state.arrangement.length)
-              .fill(0)
-              .map(() => new Array(this.state.songList.length).fill(0).map(() => Math.floor(Math.random() * 100)))
-            }
-            squares
-            //onClick={(x, y) => alert(`Clicked ${x}, ${y}`)}
-            cellStyle={(background, value, min, max, data, x, y) => ({
-              background: `rgb(0, 151, 230, ${1 - (max - value) / (max - min)})`,
-              fontSize: "11.5px",
-              color: "#000"
-            })}
-            cellRender={value => value && `${value}%`}
-          />
-            </div>
-            </div>
+
+                  <div className="row">
+                    <div className="col-12 ml-5 mt-5">
+              <HeatMap
+                xLabels={this.state.songList}
+                yLabels={this.state.arrangement}
+                // xLabels={['test1', 'test2']}
+                // yLabels={['test3', 'test4']}
+                // data={[[1, 2], [3, 4]]}
+                xLabelsLocation={"bottom"}
+                //xLabelsVisibility={xLabelsVisibility}
+                xLabelWidth={60}
+                data={new Array(this.state.arrangement.length)
+                  .fill(0)
+                  .map(() => new Array(this.state.songList.length).fill(0).map(() => Math.floor(Math.random() * 100)))
+                }
+                squares
+                onClick={(x, y) => this.cycle(x, y )}
+                cellStyle={(background, value, min, max, data, x, y) => ({
+                  fontSize: "0.5rem",
+                  color: "#000"
+                })}
+                cellRender={value => value && `${value}%`}
+              />
+              </div>
+              </div>
+            
+            
           </div>
           </div>
         </div>
-      </div>
-    ); 
+        </div>
+
+    );
   }
 }
 

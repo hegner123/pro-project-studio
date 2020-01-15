@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import HeatMap from "react-heatmap-grid";
 
 function Table (props) {
