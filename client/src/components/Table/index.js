@@ -2,17 +2,15 @@ import React, { Component } from "react";
 import HeatMap from "react-heatmap-grid";
 
   class Table extends Component{
+    state={
+      data: ["song1", "song2", "song3"]
+    }
 
   
 
-  render() {
-    const xLabels = new Array(24).fill(0).map((_, i) => `${i}`);
+  render(props) {
+    const xLabels = this.state.data;
 
-    // Display only even labels
-    const xLabelsVisibility = new Array(24)
-      .fill(0)
-      .map((_, i) => (i % 2 === 0 ? true : false));
-    
     const yLabels = ["Sun", "Mon", "Tue"];
     const data = new Array(yLabels.length)
       .fill(0)
@@ -30,7 +28,7 @@ import HeatMap from "react-heatmap-grid";
    xLabels={xLabels}
    yLabels={yLabels}
    xLabelsLocation={"bottom"}
-   xLabelsVisibility={xLabelsVisibility}
+   
    xLabelWidth={50}
    data={data}
    squares

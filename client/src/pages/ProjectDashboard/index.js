@@ -5,6 +5,7 @@ import { logoutUser } from "../../actions/authActions";
 import "./style.css";
 import API from "../../utils/API";
 import ProjectDetail from "../../components/ProjectDetails";
+import Table from "../../components/Table";
 
 
 class ProjectDashboard extends Component {
@@ -47,11 +48,14 @@ class ProjectDashboard extends Component {
     return (
       <div className="container text-white">
         <div className="row">
-
+        
           <ProjectDetail
            members = {this.state.project.members}
-           projectTitle = {this.state.project.title}/>
+           projectTitle = {this.state.project.title}>
+
+           </ProjectDetail>
           </div>
+          
         </div>
 
     );
