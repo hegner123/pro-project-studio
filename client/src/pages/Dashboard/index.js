@@ -40,12 +40,12 @@ class Dashboard extends Component {
     return (
       <div className="container text-white">
         <div className="row">
-          <div className="dashboard-header col-12">
+          <div className=" col-12">
             <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
           </div>
-          <div className="dashboard-box">
+          
           {/* <h3>Projects</h3> */}
-          <div className="project-container">
+          <div className="">
            {this.state.projects.map(project => (
              <ProjectComponent
                title={project.title}
@@ -56,16 +56,18 @@ class Dashboard extends Component {
 
            )) }
 
-          </div>
-          </div>
-          <button
+          
+          
+        
+            </div>
+            
+        </div>
+        <button
               onClick={this.onLogoutClick}
               className="btn btn-dark bg-dark mt-5"
             >
               Logout
             </button>
-        </div>
-
       </div>
     );
   }
