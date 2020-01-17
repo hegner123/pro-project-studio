@@ -8,6 +8,7 @@ import API from "../../utils/API";
 // import Table from "../../components/Table";
 import HeatMap from "react-heatmap-grid";
 
+
 class ProjectDashboard extends Component {
   state = {
     project: [],
@@ -63,16 +64,17 @@ class ProjectDashboard extends Component {
 
 
   render() {
-    const { user } = this.props.auth;
+   
     console.log("render, this.state.data", this.state.data);
 
     return (
       <div className="container">
         <div className="row">
                     <div className="dashboard-box">
-          <div className="project-container col-12">
+          <div className="project-container col-6">
             <h3>{this.state.project.title}</h3>
-
+          </div>
+          
                   <div className="row">
                     <div className="col-12 ml-5 mt-5">
               <HeatMap
@@ -103,7 +105,7 @@ class ProjectDashboard extends Component {
           </div>
           </div>
         </div>
-        </div>
+        
 
     );
   }

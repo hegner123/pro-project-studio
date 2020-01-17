@@ -6,7 +6,7 @@ import Image from "./images/Image1.svg"
 class Landing extends Component {
   render() {
     return (
-     <div className="container-fluid full">
+     <div className="container full">
        <div className="row">
 
          <div className="col-6 d-flex ">
@@ -20,6 +20,8 @@ class Landing extends Component {
          <div className="col-6 d-flex">
            <img src= {Image} alt="logo" className="landing-page-img" />
          </div>
+
+
 
        </div>
 

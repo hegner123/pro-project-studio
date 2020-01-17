@@ -13,5 +13,9 @@ body {
 
 
 .full {
-  height: 100vh;
+  height: 60vh;
+}
+
+.custom{
+  margin-top: 50%;
 }
