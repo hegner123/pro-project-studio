@@ -5,7 +5,7 @@ function Image() {
   return (
     <div className="row">
       <div className="col-12 text-center">
-      <img src={Picture}/>
+      <img src={Picture} alt="text"/>
       </div>
     </div>
   );

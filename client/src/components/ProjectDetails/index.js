@@ -8,8 +8,8 @@ import Table from '../Table'
 
 function ProjectDetail(props,) {
   return (
-    <div className="project-details">
-      <div className= "details-box" >
+    <div >
+      <div >
       <p>Members: {props.members} </p>
       <p>Project Title: {props.projectTitle}</p>
       <Table

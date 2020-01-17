@@ -4,8 +4,8 @@ import './style.css';
 
 function ProjectComponent(props) {
   return (
-    <div className="resultBox">
-      <div className= "projectBox" >
+    
+      <div className= "test-one col-md-4 " >
       <h5 className="project-title">{props.title}</h5>
       <p>Client Name: {props.company}</p>
       <div className="btn-box">
@@ -14,7 +14,7 @@ function ProjectComponent(props) {
       </Link>
       </div>
       </div>
-    </div>
+    
   );
 }
 
