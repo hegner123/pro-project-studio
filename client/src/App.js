@@ -6,7 +6,6 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
-
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -50,6 +49,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Login} />
             <Route exact path="/forgotpassword" component={ForgotPassword} />
             <Route exact path="/image" component={image}/>
 

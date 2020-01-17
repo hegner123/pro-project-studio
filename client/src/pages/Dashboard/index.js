@@ -5,7 +5,11 @@ import { logoutUser } from "../../actions/authActions";
 // import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
-import ProjectComponent from "../../components/ProjectComponent";
+
+
+// import bootstrap components
+import { Row, Tab, Col, ListGroup} from 'react-bootstrap';
+
 
 
 class Dashboard extends Component {
@@ -38,40 +42,57 @@ class Dashboard extends Component {
     const { user } = this.props.auth;
 
     return (
-      <div className="container text-white">
+      <div className="container text-black">
         <div className="row">
           <div className=" col-12">
             <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
           </div>
-          
-          {/* <h3>Projects</h3> */}
-          <div className="">
-           {this.state.projects.map(project => (
-             <ProjectComponent
-               title={project.title}
-               company = {project.companyName}
-               key={project._id}
-               id = {project._id}
-             />
+          <div className="dashboard-box">
+            <Tab.Container id="list-group-tabs-example" defaultActiveKey="{project[0].title}">
+              <Row>
+                <Col sm={4}>
+                  <ListGroup>
+                  {this.state.projects.map(project => (
+                    <ListGroup.Item action href={" #" + project.title} key={project._id}>
+                    {project.title}
+                  </ListGroup.Item>
+                  ))
+                  }
+                  </ListGroup>
+                </Col>
 
-           )) }
-
-          
-          
-        
-            </div>
-            
+                <Col sm={8}>
+                  <Tab.Content>
+                  {this.state.projects.map(project => (
+                    <Tab.Pane eventKey={" #" + project.title} key={project._id}>
+                      <p>Client Name: {project.companyName}</p>
+                    </Tab.Pane>
+                  ))
+                  }
+                  </Tab.Content>
+                </Col>
+              </Row>
+            </Tab.Container>
+          </div>
         </div>
-        <button
-              onClick={this.onLogoutClick}
-              className="btn btn-dark bg-dark mt-5"
-            >
-              Logout
-            </button>
       </div>
     );
   }
 }
+// {
+//   this.state.projects.map(project => (
+//     <ProjectComponent
+//       title={project.title}
+//       company={project.companyName}
+//       key={project._id}
+//       id={project._id}
+//     />
+//   ))
+// }
+
+
+
+
 
 Dashboard.propTypes = {
   logoutUser: PropTypes.func.isRequired,
