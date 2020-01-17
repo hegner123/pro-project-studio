@@ -64,9 +64,11 @@ class Dashboard extends Component {
                 <Col sm={8}>
                   <Tab.Content>
                   {this.state.projects.map(project => (
-                    <Tab.Pane eventKey={" #" + project.title} key={project._id}>
+                    
+                    <Tab.Pane eventKey={" #" + project.title} key={project._id} className="custom">
                       <p>Client Name: {project.companyName}</p>
                     </Tab.Pane>
+                    
                   ))
                   }
                   </Tab.Content>
