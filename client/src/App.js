@@ -7,13 +7,12 @@ import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Navbar from "./components/Navbar";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
-
+import Profile from "./pages/Profile"
 import Home from "./pages/Home"
 import ProjectDashboard from "./pages/ProjectDashboard";
 import image from './components/image';
@@ -57,6 +56,7 @@ class App extends Component {
 
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute exact path="/dashboard/projects/:id" component={ProjectDashboard} />
 
             </Switch>
