@@ -1,10 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authActions";
 
 
 
 class Navbar extends Component {
+
+  //Functions for log out button
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
+
+
   render() {
+    //const { user } = this.props.auth;
     return (
 <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
   <a className="navbar-brand" href="/">Pro-Project Studio</a>
@@ -40,6 +52,20 @@ class Navbar extends Component {
                 Login
               </Link>
       </li>
+      <li className="nav-item">
+      <Link to="/logout" className="nav-link" onClick={this.onLogoutClick}>
+                Logout
+              </Link>
+      </li>
+
+      {/* <li>
+      <button
+              onClick={this.onLogoutClick}
+              className="btn btn-dark bg-dark mt-5"
+            >
+              Logout
+            </button>
+      </li> */}
 
     </ul>
   </div>
@@ -48,5 +74,18 @@ class Navbar extends Component {
     );
   }
 }
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
 
-export default Navbar;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+
+// export default Navbar;
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Navbar);

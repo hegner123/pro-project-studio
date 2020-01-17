@@ -13,10 +13,12 @@ import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
-import Profile from "./components/dashboard/Profile";
+import Profile from "./pages/Profile";
 import Home from "./pages/Home"
 import ProjectDashboard from "./pages/ProjectDashboard";
 import image from './components/image';
+
+
 
 // import NoMatch from "./pages/NoMatch";
 
@@ -51,6 +53,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
+            <Route exact path="/logout" component={Login} />
             <Route exact path="/forgotpassword" component={ForgotPassword} />
             <Route exact path="/image" component={image}/>
 
