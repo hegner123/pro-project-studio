@@ -6,8 +6,6 @@ import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
-
-import Navbar from "./components/Navbar";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -17,9 +15,7 @@ import Profile from "./pages/Profile";
 import Home from "./pages/Home"
 import ProjectDashboard from "./pages/ProjectDashboard";
 import image from './components/image';
-
-
-
+import NewNav from "./components/NewNav"
 // import NoMatch from "./pages/NoMatch";
 
 import "./App.css";
@@ -49,7 +45,7 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            <Navbar />
+            <NewNav/>
             <Route exact path="/" component={Home} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
@@ -57,10 +53,11 @@ class App extends Component {
             <Route exact path="/forgotpassword" component={ForgotPassword} />
             <Route exact path="/image" component={image}/>
 
+
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/dashboard/projects/:id" component={ProjectDashboard} />
-              <PrivateRoute exact path="/profile" component={Profile} />
+
             </Switch>
           </div>
         </Router>

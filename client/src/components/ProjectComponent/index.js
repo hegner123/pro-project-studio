@@ -8,6 +8,8 @@ function ProjectComponent(props) {
   return (
     <div className="resultBox">
       {/* <div className= "projectBox" >
+    
+      <div className= "test-one col-md-4 " >
       <h5 className="project-title">{props.title}</h5>
       
       <div className="btn-box">
@@ -15,6 +17,7 @@ function ProjectComponent(props) {
                  <button className="btn btn-sm btn-light">View Project</button>
       </Link>
       </div>
+<<<<<<< HEAD
       </div> */}
 
       <Col sm={4}>
@@ -32,6 +35,10 @@ function ProjectComponent(props) {
               </Tab.Content>
       </Col>
     </div>
+=======
+      </div>
+    
+>>>>>>> 455e27b5aa7716a31b54a090035a2e9b12472916
   );
 }
 

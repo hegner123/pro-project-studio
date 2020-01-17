@@ -44,7 +44,7 @@ class Dashboard extends Component {
     return (
       <div className="container text-black">
         <div className="row">
-          <div className="dashboard-header col-12">
+          <div className=" col-12">
             <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
           </div>
           <div className="dashboard-box">
