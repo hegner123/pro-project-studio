@@ -15,11 +15,10 @@ export default {
 //   },
 //   // Saves a book to the database
   saveProject: function(projectData) {
-    return axios.post("/api/project", projectData);
+    return axios.post("/api/projects", projectData);
   },
-
   updateProject: function(projectData, id){
-    return axios.put("/api/project" + id, projectData)
+    return axios.put("/api/projects" + id, projectData)
   }
 
 };

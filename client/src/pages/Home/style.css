@@ -19,3 +19,8 @@ body {
 .custom{
   margin-top: 50%;
 }
+
+.box-bg{
+  background: url("images/Box1.svg") !important;
+  z-index: 200;
+}

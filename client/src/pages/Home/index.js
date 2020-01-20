@@ -2,30 +2,39 @@ import React, { Component } from "react";
 import "./style.css";
 import Image from "./images/Image1.svg"
 
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Container from "react-bootstrap/Container";
+
 
 class Landing extends Component {
   render() {
     return (
-     <div className="container full">
+     <Container>
        <div className="row">
 
-         <div className="col-6 d-flex ">
-           <div className="header">
+         <Col xs={6}>
+         <div className="header">
              <h1 className="text-white">Pro-Project Studio</h1>
              <h3 className="text-white">Make it easy for you and your clients
               to keep track of your recording projects.</h3>
            </div>
-         </div>
-
-         <div className="col-6 d-flex">
+         </Col>
+         <Col xs={6}>
            <img src= {Image} alt="logo" className="landing-page-img" />
-         </div>
-
-
-
+         </Col>
        </div>
 
-     </div>
+       <Row>
+         <div className="box-bg">
+           <Col xs={12}>
+         this
+         </Col>
+         </div>
+         
+       </Row>
+
+       </Container>
     );
   }
 }

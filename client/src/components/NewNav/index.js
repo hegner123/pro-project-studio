@@ -17,8 +17,7 @@ class NewNav extends Component {
       e.preventDefault();
       this.props.logoutUser();
     };
-   
-  
+
     render() {
       const { user } = this.props.auth;
       const isLoggedIn = localStorage.jwtToken;
@@ -52,7 +51,15 @@ class NewNav extends Component {
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav" className="text-white">
     <Nav className="mr-auto text-white">
-    <a href="#why">why</a>
+      <div className="nav-link">
+    <a href="#why">Why</a>
+    </div>
+    <div className="nav-link">
+    <a href="#what">What</a>
+    </div>
+    <div className="nav-link">
+    <a href="#how">How</a>
+    </div>
     </Nav>
    
     {authArea}

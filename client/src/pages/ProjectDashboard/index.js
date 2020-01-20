@@ -48,7 +48,6 @@ class ProjectDashboard extends Component {
 
     console.log("tempArray", tempArray);
     console.log("songList", this.state.songList);
-    
     this.setState({ arrangement: tempArray });
     console.log("arr array: " + this.state.arrangement);
     let data = new Array(this.state.arrangement.length)
