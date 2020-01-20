@@ -5,10 +5,11 @@ export default {
   getProjects: function() {
     return axios.get("/api/projects");
   },
-    // Gets the book with the given id
-  getProject: function(id) {
+    // Gets the project with the given id
+  getProjectDetails: function(id) {
     return axios.get("/api/projects/" + id);
   }
+
 //   // Deletes the book with the given id
 //   deleteBook: function(id) {
 //     return axios.delete("/api/books/" + id);
