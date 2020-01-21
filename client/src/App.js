@@ -57,7 +57,8 @@ class App extends Component {
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/profile" component={Profile} />
-              <PrivateRoute exact path="/dashboard/projects/:id" component={ProjectDashboard} />
+
+              <PrivateRoute exact path="/dashboard#:id" component={Dashboard} />
 
             </Switch>
           </div>

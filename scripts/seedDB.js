@@ -11,30 +11,96 @@ mongoose.connect(
 const projectSeed = [
   {
     title: "Project1",
-    song: [{song_title: "Song Title 1",
+    songs: [{song_title: "Song Title 1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Fm",
             song_bpm: 150,
-            song_notes: [{notes:"there's no note"}]
-          }],
+            song_notes: [{
+              noteTitle: "Song Title 1-1 - guitar",
+              noteBody:"note for song 1 guitar",
+              noteStatus: true
+            },
+            {
+              noteTitle: "Song Title 1-1 - piano",
+              noteBody:"note for song 1 piano",
+              noteStatus: true
+            },
+            {
+              noteTitle: "Song Title 1-1 - drum",
+              noteBody:"note for song 1 drum",
+              noteStatus: true
+            },
+          ]
+          },
+          {song_title: "Song Title 1-2 Piano Solo",
+            song_arrangements: ["piano"],
+            song_key: "Am",
+            song_bpm: 110,
+            song_notes: [{
+              noteTitle: "Song Title 1-2 - piano",
+              noteBody:"note for song 1-2 piano solo",
+              noteStatus: true
+            }
+          ]
+          },
+        ],
     members: ["things 1", "thing2"],
     total_arrangements: 3,
     companyName: "ABC"
   },
   {
     title: "Project2",
-    song: [
+    songs: [
       { song_title: "Song Title 2-1",
         song_arrangements: ["guitar1", "orchestra", "drum", "guitar2", "guitar3"],
         song_key: "Bm",
         song_bpm: 120,
-        song_notes: [{notes:"there's no note 2-1"}]
+        song_notes: [{
+          noteTitle: "Song Title 2-1 - guitar1",
+          noteBody:"there's no note 2-1",
+          noteStatus: true
+        },
+        {
+          noteTitle: "Song Title 2-1 orchestra ",
+          noteBody:"2-1 orchestra note",
+          noteStatus: true
+        },
+        {
+          noteTitle: "Song Title 2-1 drum ",
+          noteBody:"2-1 drum note",
+          noteStatus: false
+        },
+        {
+          noteTitle: "Song Title 2-1 guitar2 ",
+          noteBody:"2-1 guitar2 note",
+          noteStatus: true
+        },
+        {
+          noteTitle: "Song Title 2-1 guitar3",
+          noteBody:"2-1 guitar3 note",
+          noteStatus: true
+        },
+      ]
       },
       { song_title: "Song Title 2-2",
         song_arrangements: ["drum", "orchestra", "trumpet"],
         song_key: "Am",
         song_bpm: 90,
-        song_notes: [{notes:"there's no note 2-2"}]
+        song_notes: [{
+          noteTitle: "Song Title 2-2 - drum",
+          noteBody:"]note 2-2 drum",
+          noteStatus: false
+        },
+        {
+          noteTitle: "Song Title 2-2 - orchestra",
+          noteBody:"note 2-2 orchestra",
+          noteStatus: false
+        },
+        {
+          noteTitle: "Song Title 2-2 - trumpet",
+          noteBody:"there's no note 2-2 trumpet",
+          noteStatus: false
+        }]
       }
     ],
     members: ["member 1", "member 2"],
@@ -43,7 +109,7 @@ const projectSeed = [
   },
   {
     title: "Project3",
-    song: [{song_title: "Song Title 3-1",
+    songs: [{song_title: "Song Title 3-1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Fm",
             song_bpm: 150,
@@ -55,7 +121,7 @@ const projectSeed = [
   },
   {
     title: "Project4",
-    song: [{song_title: "Song Title 4-1",
+    songs: [{song_title: "Song Title 4-1",
             song_arrangements: ["guitar", "piano", "drum"],
             song_key: "Am",
             song_bpm: 150,
@@ -67,7 +133,7 @@ const projectSeed = [
   },
   {
     title: "Project5",
-    song: [{song_title: "Song Title 5-1",
+    songs: [{song_title: "Song Title 5-1",
             song_arrangements: ["bass1", "drum", "guitar1", "guitar2"],
             song_key: "G",
             song_bpm: 80,
