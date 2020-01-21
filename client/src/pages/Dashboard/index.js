@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import { Link } from "react-router-dom";
+
 // import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
@@ -21,6 +21,7 @@ import Table from 'react-bootstrap/Table';
 import Button from "react-bootstrap/Button";
 // import Form from 'react-bootstrap/Form'
 import Modal from "react-bootstrap/Modal"
+
 
 
 export class NameForm extends React.Component {
@@ -54,9 +55,7 @@ export class NameForm extends React.Component {
       })
 
       .catch(err => console.log(err));
-  };
-
-
+    }
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -103,14 +102,16 @@ export const Addproject = (props) => {
 
 
 
-class Dashboard extends Component {
-  constructor(props){
-    super(props);
-    this.state= {
+
+  class Dashboard extends Component {
+    state = {
       projects: [],
-      success: false
+      idForContent: String,
+      projectDetail: [],
+      instruments: [],
+      songs: [],
+      example: [{ title: "1-1", guitar: "false", drum: "true", piano: "true" }, { title: "1-2", guitar: "false", drum: "false", piano: "true"  }]
     };
-}
   
 
 
@@ -120,7 +121,7 @@ class Dashboard extends Component {
     this.props.logoutUser();
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadProjects();
   };
 
@@ -142,9 +143,9 @@ class Dashboard extends Component {
       .catch(err => console.log(err));
   };
   generateContent = (id) => {
-
     this.setState({ idForContent: id })
     console.log("id: " + this.state.idForContent);
+    this.loadSongDetails();
   };
 
   //Get song details for grid
@@ -153,24 +154,50 @@ class Dashboard extends Component {
       .then(res => {
         this.setState({ projectDetail: res.data });
         console.log("project Detail: " + JSON.stringify(this.state.projectDetail));
+        const songTemp = [];
+        var instTemp = [];
         this.state.projectDetail.songs.forEach((song, index) => {
-          this.state.songs.push(song.song_title);
+          songTemp.push(song.song_title);
           song.song_arrangements.forEach((inst, index) => {
-            this.state.instruments.push(inst)
+            instTemp.push(inst)
           })
         })
-        this.renderTableHeader();
-
+        instTemp = new Set(instTemp);
+        instTemp = [...instTemp]
+        instTemp.sort();
+        this.setState({ songs: songTemp, instruments: instTemp });
+        console.log("inst: " + this.state.songs)
+        //this.renderTableHeader();
       })
       .catch(err => console.log(err));
   };
 
-  // renderTableHeader() {
-  //   return this.state.projects.map(inst => {
-  //     console.log(inst)
-  //     return <th>{inst}</th>
-  //   })
-  // }
+  renderTableHeader() {
+    // let header = this.state.instruments;
+    // // console.log(header);
+    // // return <th>{this.state.instruments[0]}</th>
+    // return header.forEach((inst, index) => {
+
+    // return <th key={index}>{inst}</th>
+    // })
+    return this.state.instruments.map(inst => {
+      return <th>{inst}</th>
+    })
+  }
+
+  renderTableData() {
+    return this.state.example.map((song, index) => {
+      const { title, guitar, drum, piano } = song
+      return (
+        <tr key={title}>
+          <td><div>{title}</div></td>
+          <td><div>{guitar}</div></td>
+          <td><div>{drum}</div></td>
+          <td><div>{piano}</div></td>
+        </tr>
+      )
+    })
+  }
 
   render() {
     const { user } = this.props.auth;
@@ -211,16 +238,19 @@ class Dashboard extends Component {
                   <Table>
                     <thead>
                       <tr>
-                        {/* <th>{this.renderTableHeader()}</th>
-                        {this.state.projects.map(song => (
-                          <th>{song}</th>
+                      <th></th>
+                        {this.renderTableHeader()}
+
+                        {/* <th>{this.renderTableHeader()}</th> */}
+                        
+                        {/* {this.state.instruments.map(inst => (
+                          <th>{inst}</th>
                         ))} */}
+
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-
-                      </tr>
+                        {this.renderTableData()}
                     </tbody>
 
                   </Table>
