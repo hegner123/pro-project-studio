@@ -63,7 +63,7 @@ class NewNav extends Component {
 }
 
 
-Navbar.propTypes = {
+NewNav.propTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };

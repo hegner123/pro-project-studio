@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const ProjectSchema = new Schema({
   title: { type: String, required: true },
-  song: [ new Schema ({
+  songs: [ new Schema ({
             song_title: String,
             song_arrangements: {type: Array, default: []},
             song_lyrics: String,
@@ -13,7 +13,12 @@ const ProjectSchema = new Schema({
             song_bpm: Number,
             song_reference: String,
             song_notes: [new Schema ({
-                  notes: {type: String, required: true}
+                  noteTitle: String,
+                  noteBody: String,
+                  noteStatus: {
+                        type: Boolean,
+                        default: false
+                  }
             })]
         })],
   members: {type: Array, default: []},

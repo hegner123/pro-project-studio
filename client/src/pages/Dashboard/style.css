@@ -7,4 +7,9 @@ body {
   margin-top:30%;
 }
 
+.contentSection {
+  background-color: white;
+  width: 1000px;
+  height: auto;
+}
 
