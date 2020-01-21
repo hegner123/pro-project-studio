@@ -13,33 +13,35 @@ const projectSeed = [
     title: "Project1",
     songs: [{song_title: "Song Title 1",
             song_arrangements: ["guitar", "piano", "drum"],
+            song_status: {guitar: "Incomplete", piano: "Incomplete", drum: "Complete"},
             song_key: "Fm",
             song_bpm: 150,
             song_notes: [{
               noteTitle: "Song Title 1-1 - guitar",
               noteBody:"note for song 1 guitar",
-              noteStatus: true
+              noteStatus: "Incomplete"
             },
             {
               noteTitle: "Song Title 1-1 - piano",
               noteBody:"note for song 1 piano",
-              noteStatus: true
+              noteStatus: "Incomplete"
             },
             {
               noteTitle: "Song Title 1-1 - drum",
               noteBody:"note for song 1 drum",
-              noteStatus: true
+              noteStatus: "Complete"
             },
           ]
           },
           {song_title: "Song Title 1-2 Piano Solo",
             song_arrangements: ["piano"],
+            song_status: {piano: "Complete"},
             song_key: "Am",
             song_bpm: 110,
             song_notes: [{
               noteTitle: "Song Title 1-2 - piano",
               noteBody:"note for song 1-2 piano solo",
-              noteStatus: true
+              noteStatus: "Complete"
             }
           ]
           },
@@ -58,27 +60,27 @@ const projectSeed = [
         song_notes: [{
           noteTitle: "Song Title 2-1 - guitar1",
           noteBody:"there's no note 2-1",
-          noteStatus: true
+          noteStatus: "Complete"
         },
         {
           noteTitle: "Song Title 2-1 orchestra ",
           noteBody:"2-1 orchestra note",
-          noteStatus: true
+          noteStatus: "Complete"
         },
         {
           noteTitle: "Song Title 2-1 drum ",
           noteBody:"2-1 drum note",
-          noteStatus: false
+          noteStatus: "Incomplete"
         },
         {
           noteTitle: "Song Title 2-1 guitar2 ",
           noteBody:"2-1 guitar2 note",
-          noteStatus: true
+          noteStatus: "Complete"
         },
         {
           noteTitle: "Song Title 2-1 guitar3",
           noteBody:"2-1 guitar3 note",
-          noteStatus: true
+          noteStatus: "Complete"
         },
       ]
       },
@@ -89,17 +91,17 @@ const projectSeed = [
         song_notes: [{
           noteTitle: "Song Title 2-2 - drum",
           noteBody:"]note 2-2 drum",
-          noteStatus: false
+          noteStatus: "Incomplete"
         },
         {
           noteTitle: "Song Title 2-2 - orchestra",
           noteBody:"note 2-2 orchestra",
-          noteStatus: false
+          noteStatus: "Incomplete"
         },
         {
           noteTitle: "Song Title 2-2 - trumpet",
           noteBody:"there's no note 2-2 trumpet",
-          noteStatus: false
+          noteStatus: "Incomplete"
         }]
       }
     ],
