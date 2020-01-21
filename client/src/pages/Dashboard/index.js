@@ -17,10 +17,12 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import ContentPane from 'react-bootstrap/TabContent'
-import Table from 'react-bootstrap/Table';
+
 import Button from "react-bootstrap/Button";
 // import Form from 'react-bootstrap/Form'
 import Modal from "react-bootstrap/Modal"
+import ReactDataGrid from "react-data-grid";
+import { Editors } from "react-data-grid-addons";
 
 
 
@@ -103,18 +105,25 @@ export const Addproject = (props) => {
 
 
 
-  class Dashboard extends Component {
-    state = {
-      projects: [],
-      idForContent: String,
-      projectDetail: [],
-      instruments: [],
-      songs: [],
-      example: [{ title: "1-1", guitar: "false", drum: "true", piano: "true" }, { title: "1-2", guitar: "false", drum: "false", piano: "true"  }]
-    };
-  
+ 
 
 
+
+
+
+
+
+class Dashboard extends Component {
+  state = {
+    projects: [],
+    idForContent: String,
+    projectDetail: [],
+    instruments: [],
+    songs: [],
+    columns: [],
+    rows: [],
+    rowCount: Number
+  };
 
   onLogoutClick = e => {
     e.preventDefault();
@@ -153,51 +162,83 @@ export const Addproject = (props) => {
     API.getProjectDetails(this.state.idForContent)
       .then(res => {
         this.setState({ projectDetail: res.data });
-        console.log("project Detail: " + JSON.stringify(this.state.projectDetail));
-        const songTemp = [];
+        console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
         var instTemp = [];
+        var songTemp = [];
+        var instStatus = [];
+        var status = [];
         this.state.projectDetail.songs.forEach((song, index) => {
           songTemp.push(song.song_title);
           song.song_arrangements.forEach((inst, index) => {
             instTemp.push(inst)
           })
+          status.push(song.song_status)
+          console.log("status" + JSON.stringify(status));
+          // song.song_status.forEach((ins, index) => {
+          //   console.log("status" + ins)
+          // })
         })
         instTemp = new Set(instTemp);
         instTemp = [...instTemp]
-        instTemp.sort();
-        this.setState({ songs: songTemp, instruments: instTemp });
-        console.log("inst: " + this.state.songs)
-        //this.renderTableHeader();
+
+        this.renderGrid(instTemp, songTemp, status);
       })
       .catch(err => console.log(err));
   };
 
-  renderTableHeader() {
-    // let header = this.state.instruments;
-    // // console.log(header);
-    // // return <th>{this.state.instruments[0]}</th>
-    // return header.forEach((inst, index) => {
+  renderGrid(inst, songs, status) {
+    console.log("inst: " + inst);
 
-    // return <th key={index}>{inst}</th>
-    // })
-    return this.state.instruments.map(inst => {
-      return <th>{inst}</th>
-    })
+    const { DropDownEditor } = Editors;
+    const issueTypes = [
+      { id: "incomplete", value: "Incomplete" },
+      { id: "complete", value: "Complete" },
+      { id: "x", value: "X" }
+    ];
+    const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
+
+    //Add data to column array
+    // First column of song title
+    var tempCol = [];
+    var columnObj = { key: "songTitle", name: "Song Title" };
+    tempCol.push(columnObj);
+    // Add remaning columns
+    inst.forEach((instrument, index) => {
+      columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
+      tempCol.push(columnObj);
+    });
+
+    this.setState({ columns: tempCol })
+    console.log("add obj: " + JSON.stringify(this.state.columns));
+
+    //Add data to row array
+    var tempRow = [];
+    for (var i = 0; i < songs.length; i++) {
+      tempRow.push({})
+    }
+    tempRow.forEach((row, index) => {
+      row.songTitle = songs[index];
+      inst.forEach((ins, index) => {
+        row[ins] = "X"
+      })
+      const merged = Object.assign(row, status[index]);
+    });
+    
+    this.setState({ rows: tempRow, rowCount: tempRow.length })
+    console.log("num of rows" + this.state.rowCount)
+    console.log("row: " + JSON.stringify(this.state.rows));
   }
 
-  renderTableData() {
-    return this.state.example.map((song, index) => {
-      const { title, guitar, drum, piano } = song
-      return (
-        <tr key={title}>
-          <td><div>{title}</div></td>
-          <td><div>{guitar}</div></td>
-          <td><div>{drum}</div></td>
-          <td><div>{piano}</div></td>
-        </tr>
-      )
-    })
-  }
+
+  onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+    // this.setState(state => {
+      const rows = this.state.rows.slice();
+      for (let i = fromRow; i <= toRow; i++) {
+        rows[i] = { ...rows[i], ...updated };
+      }
+      return { rows };
+    // });
+  };
 
   render() {
     const { user } = this.props.auth;
@@ -235,25 +276,16 @@ export const Addproject = (props) => {
                   <ContentPane
                     id={this.state.idForContent}
                   />
-                  <Table>
-                    <thead>
-                      <tr>
-                      <th></th>
-                        {this.renderTableHeader()}
-
-                        {/* <th>{this.renderTableHeader()}</th> */}
-                        
-                        {/* {this.state.instruments.map(inst => (
-                          <th>{inst}</th>
-                        ))} */}
-
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderTableData()}
-                    </tbody>
-
-                  </Table>
+                  <div>
+                    <ReactDataGrid
+                      columns={this.state.columns}
+                      rowGetter={i => this.state.rows[i]}
+                      rowsCount={3}
+                      onGridRowsUpdated={this.onGridRowsUpdated}
+                      enableCellSelect={true}
+                    />
+                    {/* <PageGuide /> */}
+                  </div>
 
                 </Col>
 
@@ -262,19 +294,13 @@ export const Addproject = (props) => {
             </Tab.Container>
 
             </div>
-            
+
             </Row>
         </Container>
     );
   }
 
 }
-
-
-
-
-
-
 
 Dashboard.propTypes = {
   logoutUser: PropTypes.func.isRequired,
