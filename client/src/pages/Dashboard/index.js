@@ -7,9 +7,10 @@ import { logoutUser } from "../../actions/authActions";
 import "./style.css";
 import API from "../../utils/API";
 
-import ContentPane from "../../components/ContentPane";
+// import ContentPane from "../../components/ContentPane";
+import {AddSong} from "../../components/SongForm";
 // import bootstrap components
-import { Container, Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover } from 'react-bootstrap';
+import {Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
@@ -29,24 +30,23 @@ export class NameForm extends React.Component {
     total_arrangements: 0,
     companyName: ""};
 
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleCompanyNameChange = this.handleCompanyNameChange.bind(this);
-    this.handleMembersChange = this.handleMembersChange.bind(this);
+
+
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
   }
 
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
 
-  handleTitleChange(event) {
-    this.setState({title: event.target.value});
+    this.setState({
+      [name]: value
+    });
   }
-  handleCompanyNameChange(event) {
-    this.setState({companyName: event.target.value});
-  }
-  handleMembersChange(event) {
 
-    this.setState({members:event.target.value});
-  }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -69,17 +69,23 @@ export class NameForm extends React.Component {
         <div className="form-row">
         <label className="form-label">
           Title:
-          <input type="text" className="form-control"onChange={this.handleTitleChange} />
+          <input  type="text" className="form-control" name={"title"}
+          value={this.state.title}
+          onChange={this.handleInputChange} />
         </label>
         </div>
         <div className ="form-row">
         <label>Members:
-        <input type="text" className="form-control" onChange={this.handleMembersChange} />
+        <input type="text" className="form-control" name={"members"}
+        value={this.state.members}
+        onChange={this.handleInputChange} />
         </label>
         </div>
         <div className ="form-row">
         <label>Company:
-        <input type="text" className="form-control" onChange={this.handleCompanyNameChange} />
+        <input type="text" className="form-control" name={"companyName"}
+        value={this.state.companyName}
+        onChange={this.handleInputChange} />
         </label>
         </div>
 
@@ -175,10 +181,10 @@ export const Addproject = (props) => {
         .then(res => {
           this.setState({ projectDetail: res.data });
           console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
-          var instTemp = [];
-          var songTemp = [];
-          var instStatus = [];
-          var status = [];
+          let instTemp = [];
+          let songTemp = [];
+          let instStatus = [];
+          let status = [];
           this.state.projectDetail.songs.forEach((song, index) => {
             songTemp.push(song.song_title);
             song.song_arrangements.forEach((inst, index) => {
@@ -200,6 +206,10 @@ export const Addproject = (props) => {
 
     renderGrid(inst, songs, status) {
       console.log("inst: " + inst);
+      if (status === "Incomplete"){
+        console.log("Incomplete")
+        console.log(this);
+      };
 
       const { DropDownEditor } = Editors;
       const issueTypes = [
@@ -209,10 +219,12 @@ export const Addproject = (props) => {
       ];
       const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
 
+
+
       //Add data to column array
       // First column of song title
-      var tempCol = [];
-      var columnObj = { key: "songTitle", name: "Song Title" };
+      let tempCol = [];
+      let columnObj = { key: "songTitle", name: "Song Title" };
       tempCol.push(columnObj);
       // Add remaning columns
       inst.forEach((instrument, index) => {
@@ -224,8 +236,8 @@ export const Addproject = (props) => {
       console.log("add obj: " + JSON.stringify(this.state.columns));
 
       //Add data to row array
-      var tempRow = [];
-      for (var i = 0; i < songs.length; i++) {
+      let tempRow = [];
+      for (let i = 0; i < songs.length; i++) {
         tempRow.push({})
       }
       tempRow.forEach((row, index) => {
@@ -262,33 +274,59 @@ export const Addproject = (props) => {
             <div className=" col-6">
               <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
             </div>
-            <div className=" col-6">
+            <div className="col-6 btn-align">
+              <div className="cust-btn-group">
               <Addproject/>
+              <AddSong id={this.state.idForContent}/>
+              </div>
             </div>
             </div>
 
               <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
                 <Row>
-                  <Col sm={4}>
+                  <Col sm={2}>
                     <ListGroup>
                       {this.state.projects.map(project => (
-                        <OverlayTrigger placement="right" overlay={
+                        <OverlayTrigger placement="right" key={project.id} overlay={
                           <Popover id="popover-basic">
                             <Popover.Title as="h3">{project.title}</Popover.Title>
                             <Popover.Content>
                               <p>Client Name: {project.companyName}</p>
                               <p>Members: {project.members}</p>
                             </Popover.Content>
-                          </Popover>} delay={{ show: 100, hide: 10 }}>
+                          </Popover>} >
                           <ListGroup.Item action
                             href={" #" + project._id}
-                            key={project._id} onClick={() => this.generateContent(project._id)}>
+                            key={project._id}
+                            onClick={()=> this.generateContent(project._id)}
+                            >
+
+                              <div className="row">
+                                <div className="col-6">
                             {project.title}
+                            </div>
+                            <div className="col-6 btn-align">
+
+                            <Dropdown bsPrefix={"myparentDropdown"}>
+                              <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
+                                ...
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+
+                                <Dropdown.Item onClick={()=> this.editProject(project._id)}>Edit Project</Dropdown.Item>
+                                <Dropdown.Item onClick={()=> this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </div>
+                            </div>
                           </ListGroup.Item>
-                        </OverlayTrigger>
+
+                      </OverlayTrigger>
                       ))
                       }
                     </ListGroup>
+
                   </Col>
 
                   <Col sm={8} className="contentSection">
@@ -299,7 +337,7 @@ export const Addproject = (props) => {
                       <ReactDataGrid
                         columns={this.state.columns}
                         rowGetter={i => this.state.rows[i]}
-                        rowsCount={3}
+                        rowsCount={5}
                         onGridRowsUpdated={this.onGridRowsUpdated}
                         enableCellSelect={true}
                       />

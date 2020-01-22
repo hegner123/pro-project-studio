@@ -22,5 +22,24 @@ body {
   float: left;
 }
 
+.cust-btn-group{
+  display: inline-flex;
+  width:12rem;
+}
 
+.btn-align{
+  justify-content: flex-end;
+}
+
+.myparentDropdown{
+  border:none;
+}
+
+.myDropdown{
+  padding:0px !important;
+  background: none !important;
+  border: none;
+  color:black;
+  justify-self: flex-end;
+}
 

@@ -18,9 +18,13 @@ export default {
   saveProject: function(projectData) {
     return axios.post("/api/projects", projectData);
   },
+  saveSong: function(songData, id) {
+    return axios.post("/api/projects" + id, songData);
+  },
   updateProject: function(projectData, id){
     return axios.put("/api/projects" + id, projectData)
   }
+
 
 };
 
