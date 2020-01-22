@@ -7,9 +7,20 @@ body {
   margin-top:30%;
 }
 
-.contentSection {
-  background-color: white;
-  width: 1000px;
-  height: auto;
+.col-1,.col-2,.col-3, .col-4,.col-5,.col-6{
+  display: flex;
 }
+
+
+.btn-xs {
+  height:2rem !important;
+  font-size: 0.75rem;
+}
+
+.dashboard-box{
+  width: 100%;
+  float: left;
+}
+
+
 

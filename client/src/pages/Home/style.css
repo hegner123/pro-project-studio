@@ -13,5 +13,14 @@ body {
 
 
 .full {
-  height: 100vh;
+  height: 60vh;
+}
+
+.custom{
+  margin-top: 50%;
+}
+
+.box-bg{
+  background: url("images/Box1.svg") !important;
+  z-index: 200;
 }
