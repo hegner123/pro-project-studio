@@ -183,7 +183,7 @@ export const Addproject = (props) => {
           console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
           let instTemp = [];
           let songTemp = [];
-          let instStatus = [];
+          // let instStatus = [];
           let status = [];
           this.state.projectDetail.songs.forEach((song, index) => {
             songTemp.push(song.song_title);
@@ -245,7 +245,7 @@ export const Addproject = (props) => {
         inst.forEach((ins, index) => {
           row[ins] = "X"
         })
-        const merged = Object.assign(row, status[index]);
+        // const merged = Object.assign(row, status[index]);
       });
 
       this.setState({ rows: tempRow, rowCount: tempRow.length })
