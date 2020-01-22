@@ -6,21 +6,10 @@ import { logoutUser } from "../../actions/authActions";
 // import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
-// import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col"
-import Container from "react-bootstrap/Container"
 
+import ContentPane from "../../components/ContentPane";
 // import bootstrap components
-import Row from "react-bootstrap/Row"
-import Tab from "react-bootstrap/Tab"
-import ListGroup from 'react-bootstrap/ListGroup';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Popover from 'react-bootstrap/Popover';
-import ContentPane from 'react-bootstrap/TabContent'
-
-import Button from "react-bootstrap/Button";
-// import Form from 'react-bootstrap/Form'
-import Modal from "react-bootstrap/Modal"
+import { Container, Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
