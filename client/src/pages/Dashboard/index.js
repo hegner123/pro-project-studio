@@ -44,7 +44,7 @@ export class NameForm extends React.Component {
     this.setState({companyName: event.target.value});
   }
   handleMembersChange(event) {
- 
+
     this.setState({members:event.target.value});
   }
 
@@ -135,16 +135,16 @@ export const Addproject = (props) => {
       rows: [],
       rowCount: Number
     };
-  
+
     onLogoutClick = e => {
       e.preventDefault();
       this.props.logoutUser();
     };
-  
+
     componentDidMount() {
       this.loadProjects();
     }
-  
+
     loadProjects = () => {
       API.getProjects()
         .then(res => {
@@ -168,7 +168,7 @@ export const Addproject = (props) => {
       console.log("id: " + this.state.idForContent);
       this.loadSongDetails();
     };
-  
+
     //Get song details for grid
     loadSongDetails = () => {
       API.getProjectDetails(this.state.idForContent)
@@ -192,15 +192,15 @@ export const Addproject = (props) => {
           })
           instTemp = new Set(instTemp);
           instTemp = [...instTemp]
-  
+
           this.renderGrid(instTemp, songTemp, status);
         })
         .catch(err => console.log(err));
     };
-  
+
     renderGrid(inst, songs, status) {
       console.log("inst: " + inst);
-  
+
       const { DropDownEditor } = Editors;
       const issueTypes = [
         { id: "incomplete", value: "Incomplete" },
@@ -208,7 +208,7 @@ export const Addproject = (props) => {
         { id: "x", value: "X" }
       ];
       const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
-  
+
       //Add data to column array
       // First column of song title
       var tempCol = [];
@@ -219,10 +219,10 @@ export const Addproject = (props) => {
         columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
         tempCol.push(columnObj);
       });
-  
+
       this.setState({ columns: tempCol })
       console.log("add obj: " + JSON.stringify(this.state.columns));
-  
+
       //Add data to row array
       var tempRow = [];
       for (var i = 0; i < songs.length; i++) {
@@ -235,13 +235,13 @@ export const Addproject = (props) => {
         })
         const merged = Object.assign(row, status[index]);
       });
-      
+
       this.setState({ rows: tempRow, rowCount: tempRow.length })
       console.log("num of rows" + this.state.rowCount)
       console.log("row: " + JSON.stringify(this.state.rows));
     }
-  
-  
+
+
     onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
       // this.setState(state => {
         const rows = this.state.rows.slice();
@@ -251,10 +251,10 @@ export const Addproject = (props) => {
         return { rows };
       // });
     };
-  
+
     render() {
       const { user } = this.props.auth;
-  
+
       return (
         <div className="container-fluid p-5 text-black">
           <div className="dashboard-bg">
@@ -266,7 +266,7 @@ export const Addproject = (props) => {
               <Addproject/>
             </div>
             </div>
-            
+
               <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
                 <Row>
                   <Col sm={4}>
@@ -290,7 +290,7 @@ export const Addproject = (props) => {
                       }
                     </ListGroup>
                   </Col>
-  
+
                   <Col sm={8} className="contentSection">
                     {/* <ContentPane
                       id={this.state.title}
@@ -311,26 +311,26 @@ export const Addproject = (props) => {
               </Tab.Container>
             </div>
             </div>
-          
-        
+
+
       );
     }
   }
-  
+
   Dashboard.propTypes = {
     logoutUser: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
   };
-  
+
   const mapStateToProps = state => ({
     auth: state.auth
   });
-  
+
   export default connect(
     mapStateToProps,
     { logoutUser }
   )(Dashboard);
-  
+
 
 
 
