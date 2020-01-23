@@ -7,7 +7,6 @@ const multer = require('multer');
 const cors = require('cors');
 
 const users = require("./routes/api/users");
-
 const router = require("express").Router();
 
 const app = express();
