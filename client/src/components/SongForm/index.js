@@ -64,7 +64,7 @@ export class SongForm extends React.Component {
         <div className="form-row">
         <label className="form-label">
           Song Title
-          <input type="text" className="form-control"onChange={this.handleInputChange} />
+          <input type="text" className="form-control" name="songTitle"onChange={this.handleInputChange} />
         </label>
         </div>
         <div className ="form-row">
