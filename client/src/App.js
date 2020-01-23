@@ -13,7 +13,6 @@ import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile"
 import Home from "./pages/Home"
-import image from './components/image';
 import NewNav from "./components/NewNav"
 // import NoMatch from "./pages/NoMatch";
 
@@ -50,7 +49,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Route exact path="/logout" component={Login} />
             <Route exact path="/forgotpassword" component={ForgotPassword} />
-            <Route exact path="/image" component={image}/>
+      
 
 
             <Switch>

@@ -21,6 +21,15 @@ body {
 }
 
 .box-bg{
-  background: url("images/Box1.svg") !important;
-  z-index: 200;
+  margin-top: 20vh;
+  background: url("images/Box1.svg") no-repeat center  center !important;
+  width:100%;
+  height:120vh;
+  position: relative;
+  bottom:-100px;
 }
+
+.margin{
+  margin-top: 30vh;
+}
+
