@@ -19,10 +19,10 @@ export default {
     return axios.post("/api/projects", projectData);
   },
   saveSong: function(songData, id) {
-    return axios.post("/api/projects" + id, songData);
+    return axios.post("/api/projects/" + id +"/songs", songData);
   },
   updateProject: function(projectData, id){
-    return axios.put("/api/projects" + id, projectData)
+    return axios.put("/api/projects/" + id, projectData)
   }
 
 

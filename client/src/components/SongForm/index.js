@@ -43,7 +43,7 @@ export class SongForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     let songData = {
-      title: this.state.songTitle,
+      song_title: this.state.songTitle,
 
     }
     console.log(songData)

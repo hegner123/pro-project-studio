@@ -21,12 +21,7 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  createSong: function(req, res) {
-    Project.songs
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
+
 
   update: function(req, res) {
     Project
@@ -40,5 +35,26 @@ module.exports = {
       .then(dbModel => dbModel.remove())
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
+  },
+
+  pushSong: function(req,res){
+    console.log(req.body)
+    const songTitle = req.body.song_title;
+    const newSong = {
+      song_title: songTitle
+     };
+    
+    Project
+    .findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $push: {
+        songs: newSong
+      }
+    })
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
   }
+
+
 };
