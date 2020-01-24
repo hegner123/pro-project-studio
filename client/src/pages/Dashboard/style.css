@@ -13,3 +13,8 @@ body {
   height: auto;
 }
 
+.notesSection {
+  background-color: white;
+  padding-left: 15px;
+}
+
