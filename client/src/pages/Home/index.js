@@ -31,11 +31,14 @@ class Landing extends Component {
          <Container>
        <Row>
            <Col xs={12}>
+             <div className="box-header">
          <h1 className="text-white mt-5" id="what-is-pro-project-studio">What is Pro-Project Studio?</h1>
+         </div>
          </Col>
        </Row>
-       
+
        <Row bsPrefix="margin row">
+
          <Col xs={12} md={4}>
            <h3>We know what works</h3>
            <p>Recording engineers have been using the same method of tracking recording sessions since the 60's. The famous grid with x's and checks. Pro-Project Studio takes this interface and chucks it online to make it accesable anywhere.</p>
@@ -50,6 +53,12 @@ class Landing extends Component {
            <h3>"Make it sound like "</h3>
            <p>Make it easy for your clients to communicate their artistic vision. Our utilization of Spotify's API allows you to preview reference material right in the browser.</p>
          </Col>
+      </Row>
+
+      <Row bsPrefix="row-box">
+        <Col>
+        Stuff
+        </Col>
       </Row>
 
        </Container>

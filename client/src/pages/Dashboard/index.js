@@ -58,6 +58,7 @@ export class NameForm extends React.Component {
     console.log(projectData)
     API.saveProject(projectData)
       .then(res => {
+        this.componentDidMount()
         console.log(res);
       })
 
@@ -173,6 +174,7 @@ export const Addproject = (props) => {
       this.setState({ idForContent: id })
       console.log("id: " + this.state.idForContent);
       this.loadSongDetails();
+      
     };
 
     //Get song details for grid
@@ -263,6 +265,12 @@ export const Addproject = (props) => {
         return { rows };
       // });
     };
+
+
+    deleteProject = (id) => {
+      API.deleteProject(id)
+      .then( res => this.loadProjects());
+    }
 
     render() {
       const { user } = this.props.auth;

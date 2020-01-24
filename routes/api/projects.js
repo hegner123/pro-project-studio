@@ -10,6 +10,7 @@ router.route("/")
 router
   .route("/:id")
   .get(projectController.findById)
+  .delete(projectController.remove)
   
 //   .put(booksController.update)
 //   .delete(booksController.remove);
@@ -17,5 +18,9 @@ router
 router
   .route("/:id/songs")
   .post(projectController.pushSong)
+
+  router
+  .route("/api/projects/:id/songs/:songId")
+  .post(projectController.pushInstruments)
 
 module.exports = router;

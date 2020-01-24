@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 
 // import Table from "../../components/Table";
 import API from "../../utils/API";
@@ -10,15 +10,16 @@ import "./style.css"
 
 
 
+
 export class SongForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
     songTitle:"",
-    songArrangements:[],
     songLyrics:"",
     songKey:"",
-    songBpm:""
+    songBpm:"",
+    songReferences:""
     }
 
 
@@ -44,6 +45,10 @@ export class SongForm extends React.Component {
     e.preventDefault();
     let songData = {
       song_title: this.state.songTitle,
+      song_key: this.state.songKey,
+      song_bpm: this.state.songBpm,
+      song_lyrics: this.state.songLyrics,
+      song_references:this.state.songReferences
 
     }
     console.log(songData)
@@ -59,37 +64,46 @@ export class SongForm extends React.Component {
   render() {
 
     return (
-      <div className="wide">
+      <div className="container">
+        <div className="row">
+        <div className="col-6">
       <form onSubmit={this.handleSubmit}>
         <div className="form-row">
         <label className="form-label">
           Song Title
-          <input type="text" className="form-control" name="songTitle"onChange={this.handleInputChange} />
+          <input type="text" className="form-control" name="songTitle" onChange={this.handleInputChange} />
         </label>
         </div>
         <div className ="form-row">
-        <label>Instruments <span className="btn" onClick={()=>this.handleAddInput}>+</span> <span className="btn" onClick={()=>this.handleDeleteInput}>-</span>
-        <input type="text" className="form-control" onChange={this.handleInputChange} />
-        </label>
-        <div id="form-section"></div>
-        </div>
-
-        <div className ="form-row">
-        <label>Key
-        <input type="text" className="form-control" onChange={this.handleInputChange} />
+        <label>Song Key
+        <input type="text" className="form-control" name="songKey" onChange={this.handleInputChange} />
         </label>
         </div>
         <div className ="form-row">
-        <label>Song Lyrics
-        <textarea type="text" className="form-control" onChange={this.handleInputChange} />
+        <label>Song BPM
+        <input type="text" className="form-control" name="songBpm" onChange={this.handleInputChange} />
         </label>
         </div>
-
-
+        <div className ="form-row">
+        <label>Lyrics
+        <textarea type="text" className="form-control" name="songLyrics" onChange={this.handleInputChange} />
+        </label>
+        </div>
+        <div className ="form-row">
+        <label>Song References
+        <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
+        </label>
+        </div>
+        
 
 
         <input className="btn-primary" type="submit" value="Submit" />
       </form>
+      </div>
+      <div className="col-6">
+        <AddInstrument/>
+      </div>
+      </div>
       </div>
     );
   }
@@ -115,6 +129,7 @@ export const AddSong = (props) => {
         </Modal.Header>
         <Modal.Body>
           <SongForm id={props.id}/>
+          
 
         </Modal.Body>
 
@@ -125,3 +140,75 @@ export const AddSong = (props) => {
   };
 
   
+
+  export class AddInstrument extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+      instruments:[],
+      instrumentForm:""
+
+      }
+      this.handleInputChange = this.handleInputChange.bind(this);
+      this.saveInstruments = this.saveInstruments.bind(this);
+      this.handleAdd = this.handleAdd.bind(this)
+  
+    }
+   
+  
+    handleInputChange(event) {
+      const target = event.target;
+      const value = target.value;
+      const name = target.name;
+  
+      this.setState({
+        [name]: value
+      });
+      console.log(this.state)
+      console.log(this.state.instrumentForm)
+      }
+
+  handleAdd(e) {
+      this.setState(prevState => ({
+        instruments: [...prevState.instruments, this.state.instrumentForm]
+      }));
+      console.log(this.state)
+      this.setState({instrumentForm :""})
+      //console.log(("project array" + JSON.stringify(this.state.projects)));
+    }
+
+
+  saveInstruments(e) {
+    
+    let instrumentData = this.state.instruments
+    console.log(instrumentData)
+    API.saveInstruments(instrumentData, this.props.id)
+      .then(res => {
+        console.log(res);
+      })
+
+      .catch(err => console.log(err));
+    console.log(this.state)
+    }
+
+
+  render(props) {
+
+    return (
+
+      <div className="border">
+         {this.state.instruments.map(instrument => (
+           <div> {instrument}</div>
+                      ))
+                      }
+      <form>
+      <label>instruments
+        <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
+      </label>
+      <Button  onClick={() => this.handleAdd()}>Add Instruments</Button>
+      </form>
+      <Button className="btn-primary" onClick={() => this.saveInstruments()}>Save Instruments</Button>
+      </div>
+    )
+  }
+  }

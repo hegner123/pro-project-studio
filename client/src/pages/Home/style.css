@@ -22,14 +22,24 @@ body {
 
 .box-bg{
   margin-top: 20vh;
-  background: url("images/Box1.svg") no-repeat center  center !important;
+  background: url("images/Path2.svg") no-repeat center center !important;
   width:100%;
-  height:120vh;
+  height:100vh;
   position: relative;
   bottom:-100px;
 }
 
 .margin{
-  margin-top: 30vh;
+  margin-top: 25vh;
+}
+
+.box-body{
+  background:white;
+}
+
+.row-box{
+  
+  margin-top: 20vh;
+  height:100vh;
 }
 

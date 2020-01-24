@@ -23,6 +23,12 @@ export default {
   },
   updateProject: function(projectData, id){
     return axios.put("/api/projects/" + id, projectData)
+  },
+  deleteProject: function(id){
+    return axios.delete("/api/projects/" + id)
+  },
+  saveInstruments: function (instrumentData, id, songId){
+    return axios.post("/api/projects" + id + "/songs/" + songId, instrumentData)
   }
 
 
