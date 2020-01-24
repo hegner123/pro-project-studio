@@ -41,6 +41,7 @@ super(props)
   };
 
   componentDidMount() {
+    console.log("user info: ", this.props.auth);
     this.loadProjects();
   }
 
@@ -175,31 +176,50 @@ super(props)
   }
 
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    const rowsVar = this.state.rows.slice();
-    
-    for (let i = fromRow; i <= toRow; i++) {
-      rowsVar[i] = { ...rowsVar[i], ...updated };
-    }
     let property = Object.keys(updated)[0];
-    console.log("whiat is updated; ", Object.keys(updated)[0]);
+    const rowsVar = this.state.rows.slice();
 
-    
-    this.setState({rows: rowsVar}, () => {
-      //Once rows in state has been updated, update the object to pass on to the database
-      var updatedProjectDetails = this.state.projectDetail;
-      // if (! Object.values(updatedProjectDetails.songs[fromRow].song_status[property])
-      //    =undefined) {
-        updatedProjectDetails.songs[fromRow].song_status[property]= Object.values(updated)[0]
-      
-        console.log("updated Project detail" , JSON.stringify(updatedProjectDetails.songs[fromRow].song_status));
+    //Only if a cell is applicable, then continute to update the object
+    if (!(this.state.rows[fromRow][property] === "X")) {
+      console.log("it's applicable");
+
+      for (let i = fromRow; i <= toRow; i++) {
+        rowsVar[i] = { ...rowsVar[i], ...updated };
       }
-     
 
-    )
+      this.setState({rows: rowsVar}, () => {
+        //Once rows in state has been updated, update the object to pass on to the database
+        var updatedProjectDetails = this.state.projectDetail;
+          updatedProjectDetails.songs[fromRow].song_status[property]= Object.values(updated)[0]
+        
+          console.log("updated Project detail" , JSON.stringify(updatedProjectDetails));
+          this.updateStatus(updatedProjectDetails);
+        }
+      )
+    }
+    else {
+      console.log("N/A");
+    }
   };
 
+  updateStatus = (updatedObj) => {
+    let id = this.state.idForContent;
+    console.log("inside update status func ", updatedObj)
+    API.updateStatus(id, updatedObj)
+    .then(res => {
+      console.log("successfully status updated");            
+      
+    })
+    .catch(err => console.log(err));
+    
+  }
+
   checkCellEditable = ({column, row})=> {
-    console.log("editable function", row)
+    //console.log("editable function", row)
+    // if (row.id === 1) {
+      
+    // }
+    return(false)
   }
   rowSelected = (index) => {
     // console.log("cell clicked is read");
@@ -276,7 +296,7 @@ super(props)
                       columns={this.state.columns}
                       rowGetter={i => this.state.rows[i]}
                       rowsCount={this.state.rowCount}
-                      onCheckCellEditable={this.state.checkCellEditable}
+                      onCheckCellIsEditable={this.state.checkCellEditable}
                       onGridRowsUpdated={this.onGridRowsUpdated}
                       //onRowClick={this.rowSelected}
                       enableCellSelect={true}

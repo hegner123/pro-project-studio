@@ -8,7 +8,10 @@ export default {
     // Gets the project with the given id
   getProjectDetails: function(id) {
     return axios.get("/api/projects/" + id);
-  }
+  },
+  updateStatus: function (id, projectData) {
+    return axios.put("/api/projects/" + id, projectData);
+  },
 
 //   // Deletes the book with the given id
 //   deleteBook: function(id) {
