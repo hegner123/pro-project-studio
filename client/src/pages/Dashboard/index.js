@@ -8,32 +8,32 @@ import "./style.css";
 import API from "../../utils/API";
 import ContentPane from "../../components/ContentPane";
 // import bootstrap components
-import { Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form } from 'react-bootstrap';
+import { Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Button } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
 class Dashboard extends Component {
-  constructor(props){
-super(props)
-  
-  this.state = {
-    projects: [],
-    idForContent: String,
-    projectDetail: [],
-    songsDetails: [],
-    instruments: [],
-    songs: [],
-    columns: [],
-    rows: [],
-    rowCount: 0,
-    songNotes: [],
-    testing:""
-  };
+  constructor(props) {
+    super(props)
 
-  this.handleInputChange = this.handleInputChange.bind(this);
-}
+    this.state = {
+      projects: [],
+      idForContent: String,
+      projectDetail: [],
+      songsDetails: [],
+      instruments: [],
+      songs: [],
+      columns: [],
+      rows: [],
+      rowCount: 0,
+      songNotes: [],
+      songID: ""
+    };
 
-  
+    this.handleNoteChange = this.handleNoteChange.bind(this);
+  }
+
+
 
   onLogoutClick = e => {
     e.preventDefault();
@@ -64,8 +64,7 @@ super(props)
       .catch(err => console.log(err));
   };
   generateContent = (id) => {
-    this.setState({ idForContent: id }, () => 
-    {
+    this.setState({ idForContent: id }, () => {
       //console.log("id: " + this.state.idForContent)
       this.loadSongDetails()
     }
@@ -84,8 +83,7 @@ super(props)
           allSongs.push(song)
         })
 
-        this.setState({ songsDetails: allSongs}, () => 
-        {
+        this.setState({ songsDetails: allSongs }, () => {
           this.renderGrid();
         }
         )
@@ -94,7 +92,7 @@ super(props)
   };
 
   renderGrid = () => {
-  
+
     const { DropDownEditor } = Editors;
     const issueTypes = [
       { id: "incomplete", value: "Incomplete" },
@@ -121,32 +119,35 @@ super(props)
     //Add data to column array
     // First column of song title
     var tempCol = [];
-    var columnObj = { key: "songTitle", name: "Song Title", resizable: true, events: {
-      onDoubleClick: (ev, args) => {
-        let rowIndex = args.rowIdx;
-        this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
-        // console.log(
-        //   "args: ", this.state.rows[rowIndex].idx
-        // );
-        //console.log(this.state.rows[index].idx)
+    var columnObj = {
+      key: "songTitle", name: "Song Title", resizable: true, events: {
+        onDoubleClick: (ev, args) => {
+          let rowIndex = args.rowIdx;
+          this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
+          console.log(
+            "song Id? ", this.state.rows[rowIndex].idx
+          );
+          this.setState({songID: this.state.rows[rowIndex].idx});
+          //console.log(this.state.rows[index].idx)
+        }
       }
-    }  };
+    };
     tempCol.push(columnObj);
     // Add remaning columns
     inst.forEach((instrument, index) => {
       columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
       tempCol.push(columnObj);
     });
-   
+
     this.setState({ columns: tempCol }, () => { })
-    
+
 
     //Add data to row array
     var tempRow = [];
     for (var i = 0; i < this.state.songsDetails.length; i++) {
       tempRow.push({})
     }
-    
+
     tempRow.forEach((row, index) => {
       row.songTitle = this.state.songsDetails[index].song_title;
       row.idx = this.state.songsDetails[index]._id;
@@ -155,7 +156,7 @@ super(props)
       })
       const merged = Object.assign(row, status[index]);
     });
-    
+
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
   }
 
@@ -167,10 +168,10 @@ super(props)
       this.state.songsDetails[rowIndex].song_notes.forEach((note, index) => {
         noteTempArray.push(note)
       });
-      this.setState({songNotes: noteTempArray}, () => {
-        //console.log("this state song notes", this.state.songNotes)
+      this.setState({ songNotes: noteTempArray }, () => {
+        console.log("this state song notes", this.state.songNotes)
       });
-      
+
     }
 
   }
@@ -187,14 +188,14 @@ super(props)
         rowsVar[i] = { ...rowsVar[i], ...updated };
       }
 
-      this.setState({rows: rowsVar}, () => {
+      this.setState({ rows: rowsVar }, () => {
         //Once rows in state has been updated, update the object to pass on to the database
         var updatedProjectDetails = this.state.projectDetail;
-          updatedProjectDetails.songs[fromRow].song_status[property]= Object.values(updated)[0]
-        
-          console.log("updated Project detail" , JSON.stringify(updatedProjectDetails));
-          this.updateStatus(updatedProjectDetails);
-        }
+        updatedProjectDetails.songs[fromRow].song_status[property] = Object.values(updated)[0]
+
+        console.log("updated Project detail", JSON.stringify(updatedProjectDetails));
+        this.updateStatus(updatedProjectDetails);
+      }
       )
     }
     else {
@@ -205,21 +206,21 @@ super(props)
   updateStatus = (updatedObj) => {
     let id = this.state.idForContent;
     console.log("inside update status func ", updatedObj)
-    API.updateStatus(id, updatedObj)
-    .then(res => {
-      console.log("successfully status updated");            
-      
-    })
-    .catch(err => console.log(err));
-    
+    API.updateProject(id, updatedObj)
+      .then(res => {
+        console.log("successfully status updated");
+
+      })
+      .catch(err => console.log(err));
+
   }
 
-  checkCellEditable = ({column, row})=> {
+  checkCellEditable = ({ column, row }) => {
     //console.log("editable function", row)
     // if (row.id === 1) {
-      
+
     // }
-    return(false)
+    return (false)
   }
   rowSelected = (index) => {
     // console.log("cell clicked is read");
@@ -236,19 +237,44 @@ super(props)
   //   //console.log("row id" + row.songTitle)
   //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
   // }
-  handleInputChange = event => {
+  handleNoteChange = (event) => {
+
+    let tempArray = this.state.songNotes;
+    const target = event.target;
+    const index = tempArray.findIndex(x => x._id === target.id);
+    const value = target.value;
+    const name = target.name;
     
-    // const target = event.target;
-    // const value = target.value;
-    // const name = target.name;
-    // //console.log("id", id);
-    
-    // this.setState({
-    //   [name]: value
-    // }, () => {
-    //   console.log("input value: ", this.state.testing)
-    // });
+    tempArray[index].noteBody = value;
+
+    this.setState({
+      [name]: tempArray
+    }, () => {
+      //console.log("updated song notes value: ", this.state.songNotes)
+    });
   };
+
+  saveNotes = () => {
+    //console.log("save note butotn click", this.state.songNotes);
+    //console.log("butotn click song id", this.state.songID);
+    
+    //Update the project variable with song notes
+    let updatedProjectDetails = this.state.projectDetail;
+    updatedProjectDetails.songs.forEach((song, index) => {
+      if (song._id == this.state.songID) {
+        //console.log("found matching song ID", index);
+        song.song_notes = this.state.songNotes;
+      }
+    })
+    console.log("show updated project", updatedProjectDetails);
+
+    API.updateProject(this.state.idForContent, updatedProjectDetails)
+      .then(res => {
+        console.log("successfully status updated");
+      })
+      .catch(err => console.log(err));
+
+  }
 
 
   render() {
@@ -282,7 +308,7 @@ super(props)
                       </OverlayTrigger>
                     ))
                     }
-                    
+
                     {/* short circuit (conditional rendering){this.state.songNotes && <SongNotes/>} */}
                   </ListGroup>
                 </Col>
@@ -300,41 +326,37 @@ super(props)
                       onGridRowsUpdated={this.onGridRowsUpdated}
                       //onRowClick={this.rowSelected}
                       enableCellSelect={true}
-                      // getCellActions={this.getCellActions}
+                    // getCellActions={this.getCellActions}
                     />
-                    {/* <PageGuide /> */}
+
                   </div>
 
                 </Col>
                 <Col sm={2} className="notesSection">
                   <div>
-                  <h3>Notes Section</h3>
-                  {/* <Form.Group controlId="exampleForm.ControlTextarea1">
-                      <Form.Label>TextBox</Form.Label>
-                      <Form.Control as="textarea" rows="3" />
-                      <Form.Label>TextBox2</Form.Label>
-                      <Form.Control as="textarea" rows="3" />
-                  </Form.Group> */}
-                  <Form.Group controlId="exampleForm.ControlTextarea1">
-                  {this.state.songNotes && this.state.songNotes.map((note, index) => (
-              
-                     //console.log("note sectio note");
-                    // <div key={index}>
-                    //   <h5 >{note.noteTitle}</h5>
-                    //   <p> {note.noteBody}</p>
-                    // </div> 
-                    <div key={index}>                                 
-                      <Form.Label key={index}>{note.noteTitle}</Form.Label>
-                      <Form.Control as="textarea" rows="3" 
-                        id={note.noteTitle}
-                        value= {this.state.testing}
-                        onChange={this.handleInputChange}
-                        name={"testing"}/>
-                    </div>                  
-                  ))}
-                </Form.Group>
-                </div>
-                  
+                    <h3>Notes Section</h3>
+                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                      {this.state.songNotes && this.state.songNotes.map((note, index) => (
+                          // <Form.Label key={index}>{note.noteTitle}</Form.Label>
+                          // <Form.Control as="textarea" rows="3"
+                          //   id={note.noteTitle}
+                          //   value={this.state.testing}
+                          //   onChange={this.handleInputChange}
+                          //   name={"testing"} />
+                    
+                        <div key={index}>
+                          <Form.Label key={index}>{note.noteTitle}</Form.Label>
+                          <Form.Control as="textarea" rows="3"
+                            id={note._id}                         
+                            value={this.state.songNotes[index].noteBody}
+                            onChange={this.handleNoteChange}
+                            name={"songNotes"} />
+                        </div>
+                      ))}
+                      <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
+                    </Form.Group>
+                  </div>
+
                 </Col>
               </Row>
             </Tab.Container>
