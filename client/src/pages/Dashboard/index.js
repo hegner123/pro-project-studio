@@ -287,7 +287,7 @@ export const Addproject = (props) => {
                   <Col sm={2}>
                     <ListGroup>
                       {this.state.projects.map(project => (
-                        <OverlayTrigger placement="right" key={project.id} overlay={
+                        <OverlayTrigger placement="top" key={project.id} overlay={
                           <Popover id="popover-basic">
                             <Popover.Title as="h3">{project.title}</Popover.Title>
                             <Popover.Content>
