@@ -9,6 +9,15 @@ export default {
   getProjectDetails: function(id) {
     return axios.get("/api/projects/" + id);
   },
+  updateProject: function (id, projectData) {
+    return axios.put("/api/projects/" + id, projectData);
+  },
+  addNote: function (id, projectData) {
+    return axios.put("/api/projects/addnote/" + id, projectData);
+  },
+  // updateNotes: function (id, projectData) {
+  //   return axios.put("/api/projects/" + id, projectData);
+  // }
 
 //   // Deletes the book with the given id
 //   deleteBook: function(id) {

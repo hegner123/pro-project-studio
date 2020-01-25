@@ -15,6 +15,25 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  update: function(req, res) {
+    console.log("req.body.id: ", req.params.id)
+    console.log("req.body: ", req.body)
+    Project
+      .findOneAndUpdate({ _id: req.params.id }, req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+//   Project
+ //.findOneAndUpdate({ _id: req.params.id },{$push: {"songs.1.song_notes": req.body}})
+//   .then(dbModel => res.json(dbModel))
+//   .catch(err => res.status(422).json(err));
+// }
+  addNote: function(req, res) {
+    Project
+    .findOneAndUpdate({ _id: req.params.id},{$push: {["songs." + [req.body.index] + ".song_notes"]: req.body.newNote}})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
+  },
   create: function(req, res) {
     Project
       .create(req.body)

@@ -11,6 +11,11 @@ body {
   display: flex;
 }
 
+.notesSection {
+  background-color: white;
+  padding-left: 15px;
+}
+
 
 .btn-xs {
   height:2rem !important;

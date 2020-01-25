@@ -10,7 +10,13 @@ router.route("/")
 router
   .route("/:id")
   .get(projectController.findById)
-//   .put(booksController.update)
+  .put(projectController.update)
+  
 //   .delete(booksController.remove);
+
+router 
+  .route("/addnote/:id")
+  .get(projectController.findById)
+  .put(projectController.addNote)
 
 module.exports = router;
