@@ -16,14 +16,9 @@ const ProjectSchema = new Schema({
             song_notes: [new Schema ({
                   noteTitle: String,
                   noteBody: String,
-                  noteStatus: {
-                        type: String,
-                        default: "Incomplete"
-                  }
             })]
         })],
   members: {type: Array, default: []},
-  total_arrangements: Number,
   companyName: String
 });
 

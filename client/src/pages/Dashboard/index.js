@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
-import Spotify from "../../components/spotifySearch"
 
 // import Table from "../../components/Table";
 import "./style.css";
@@ -103,10 +102,9 @@ export class SongForm extends Component {
         </label>
         </div>
         <div className ="form-row">
-        <Spotify/>
         <label>Song References
         <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
-        
+        <Button onClick={this.searchSong}>Seach in the console</Button>
         </label>
         </div>
 
