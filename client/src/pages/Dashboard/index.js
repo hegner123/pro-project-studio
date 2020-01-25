@@ -10,10 +10,9 @@ import API from "../../utils/API";
 
 import ContentPane from "../../components/ContentPane";
 // import bootstrap components
-import { Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Button, Modal} from 'react-bootstrap';
+import { Container, Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
-
 
 
 export class NameForm extends React.Component {
@@ -25,12 +24,10 @@ export class NameForm extends React.Component {
     members: [],
     total_arrangements: 0,
     companyName: ""};
-
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleCompanyNameChange = this.handleCompanyNameChange.bind(this);
     this.handleMembersChange = this.handleMembersChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
 
@@ -55,22 +52,11 @@ export class NameForm extends React.Component {
     console.log(projectData)
     API.saveProject(projectData)
       .then(res => {
-        this.setState({ projects: res.data, });
-        //console.log(("project array" + JSON.stringify(this.state.projects)));
-        this.state.projects.forEach((pobject, index) => {
-          //console.log("song object: ", pobject.songs);
-          pobject.songs.forEach((song, index) => {
-            //console.log("song note: ", song.song_notes[0].noteBody);
-          })
-        })
-        this.setState({ idForContent: this.state.projects[0]._id });
-        //console.log("id for content on load: " + this.state.idForContent);
-        //console.log("view note icon:  " + JSON.stringify(this.state.viewNoteAction))
-        this.loadSongDetails();
+        console.log(res);
       })
 
       .catch(err => console.log(err));
-    }
+  }; 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -95,156 +81,174 @@ export class NameForm extends React.Component {
       </form>
     );
   }
-};
+}
 
-export const Addproject = (props) => {
-  const [show, setShow] = React.useState(false);
+  export const Addproject = (props) => {
+    const [show, setShow] = React.useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+  
+  
+    return (
+      <div className="ml-auto">
+        <Button variant="light" onClick={handleShow} className="btn-xs">
+          Add Project
+        </Button>
+  
+        <Modal show={show} onHide={handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add Project</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <NameForm/>
+  
+          </Modal.Body>
+  
+        </Modal>
+        </div>
+  
+    )
+    }
+   
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
 
 
-  return (
-    <div className="ml-auto">
-      <Button variant="light" onClick={handleShow} className="btn-xs">
-        Add Project
-      </Button>
+class Dashboard extends Component {
+  constructor(props) {
+    super(props)
+    
+    this.displayNewNotes = [];
 
-      <Modal show={show} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Project</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <NameForm/>
+    this.state = {
+      projects: [],
+      idForContent: String,
+      projectDetail: [],
+      songsDetails: [],
+      instruments: [],
+      songs: [],
+      columns: [],
+      rows: [],
+      rowCount: 0,
+      songNotes: [],
+      songID: "",
+      //displayNewNotes: [],
+      showNewNotes: this.displayNewNotes
+    };
 
-        </Modal.Body>
-
-      </Modal>
-      </div>
-
-  )
+    this.handleNoteChange = this.handleNoteChange.bind(this);
+    //this.addNewNote = this.addNewNote.bind(this);
   }
 
 
 
 
-
-  class Dashboard extends Component {
-    constructor(props) {
-      super(props)
-      
-      this.displayNewNotes = [];
-  
-      this.state = {
-        projects: [],
-        idForContent: String,
-        projectDetail: [],
-        songsDetails: [],
-        instruments: [],
-        songs: [],
-        columns: [],
-        rows: [],
-        rowCount: 0,
-        songNotes: [],
-        songID: "",
-        //displayNewNotes: [],
-        showNewNotes: this.displayNewNotes
-      };
-  
-      this.handleNoteChange = this.handleNoteChange.bind(this);
-      //this.addNewNote = this.addNewNote.bind(this);
-    }
-  
-  
-  
-  
-    componentDidMount() {
-      console.log("user info: ", this.props.auth);
-      this.loadProjects();
-    }
-
-    onLogoutClick = e => {
-      e.preventDefault();
-      this.props.logoutUser();
-    };
-
-
-
-    loadProjects = () => {
-      API.getProjects()
-        .then(res => {
-          this.setState({ projects: res.data, });
-          //console.log(("project array" + JSON.stringify(this.state.projects)));
-          this.state.projects.forEach((pobject, index) => {
-            //console.log("song object: ", pobject.songs);
-            pobject.songs.forEach((song, index) => {
-              //console.log("song note: ", song.song_notes[0].noteBody);
-            })
+  componentDidMount() {
+    console.log("user info: ", this.props.auth);
+    this.loadProjects();
+  }
+  loadProjects = () => {
+    API.getProjects()
+      .then(res => {
+        this.setState({ projects: res.data, });
+        //console.log(("project array" + JSON.stringify(this.state.projects)));
+        this.state.projects.forEach((pobject, index) => {
+          //console.log("song object: ", pobject.songs);
+          pobject.songs.forEach((song, index) => {
+            //console.log("song note: ", song.song_notes[0].noteBody);
           })
-          this.setState({ idForContent: this.state.projects[0]._id });
-          this.setState({ title: this.state.projects[0].title });
-          console.log("id for content on load: " + this.state.idForContent);
-          this.loadSongDetails();
         })
-        .catch(err => console.log(err));
-    };
-    generateContent = (id) => {
-      this.setState({ idForContent: id })
-      console.log("id: " + this.state.idForContent);
-      this.loadSongDetails();
-    };
+        this.setState({ idForContent: this.state.projects[0]._id });
+        this.setState({ title: this.state.projects[0].title });
+        console.log("id for content on load: " + this.state.idForContent);
+        this.loadSongDetails();
+      })
+      .catch(err => console.log(err));
+  };
 
-    //Get song details for grid
-    loadSongDetails = () => {
-      API.getProjectDetails(this.state.idForContent)
-        .then(res => {
-          this.setState({ projectDetail: res.data });
-          console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
-          var instTemp = [];
-          var songTemp = [];
-          var instStatus = [];
-          var status = [];
-          this.state.projectDetail.songs.forEach((song, index) => {
-            songTemp.push(song.song_title);
-            song.song_arrangements.forEach((inst, index) => {
-              instTemp.push(inst)
-            })
-            status.push(song.song_status)
-            console.log("status" + JSON.stringify(status));
-            // song.song_status.forEach((ins, index) => {
-            //   console.log("status" + ins)
-            // })
-          })
-          instTemp = new Set(instTemp);
-          instTemp = [...instTemp]
+  generateContent = (id) => {
+    this.setState({ idForContent: id }, () => {
+      //console.log("id: " + this.state.idForContent)
+      this.loadSongDetails()
+    }
+    )
+  };
 
-          this.renderGrid(instTemp, songTemp, status);
+  //Get song details for grid
+  loadSongDetails = () => {
+    API.getProjectDetails(this.state.idForContent)
+      .then(res => {
+        this.setState({ projectDetail: res.data });
+        //console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
+        let allSongs = [];
+
+        this.state.projectDetail.songs.forEach((song, index) => {
+          allSongs.push(song)
         })
-        .catch(err => console.log(err));
+
+        this.setState({ songsDetails: allSongs }, () => {
+          this.renderGrid();
+        }
+        )
+      })
+      .catch(err => console.log(err));
+  };
+
+  renderGrid = () => {
+
+    const { DropDownEditor } = Editors;
+    const issueTypes = [
+      { id: "incomplete", value: "Incomplete" },
+      { id: "complete", value: "Complete" },
+      //{ id: "na", value: "N/A" }
+    ];
+    const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
+
+    //List of all instruments for project
+    let inst = [];
+    let status = [];
+    console.log("all songs: " + JSON.stringify(this.state.songsDetails[0]));
+    this.state.songsDetails.forEach((song, index) => {
+      song.song_arrangements.forEach((instrument, index) => {
+        inst.push(instrument)
+      })
+      status.push(song.song_status)
+    })
+    inst = new Set(inst);
+    inst = [...inst]
+
+    console.log("status: " + JSON.stringify(status));
+
+    //Add data to column array
+    // First column of song title
+    var tempCol = [];
+    var columnObj = {
+      key: "songTitle", name: "Song Title", resizable: true, events: {
+        onDoubleClick: (ev, args) => {
+          let rowIndex = args.rowIdx;
+          this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
+          console.log(
+            "song Id? ", this.state.rows[rowIndex].idx
+          );
+          this.setState({ songID: this.state.rows[rowIndex].idx });
+          //console.log(this.state.rows[index].idx)
+        }
+      }
     };
-
-    renderGrid(inst, songs, status) {
-      console.log("inst: " + inst);
-
-      const { DropDownEditor } = Editors;
-      const issueTypes = [
-        { id: "incomplete", value: "Incomplete" },
-        { id: "complete", value: "Complete" },
-        { id: "x", value: "X" }
-      ];
-      const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
-
-      //Add data to column array
-      // First column of song title
-      var tempCol = [];
-      var columnObj = { key: "songTitle", name: "Song Title" };
+    // tempCol.push(columnObj);
+    // // Add remaning columns
+    // inst.forEach((instrument, index) => {
+    //   columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
+    // }
+    tempCol.push(columnObj);
+    // Add remaning columns
+    inst.forEach((instrument, index) => {
+      columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
       tempCol.push(columnObj);
-      // Add remaning columns
-      inst.forEach((instrument, index) => {
-        columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
-        tempCol.push(columnObj);
-      });
+    });
+
 
     this.setState({ columns: tempCol }, () => { })
 
@@ -266,6 +270,12 @@ export const Addproject = (props) => {
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
   }
+
+
+
+
+
+
 
   displayNotes = (songID, rowIndex) => {
     //console.log("songid: ", songID);
@@ -547,7 +557,6 @@ export const Addproject = (props) => {
     );
   }
 }
-  
 
   Dashboard.propTypes = {
     logoutUser: PropTypes.func.isRequired,
