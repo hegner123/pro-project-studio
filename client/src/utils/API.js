@@ -29,7 +29,12 @@ export default {
   },
   saveInstruments: function (instrumentData, id, songId){
     return axios.post("/api/projects" + id + "/songs/" + songId, instrumentData)
+  },
+
+  spotifyPreview: function (song){
+    return axios.get("/api/song-preview/" + song)
   }
+
 
 
 };

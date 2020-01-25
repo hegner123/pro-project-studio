@@ -3,12 +3,16 @@ import "./style.css";
 import Image from "./images/Image1.svg";
 
 
+
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+
 import Container from "react-bootstrap/Container";
 
 
 class Landing extends Component {
+  
+  
   render() {
     return (
       <div>
@@ -53,13 +57,15 @@ class Landing extends Component {
            <h3>"Make it sound like "</h3>
            <p>Make it easy for your clients to communicate their artistic vision. Our utilization of Spotify's API allows you to preview reference material right in the browser.</p>
          </Col>
+
       </Row>
 
       <Row bsPrefix="row-box">
         <Col>
-        Stuff
+        
         </Col>
       </Row>
+
 
        </Container>
        </div>

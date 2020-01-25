@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
+import Spotify from "../../components/spotifySearch"
 
 // import Table from "../../components/Table";
 import "./style.css";
@@ -35,6 +36,12 @@ export class SongForm extends Component {
 
   }
 
+  searchSong (){
+    API.spotifyPreview("Blink 182").then(res => {
+      console.log(res);
+    })
+  }
+
 
   handleInputChange(event) {
     const target = event.target;
@@ -58,7 +65,6 @@ export class SongForm extends Component {
       }
       console.log(songData)
       API.saveSong(songData, this.props.id)
-      
         .then(res => {
           console.log(res);
         })
@@ -97,8 +103,10 @@ export class SongForm extends Component {
         </label>
         </div>
         <div className ="form-row">
+        <Spotify/>
         <label>Song References
         <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
+        
         </label>
         </div>
 
@@ -149,7 +157,8 @@ export const AddSong = (props) => {
     constructor(props) {
       super(props);
       this.state = {
-      instrumentForm:""
+      instrumentForm:"",
+      instruments:[]
       }
       this.handleInputChange = this.handleInputChange.bind(this);
       this.saveInstruments = this.saveInstruments.bind(this);
@@ -208,6 +217,7 @@ export const AddSong = (props) => {
         <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
       </label>
       <Button  onClick={() => this.handleAdd(props)}>Add Instruments</Button>
+
       </form>
       </div>
     )
