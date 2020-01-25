@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
@@ -8,13 +9,15 @@ import "./style.css";
 import API from "../../utils/API";
 import ContentPane from "../../components/ContentPane";
 // import bootstrap components
-import { Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Button } from 'react-bootstrap';
+import { Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Button} from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
+    
+    this.displayNewNotes = [];
 
     this.state = {
       projects: [],
@@ -27,10 +30,13 @@ class Dashboard extends Component {
       rows: [],
       rowCount: 0,
       songNotes: [],
-      songID: ""
+      songID: "",
+      //displayNewNotes: [],
+      showNewNotes: this.displayNewNotes
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
+    //this.addNewNote = this.addNewNote.bind(this);
   }
 
 
@@ -97,7 +103,7 @@ class Dashboard extends Component {
     const issueTypes = [
       { id: "incomplete", value: "Incomplete" },
       { id: "complete", value: "Complete" },
-      { id: "x", value: "X" }
+      //{ id: "na", value: "N/A" }
     ];
     const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
 
@@ -127,7 +133,7 @@ class Dashboard extends Component {
           console.log(
             "song Id? ", this.state.rows[rowIndex].idx
           );
-          this.setState({songID: this.state.rows[rowIndex].idx});
+          this.setState({ songID: this.state.rows[rowIndex].idx });
           //console.log(this.state.rows[index].idx)
         }
       }
@@ -152,7 +158,7 @@ class Dashboard extends Component {
       row.songTitle = this.state.songsDetails[index].song_title;
       row.idx = this.state.songsDetails[index]._id;
       inst.forEach((ins, index) => {
-        row[ins] = "X"
+        row[ins] = "N/A"
       })
       const merged = Object.assign(row, status[index]);
     });
@@ -181,7 +187,7 @@ class Dashboard extends Component {
     const rowsVar = this.state.rows.slice();
 
     //Only if a cell is applicable, then continute to update the object
-    if (!(this.state.rows[fromRow][property] === "X")) {
+    if (!(this.state.rows[fromRow][property] === "N/A")) {
       console.log("it's applicable");
 
       for (let i = fromRow; i <= toRow; i++) {
@@ -238,13 +244,12 @@ class Dashboard extends Component {
   //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
   // }
   handleNoteChange = (event) => {
-
     let tempArray = this.state.songNotes;
     const target = event.target;
     const index = tempArray.findIndex(x => x._id === target.id);
     const value = target.value;
     const name = target.name;
-    
+   
     tempArray[index].noteBody = value;
 
     this.setState({
@@ -254,25 +259,94 @@ class Dashboard extends Component {
     });
   };
 
+  handleNoteTitleChange = (event) => {
+    let tempArray = this.state.songNotes;
+    const target = event.target;
+    const index = tempArray.findIndex(x => x._id === target.id);
+    const value = target.value;
+    const name = target.name;
+   
+    tempArray[index].noteTitle = value;
+
+    this.setState({
+      [name]: tempArray
+    }, () => {
+      //console.log("updated song notes value: ", this.state.songNotes)
+    });
+  };
   saveNotes = () => {
-    //console.log("save note butotn click", this.state.songNotes);
-    //console.log("butotn click song id", this.state.songID);
-    
     //Update the project variable with song notes
     let updatedProjectDetails = this.state.projectDetail;
     updatedProjectDetails.songs.forEach((song, index) => {
-      if (song._id == this.state.songID) {
+      if (song._id === this.state.songID) {
         //console.log("found matching song ID", index);
         song.song_notes = this.state.songNotes;
       }
     })
-    console.log("show updated project", updatedProjectDetails);
 
     API.updateProject(this.state.idForContent, updatedProjectDetails)
       .then(res => {
         console.log("successfully status updated");
       })
       .catch(err => console.log(err));
+
+  }
+
+  addNewNote = () => {
+    //Add new note object
+    // let updatedProjectDetails = this.state.projectDetail;
+    // updatedProjectDetails.songs.forEach((song, index) => {
+    //   if (song._id === this.state.songID) {
+    //     //console.log("found matching song ID", index);
+    //     var tempArray = this.state.songNotes;
+    //     tempArray.push({"_id": new ObjectId(), "noteTitle": "Note Title", "noteBody": "Note Body"});
+    //     console.log("array: ", tempArray)
+    //     song.song_notes = tempArray;
+    //   }
+    // })
+
+    // API.updateProject(this.state.idForContent, updatedProjectDetails)
+    //   .then(res => {
+    //     console.log("successfully added new note");
+    //   })
+    //   .catch(err => console.log(err));
+
+    let songIndex;
+
+    this.state.projectDetail.songs.forEach((song, index) => {
+      if (song._id === this.state.songID) {
+        console.log("found matching song ID index", index);
+        songIndex = index;
+       //song.song_notes = this.state.songNotes;
+      }
+    })
+    
+    // var newNoteObj = {
+    //   "_id": "new ObjectId()", 
+    //   "noteTitle": "Note Title", 
+    //   "noteBody": "Note Body"
+    // };
+   
+    let noteObj = '{$push: {"songs.' + songIndex + '.song_notes": {_id: new ObjectId(), "noteStatus": "N/A", noteTitle": "Note Title", "noteBody": "Note Body"}}}'
+    console.log("stringformat: " + noteObj);
+    var newnoteObj = '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'
+    var dataObj = {
+      newNote: {newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'},
+      index: songIndex
+    }
+    API.addNote(this.state.idForContent, dataObj)
+    .then(res => {
+      console.log("successfully added new note", res);
+      this.loadProjects();
+    })
+    .catch(err => console.log(err));
+
+    // this.displayNewNotes.push(<Form.Control as="textarea" rows="3"/>);
+    // this.setState({
+    //    showNewNotes : this.displayNewNotes,
+    //    //displayNewNotes: tempArray
+    //   //  postVal : ""
+    // });
 
   }
 
@@ -335,28 +409,30 @@ class Dashboard extends Component {
                 <Col sm={2} className="notesSection">
                   <div>
                     <h3>Notes Section</h3>
-                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                    <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
                       {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                          // <Form.Label key={index}>{note.noteTitle}</Form.Label>
-                          // <Form.Control as="textarea" rows="3"
-                          //   id={note.noteTitle}
-                          //   value={this.state.testing}
-                          //   onChange={this.handleInputChange}
-                          //   name={"testing"} />
-                    
                         <div key={index}>
-                          <Form.Label key={index}>{note.noteTitle}</Form.Label>
+                          {/* <Form.Label key={index}>{note.noteTitle}</Form.Label> */}
+                          <Form.Control type="text" 
+                            id={note._id}
+                            value={this.state.songNotes[index].noteTitle}
+                            onChange={this.handleNoteTitleChange}
+                            name={"songNotes"} />
+
                           <Form.Control as="textarea" rows="3"
-                            id={note._id}                         
+                            id={note._id}
                             value={this.state.songNotes[index].noteBody}
                             onChange={this.handleNoteChange}
                             name={"songNotes"} />
                         </div>
                       ))}
+                      <div id="display-data-Container">
+                        {this.displayNewNotes}
+                      </div>
                       <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
                     </Form.Group>
                   </div>
-
                 </Col>
               </Row>
             </Tab.Container>
