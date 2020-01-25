@@ -7,6 +7,7 @@ const multer = require('multer');
 const cors = require('cors');
 
 const users = require("./routes/api/users");
+
 const router = require("express").Router();
 
 const app = express();
@@ -59,7 +60,7 @@ app.use(bodyParser.json());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mernauth" ,
     { useNewUrlParser: true,
-      // useUnifiedTopology: true,
+      useUnifiedTopology: true,
       useCreateIndex:true }
   )
   .then(() => console.log("MongoDB successfully connected"))
@@ -71,7 +72,7 @@ app.use(passport.initialize());
 // Passport config
 require("./config/passport")(passport);
 
-app.use("/api/users", users);
+app.use("/api/", users);
 app.use(routes);
 
 // // ... other app.use middleware

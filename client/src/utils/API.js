@@ -18,14 +18,18 @@ export default {
   // updateNotes: function (id, projectData) {
   //   return axios.put("/api/projects/" + id, projectData);
   // }
+
 //   // Deletes the book with the given id
 //   deleteBook: function(id) {
 //     return axios.delete("/api/books/" + id);
 //   },
 //   // Saves a book to the database
-//   saveBook: function(bookData) {
-//     return axios.post("/api/books", bookData);
-//   }
+  saveProject: function(projectData) {
+    return axios.post("/api/projects", projectData);
+  },
+  updateProject: function(projectData, id){
+    return axios.put("/api/projects" + id, projectData)
+  }
 
 };
 

@@ -7,27 +7,8 @@ import API from "../../utils/API";
 
 function ContentPane(props) {
   return (
-    <div className="contentBox">
-    {/* <Tab.Content >
-      <div > */}
-
-        {/* <Tab.Pane key={props.id} className="contentBox"> */}
-          
+    <div className="">
           <h3>{props.id}</h3>
-          {/* <Table>
-            <thead>
-              <th></th>
-              {props.songs.map((song, index) => (
-                <th>{song}</th>
-              ))}
-            </thead>
-          </Table> */}
-
-
-
-        {/* </Tab.Pane> */}
-      {/* </div>
-    </Tab.Content> */}
     </div>
   )
 }

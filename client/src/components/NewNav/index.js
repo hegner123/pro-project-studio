@@ -7,6 +7,7 @@ import { logoutUser } from "../../actions/authActions";
 import PropTypes from "prop-types";
 import logo from "./Group2.png";
 import { Link } from "react-router-dom";
+import "./style.css";
 
 class NewNav extends Component {
 
@@ -16,28 +17,27 @@ class NewNav extends Component {
       e.preventDefault();
       this.props.logoutUser();
     };
-   
-  
+
     render() {
       const { user } = this.props.auth;
       const isLoggedIn = localStorage.jwtToken;
-      let button;
+      let authArea;
 
       if (isLoggedIn) {
-        button =
+        authArea =
         <NavDropdown title={user.firstName} id="basic-nav-dropdown">
-          <NavDropdown.Item> <Link to="/dashboard" className="nav-link">Dashboard </Link></NavDropdown.Item>
-          <NavDropdown.Item> <Link to="/profile" className="nav-link">Profile </Link></NavDropdown.Item>
+          <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
+          <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
 
-          <NavDropdown.Item> <Link to="/profile" onClick={this.onLogoutClick} className="nav-link">Logout </Link></NavDropdown.Item>
+          <NavDropdown.Item onClick={this.onLogoutClick}>Logout</NavDropdown.Item>
       </NavDropdown>;
       } else {
-        button =
+        authArea =
         <Nav className="ml-auto text-white">
-           <Nav.Link className="text-white" ><Link to="/register" className="nav-link text-white">
+           <Nav.Link className="text-white" ><Link to="/register" className="text-white">
                   Register
                 </Link></Nav.Link>
-        <Nav.Link className="text-white" ><Link to="/login" className="nav-link text-white">
+        <Nav.Link className="text-white" ><Link to="/login" className="text-white">
                   Login
                 </Link></Nav.Link>
 
@@ -51,9 +51,18 @@ class NewNav extends Component {
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav" className="text-white">
     <Nav className="mr-auto text-white">
-      <Link to="/why">Why</Link>
+      <div className="nav-link">
+    <a href="#why">Why</a>
+    </div>
+    <div className="nav-link">
+    <a href="#what">What</a>
+    </div>
+    <div className="nav-link">
+    <a href="#how">How</a>
+    </div>
     </Nav>
-    {button}
+   
+    {authArea}
     
   </Navbar.Collapse>
 </Navbar>

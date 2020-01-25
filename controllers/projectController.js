@@ -33,7 +33,19 @@ module.exports = {
     .findOneAndUpdate({ _id: req.params.id},{$push: {["songs." + [req.body.index] + ".song_notes"]: req.body.newNote}})
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
-  }
+  },
+  create: function(req, res) {
+    Project
+      .create(req.body)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+//   update: function(req, res) {
+//     Book
+//       .findOneAndUpdate({ _id: req.params.id }, req.body)
+//       .then(dbModel => res.json(dbModel))
+//       .catch(err => res.status(422).json(err));
+//   },
 //   remove: function(req, res) {
 //     Book
 //       .findById({ _id: req.params.id })

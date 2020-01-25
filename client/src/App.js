@@ -11,7 +11,7 @@ import Login from "./components/auth/Login";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import PrivateRoute from "./components/private-route/PrivateRoute";
 import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile"
 import Home from "./pages/Home"
 import ProjectDashboard from "./pages/ProjectDashboard";
 import image from './components/image';
@@ -56,6 +56,8 @@ class App extends Component {
 
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/profile" component={Profile} />
+
               <PrivateRoute exact path="/dashboard#:id" component={Dashboard} />
 
             </Switch>
