@@ -5,6 +5,10 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const multer = require('multer');
 const cors = require('cors');
+require('dotenv').config()
+const keys = require('./keys')
+
+
 
 const users = require("./routes/api/users");
 const router = require("express").Router();

@@ -11,7 +11,7 @@ import "./style.css"
 
 
 
-export class SongForm extends React.Component {
+export class SongForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,7 +94,6 @@ export class SongForm extends React.Component {
         <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
         </label>
         </div>
-        
 
 
         <input className="btn-primary" type="submit" value="Submit" />
@@ -129,8 +128,6 @@ export const AddSong = (props) => {
         </Modal.Header>
         <Modal.Body>
           <SongForm id={props.id}/>
-          
-
         </Modal.Body>
 
       </Modal>
