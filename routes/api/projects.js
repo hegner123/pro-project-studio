@@ -24,12 +24,17 @@ router
   .route("/api/projects/:id/songs/:songId")
   .post(projectController.pushInstruments)
   .put(projectController.update)
-  
+
 //   .delete(booksController.remove);
 
-router 
-  .route("/addnote/:id")
+router
+  .route("/note/add/:id")
   .get(projectController.findById)
   .put(projectController.addNote)
+
+router
+  .route("/note/remove/:id")
+  .get(projectController.findById)
+  .put(projectController.removeNote)
 
 module.exports = router;
