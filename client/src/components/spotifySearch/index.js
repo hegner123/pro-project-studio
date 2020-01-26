@@ -47,7 +47,7 @@ render(){
       <p>{this.state.artist} <a href={this.state.link} target="_none" className="">{this.state.title}</a> </p>
   </div>
       </div>
-      
+
 
   )
 }
