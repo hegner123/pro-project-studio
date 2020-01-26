@@ -315,6 +315,7 @@ class Dashboard extends Component {
     this.state = {
       projects: [],
       idForContent: String,
+      title: String,
       projectDetail: [],
       songsDetails: [],
       instruments: [],
@@ -724,7 +725,7 @@ class Dashboard extends Component {
 
                   <Col xs={8} className="contentSection">
                   <ContentPane
-                    id={this.state.idForContent}
+                    id={this.state.title}
                   />
                     <div>
                     <ReactDataGrid
