@@ -31,12 +31,6 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   }
-  // ,
-  // role: {
-  //   type: String,
-  //   default: 'Admin'
-  // },
-  // projects: {type: Array, default: []}
 });
 
 module.exports = User = mongoose.model("users", UserSchema);

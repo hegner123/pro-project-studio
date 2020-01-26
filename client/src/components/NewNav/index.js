@@ -25,7 +25,7 @@ class NewNav extends Component {
 
       if (isLoggedIn) {
         authArea =
-        <NavDropdown title={user.firstName} id="basic-nav-dropdown">
+        <NavDropdown title={user.firstName} id="basic-nav-dropdown" bsPrefix="cust-link">
           <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
           <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
 
@@ -34,10 +34,10 @@ class NewNav extends Component {
       } else {
         authArea =
         <Nav className="ml-auto text-white">
-           <Nav.Link className="text-white" ><Link to="/register" className="text-white">
+           <Nav.Link className="text-white" ><Link to="/register" className="text-white cust-link">
                   Register
                 </Link></Nav.Link>
-        <Nav.Link className="text-white" ><Link to="/login" className="text-white">
+        <Nav.Link className="text-white" ><Link to="/login" className="text-white cust-link">
                   Login
                 </Link></Nav.Link>
 
@@ -52,13 +52,13 @@ class NewNav extends Component {
   <Navbar.Collapse id="basic-navbar-nav" className="text-white">
     <Nav className="mr-auto text-white">
       <div className="nav-link">
-    <a href="#why">Why</a>
+    <a href="#what-is-pro-project-studio" className="text-white cust-link">Why</a>
     </div>
     <div className="nav-link">
-    <a href="#what">What</a>
+    <a href="#what"  className="text-white cust-link">What</a>
     </div>
     <div className="nav-link">
-    <a href="#how">How</a>
+    <a href="#how"  className="text-white cust-link">How</a>
     </div>
     </Nav>
    

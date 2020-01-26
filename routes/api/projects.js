@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const projectController = require("../../controllers/projectController");
+const User = require("../../models/User");
 
 // Matches with "/api/projects"
 router.route("/")
@@ -10,9 +11,16 @@ router.route("/")
 router
   .route("/:id")
   .get(projectController.findById)
-  .put(projectController.update)
+  .delete(projectController.remove)
 
-//   .delete(booksController.remove);
+router
+  .route("/:id/songs")
+  .post(projectController.pushSong)
+
+  router
+  .route("/api/projects/:id/songs/:songId")
+  .post(projectController.pushInstruments)
+  .put(projectController.update)
 
 router
   .route("/note/add/:id")
