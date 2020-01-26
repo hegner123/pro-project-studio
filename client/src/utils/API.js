@@ -27,6 +27,23 @@ export default {
   saveProject: function(projectData) {
     return axios.post("/api/projects", projectData);
   },
+  saveSong: function(songData, id) {
+    return axios.post("/api/projects/" + id +"/songs", songData);
+  },
+  updateProject: function(projectData, id){
+    return axios.put("/api/projects/" + id, projectData)
+  },
+  deleteProject: function(id){
+    return axios.delete("/api/projects/" + id)
+  },
+  saveInstruments: function (instrumentData, id, songId){
+    return axios.post("/api/projects" + id + "/songs/" + songId, instrumentData)
+  },
+
+  spotifyPreview: function (song){
+    return axios.get("/api/song-preview/" + song)
+  }
+
 
 
 };

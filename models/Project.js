@@ -8,7 +8,7 @@ const ProjectSchema = new Schema({
   songs: [ new Schema ({
             song_title: String,
             song_arrangements: {type: Array, default: []},
-            song_status: {type: Object},
+            song_status: {type:Object},
             song_lyrics: String,
             song_key: String,
             song_bpm: Number,
