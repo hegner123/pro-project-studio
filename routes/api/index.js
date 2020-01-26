@@ -7,6 +7,6 @@ const spotify = require("./spotify")
 router.use("/projects", projectRoutes);
 
 router.use("/song-preview", spotify)
-// router.use("/users", userRoutes);
+router.use("/users", userRoutes);
 
 module.exports = router;
