@@ -26,6 +26,19 @@ body {
   width: 100%;
   float: left;
 }
+.noteDiv > .removeNote {
+  color: #ff1744;
+  font-size: 48px;
+  /* position: absolute;
+  top: -20px;
+  right: 5px; */
+  cursor: pointer;
+}
+
+.noteDiv > .removeNote:hover {
+  color: #d50000;
+}
+
 
 
 

@@ -113,9 +113,6 @@ export class NameForm extends React.Component {
     }
    
 
-
-
-
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -141,9 +138,6 @@ class Dashboard extends Component {
     this.handleNoteChange = this.handleNoteChange.bind(this);
     //this.addNewNote = this.addNewNote.bind(this);
   }
-
-
-
 
   componentDidMount() {
     console.log("user info: ", this.props.auth);
@@ -345,15 +339,7 @@ class Dashboard extends Component {
     console.log(this.state.rows[index].idx)
     // if ()
   }
-  // getCellActions = (column, row) => {
-  //   //console.log("column info " + JSON.stringify(row))
-  //   //console.log("view note icon:  " + JSON.stringify(this.state.viewNoteAction))
-  //   const cellActions = {
-  //     songTitle: this.state.viewNoteAction
-  //   };
-  //   //console.log("row id" + row.songTitle)
-  //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
-  // }
+
   handleNoteChange = (event) => {
     let tempArray = this.state.songNotes;
     const target = event.target;
@@ -404,24 +390,6 @@ class Dashboard extends Component {
   }
 
   addNewNote = () => {
-    //Add new note object
-    // let updatedProjectDetails = this.state.projectDetail;
-    // updatedProjectDetails.songs.forEach((song, index) => {
-    //   if (song._id === this.state.songID) {
-    //     //console.log("found matching song ID", index);
-    //     var tempArray = this.state.songNotes;
-    //     tempArray.push({"_id": new ObjectId(), "noteTitle": "Note Title", "noteBody": "Note Body"});
-    //     console.log("array: ", tempArray)
-    //     song.song_notes = tempArray;
-    //   }
-    // })
-
-    // API.updateProject(this.state.idForContent, updatedProjectDetails)
-    //   .then(res => {
-    //     console.log("successfully added new note");
-    //   })
-    //   .catch(err => console.log(err));
-
     let songIndex;
 
     this.state.projectDetail.songs.forEach((song, index) => {
@@ -431,16 +399,7 @@ class Dashboard extends Component {
        //song.song_notes = this.state.songNotes;
       }
     })
-    
-    // var newNoteObj = {
-    //   "_id": "new ObjectId()", 
-    //   "noteTitle": "Note Title", 
-    //   "noteBody": "Note Body"
-    // };
    
-    let noteObj = '{$push: {"songs.' + songIndex + '.song_notes": {_id: new ObjectId(), "noteStatus": "N/A", noteTitle": "Note Title", "noteBody": "Note Body"}}}'
-    console.log("stringformat: " + noteObj);
-    var newnoteObj = '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'
     var dataObj = {
       newNote: {newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'},
       index: songIndex
@@ -449,16 +408,19 @@ class Dashboard extends Component {
     .then(res => {
       console.log("successfully added new note", res);
       this.loadProjects();
+      this.displayNotes();
     })
     .catch(err => console.log(err));
-
-    // this.displayNewNotes.push(<Form.Control as="textarea" rows="3"/>);
-    // this.setState({
-    //    showNewNotes : this.displayNewNotes,
-    //    //displayNewNotes: tempArray
-    //   //  postVal : ""
-    // });
-
+  }
+  removeNote = (id) => {
+    console.log("remote note button click");
+    
+    var queryString = '_id: ObjectId("' + id + '")';
+    //console.log("query string", queryString);
+    var dataObj = {
+      removeQuery: {removeQuery: queryString}
+      // index: 
+    }
   }
 
 
@@ -527,7 +489,7 @@ class Dashboard extends Component {
                     <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
                     <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
                       {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                        <div key={index}>
+                        <div key={index} className="noteDiv">
                           {/* <Form.Label key={index}>{note.noteTitle}</Form.Label> */}
                           <Form.Control type="text" 
                             id={note._id}
@@ -540,6 +502,7 @@ class Dashboard extends Component {
                             value={this.state.songNotes[index].noteBody}
                             onChange={this.handleNoteChange}
                             name={"songNotes"} />
+                          <span className="removeNote" value={this.state.songNotes[index]._id} onClick={() => this.removeNote(this.state.songNotes[index]._id)}>𝘅</span>
                         </div>
                       ))}
                       <div id="display-data-Container">
