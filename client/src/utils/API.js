@@ -12,8 +12,11 @@ export default {
   updateProject: function (id, projectData) {
     return axios.put("/api/projects/" + id, projectData);
   },
-  addNote: function (id, projectData) {
-    return axios.put("/api/projects/addnote/" + id, projectData);
+  addNote: function (id, noteData) {
+    return axios.put("/api/projects/note/add/" + id, noteData);
+  },
+  removeNote: function (id, noteData) {
+    return axios.put("/api/projects/note/remove/" + id, noteData);
   },
   // updateNotes: function (id, projectData) {
   //   return axios.put("/api/projects/" + id, projectData);
