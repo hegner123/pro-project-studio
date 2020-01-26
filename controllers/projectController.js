@@ -16,21 +16,24 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   update: function(req, res) {
-    console.log("req.body.id: ", req.params.id)
-    console.log("req.body: ", req.body)
     Project
       .findOneAndUpdate({ _id: req.params.id }, req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-//   Project
- //.findOneAndUpdate({ _id: req.params.id },{$push: {"songs.1.song_notes": req.body}})
-//   .then(dbModel => res.json(dbModel))
-//   .catch(err => res.status(422).json(err));
-// }
   addNote: function(req, res) {
     Project
     .findOneAndUpdate({ _id: req.params.id},{$push: {["songs." + [req.body.index] + ".song_notes"]: req.body.newNote}})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
+  },
+  removeNote: function(req, res) {
+    console.log("req.body.id: ", req.params.id)
+    console.log("req.body.index: ", req.body.index)
+    console.log("req.body.query: ", req.body.id)
+    console.log("songs." + [req.body.index] + ".song_notes");
+    Project
+    .findOneAndUpdate({ _id: req.params.id},{$pull: {["songs." + [req.body.index] + ".song_notes"]: {_id: req.body.id}}})
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
   },
@@ -40,12 +43,6 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-//   update: function(req, res) {
-//     Book
-//       .findOneAndUpdate({ _id: req.params.id }, req.body)
-//       .then(dbModel => res.json(dbModel))
-//       .catch(err => res.status(422).json(err));
-//   },
 //   remove: function(req, res) {
 //     Book
 //       .findById({ _id: req.params.id })

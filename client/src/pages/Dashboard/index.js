@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
@@ -9,8 +8,10 @@ import "./style.css";
 import API from "../../utils/API";
 
 import ContentPane from "../../components/ContentPane";
+import Note from "../../components/Note";
+import MoreDetails from "../../components/MoreDetails";
 // import bootstrap components
-import { Container, Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form } from 'react-bootstrap';
+import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
@@ -19,11 +20,12 @@ export class NameForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    title: "",
-    song: [],
-    members: [],
-    total_arrangements: 0,
-    companyName: ""};
+      title: "",
+      song: [],
+      members: [],
+      total_arrangements: 0,
+      companyName: ""
+    };
     this.handleTitleChange = this.handleTitleChange.bind(this);
     this.handleCompanyNameChange = this.handleCompanyNameChange.bind(this);
     this.handleMembersChange = this.handleMembersChange.bind(this);
@@ -32,14 +34,14 @@ export class NameForm extends React.Component {
 
 
   handleTitleChange(event) {
-    this.setState({title: event.target.value});
+    this.setState({ title: event.target.value });
   }
   handleCompanyNameChange(event) {
-    this.setState({companyName: event.target.value});
+    this.setState({ companyName: event.target.value });
   }
   handleMembersChange(event) {
 
-    this.setState({members:event.target.value});
+    this.setState({ members: event.target.value });
   }
 
   handleSubmit(e) {
@@ -56,25 +58,25 @@ export class NameForm extends React.Component {
       })
 
       .catch(err => console.log(err));
-  }; 
+  };
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-row">
-        <label className="form-label">
-          Title:
-          <input type="text" className="form-control"onChange={this.handleTitleChange} />
-        </label>
+          <label className="form-label">
+            Title:
+          <input type="text" className="form-control" onChange={this.handleTitleChange} />
+          </label>
         </div>
-        <div className ="form-row">
-        <label>Members:
+        <div className="form-row">
+          <label>Members:
         <input type="text" className="form-control" onChange={this.handleMembersChange} />
-        </label>
+          </label>
         </div>
-        <div className ="form-row">
-        <label>Company:
+        <div className="form-row">
+          <label>Company:
         <input type="text" className="form-control" onChange={this.handleCompanyNameChange} />
-        </label>
+          </label>
         </div>
 
         <input className="btn-primary" type="submit" value="Submit" />
@@ -83,40 +85,38 @@ export class NameForm extends React.Component {
   }
 }
 
-  export const Addproject = (props) => {
-    const [show, setShow] = React.useState(false);
-  
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
-  
-  
-    return (
-      <div className="ml-auto">
-        <Button variant="light" onClick={handleShow} className="btn-xs">
-          Add Project
+export const Addproject = (props) => {
+  const [show, setShow] = React.useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <div className="ml-auto">
+      <Button variant="light" onClick={handleShow} className="btn-xs">
+        Add Project
         </Button>
-  
-        <Modal show={show} onHide={handleClose} animation={false}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add Project</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <NameForm/>
-  
-          </Modal.Body>
-  
-        </Modal>
-        </div>
-  
-    )
-    }
-   
+
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <NameForm />
+
+        </Modal.Body>
+
+      </Modal>
+    </div>
+
+  )
+}
+
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
-    
+
     this.displayNewNotes = [];
 
     this.state = {
@@ -142,7 +142,7 @@ class Dashboard extends Component {
   componentDidMount() {
     console.log("user info: ", this.props.auth);
     this.loadProjects();
-  }
+  };
   loadProjects = () => {
     API.getProjects()
       .then(res => {
@@ -196,7 +196,6 @@ class Dashboard extends Component {
     const issueTypes = [
       { id: "incomplete", value: "Incomplete" },
       { id: "complete", value: "Complete" },
-      //{ id: "na", value: "N/A" }
     ];
     const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
 
@@ -213,8 +212,6 @@ class Dashboard extends Component {
     inst = new Set(inst);
     inst = [...inst]
 
-    console.log("status: " + JSON.stringify(status));
-
     //Add data to column array
     // First column of song title
     var tempCol = [];
@@ -223,11 +220,7 @@ class Dashboard extends Component {
         onDoubleClick: (ev, args) => {
           let rowIndex = args.rowIdx;
           this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
-          console.log(
-            "song Id? ", this.state.rows[rowIndex].idx
-          );
           this.setState({ songID: this.state.rows[rowIndex].idx });
-          //console.log(this.state.rows[index].idx)
         }
       }
     };
@@ -263,18 +256,10 @@ class Dashboard extends Component {
     });
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
-  }
-
-
-
-
-
-
+  };
 
   displayNotes = (songID, rowIndex) => {
-    //console.log("songid: ", songID);
     if (this.state.songsDetails[rowIndex]._id === songID) {
-      //console.log("found matching song id", this.state.songsDetails[rowIndex].song_title);
       let noteTempArray = [];
       this.state.songsDetails[rowIndex].song_notes.forEach((note, index) => {
         noteTempArray.push(note)
@@ -282,10 +267,8 @@ class Dashboard extends Component {
       this.setState({ songNotes: noteTempArray }, () => {
         console.log("this state song notes", this.state.songNotes)
       });
-
     }
-
-  }
+  };
 
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     let property = Object.keys(updated)[0];
@@ -324,21 +307,7 @@ class Dashboard extends Component {
       })
       .catch(err => console.log(err));
 
-  }
-
-  checkCellEditable = ({ column, row }) => {
-    //console.log("editable function", row)
-    // if (row.id === 1) {
-
-    // }
-    return (false)
-  }
-  rowSelected = (index) => {
-    // console.log("cell clicked is read");
-    //console.log("row info " + row.songTitle)
-    console.log(this.state.rows[index].idx)
-    // if ()
-  }
+  };
 
   handleNoteChange = (event) => {
     let tempArray = this.state.songNotes;
@@ -346,7 +315,7 @@ class Dashboard extends Component {
     const index = tempArray.findIndex(x => x._id === target.id);
     const value = target.value;
     const name = target.name;
-   
+
     tempArray[index].noteBody = value;
 
     this.setState({
@@ -362,7 +331,7 @@ class Dashboard extends Component {
     const index = tempArray.findIndex(x => x._id === target.id);
     const value = target.value;
     const name = target.name;
-   
+
     tempArray[index].noteTitle = value;
 
     this.setState({
@@ -387,41 +356,48 @@ class Dashboard extends Component {
       })
       .catch(err => console.log(err));
 
-  }
+  };
 
   addNewNote = () => {
-    let songIndex;
+    let songIndex = this.findSongIndex();
+
+    var dataObj = {
+      newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
+      index: songIndex
+    }
+    API.addNote(this.state.idForContent, dataObj)
+      .then(res => {
+        console.log("successfully added new note", res);
+        this.loadProjects();
+      })
+      .catch(err => console.log(err));
+  };
+  removeNote = (id) => {
+    let songIndex = this.findSongIndex();
+    console.log("remove note button click");
+
+    var dataObj = {
+      id: id,
+      index: songIndex
+    }
+    API.removeNote(this.state.idForContent, dataObj)
+      .then(res => {
+        console.log("successfully removed a note", res);
+        this.loadProjects();
+      })
+      .catch(err => console.log(err));
+  };
+  findSongIndex = () => {
+    var songIndex;
 
     this.state.projectDetail.songs.forEach((song, index) => {
       if (song._id === this.state.songID) {
         console.log("found matching song ID index", index);
         songIndex = index;
-       //song.song_notes = this.state.songNotes;
       }
     })
-   
-    var dataObj = {
-      newNote: {newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'},
-      index: songIndex
-    }
-    API.addNote(this.state.idForContent, dataObj)
-    .then(res => {
-      console.log("successfully added new note", res);
-      this.loadProjects();
-      this.displayNotes();
-    })
-    .catch(err => console.log(err));
-  }
-  removeNote = (id) => {
-    console.log("remote note button click");
-    
-    var queryString = '_id: ObjectId("' + id + '")';
-    //console.log("query string", queryString);
-    var dataObj = {
-      removeQuery: {removeQuery: queryString}
-      // index: 
-    }
-  }
+    return (songIndex);
+  };
 
 
   render() {
@@ -434,9 +410,9 @@ class Dashboard extends Component {
             <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
           </div>
           <div className="col-6">
-          <Addproject/>
+            <Addproject />
           </div>
-         
+
           <div className="">
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
               <Row>
@@ -473,42 +449,54 @@ class Dashboard extends Component {
                       columns={this.state.columns}
                       rowGetter={i => this.state.rows[i]}
                       rowsCount={this.state.rowCount}
-                      onCheckCellIsEditable={this.state.checkCellEditable}
+                      // onCheckCellIsEditable={this.state.checkCellEditable}
                       onGridRowsUpdated={this.onGridRowsUpdated}
-                      //onRowClick={this.rowSelected}
                       enableCellSelect={true}
-                    // getCellActions={this.getCellActions}
                     />
-
                   </div>
 
+                  <div className="moreDetailsDiv">
+                    <Accordion>
+                      <Card>
+                        <Card.Header>
+                          <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                            More Details!
+                          </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                          <Card.Body>
+                            <h3>Client Name: {this.state.projectDetail.companyName}</h3>                            
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  </div>
+
+                  {/* <MoreDetails
+                    // project = {this.state.projectDetail}
+                    // companyName = {this.state.projectDetail.companyName}
+
+                  /> */}
                 </Col>
                 <Col sm={2} className="notesSection">
                   <div>
                     <h3>Notes Section</h3>
+                    {this.displayNewNotes}
                     <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                    <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
                     <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
                       {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                        <div key={index} className="noteDiv">
-                          {/* <Form.Label key={index}>{note.noteTitle}</Form.Label> */}
-                          <Form.Control type="text" 
-                            id={note._id}
-                            value={this.state.songNotes[index].noteTitle}
-                            onChange={this.handleNoteTitleChange}
-                            name={"songNotes"} />
-
-                          <Form.Control as="textarea" rows="3"
-                            id={note._id}
-                            value={this.state.songNotes[index].noteBody}
-                            onChange={this.handleNoteChange}
-                            name={"songNotes"} />
-                          <span className="removeNote" value={this.state.songNotes[index]._id} onClick={() => this.removeNote(this.state.songNotes[index]._id)}>𝘅</span>
-                        </div>
+                        <Note
+                          key={index}
+                          noteId={note._id}
+                          titleValue={this.state.songNotes[index].noteTitle}
+                          titleOnChange={this.handleNoteTitleChange}
+                          name={"songNotes"}
+                          bodyValue={this.state.songNotes[index].noteBody}
+                          bodyOnChange={this.handleNoteChange}
+                          removeNote={this.removeNote}
+                        />
                       ))}
-                      <div id="display-data-Container">
-                        {this.displayNewNotes}
-                      </div>
-                      <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
                     </Form.Group>
                   </div>
                 </Col>
@@ -521,19 +509,19 @@ class Dashboard extends Component {
   }
 }
 
-  Dashboard.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
-  };
+Dashboard.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
 
-  const mapStateToProps = state => ({
-    auth: state.auth
-  });
+const mapStateToProps = state => ({
+  auth: state.auth
+});
 
-  export default connect(
-    mapStateToProps,
-    { logoutUser }
-  )(Dashboard);
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Dashboard);
 
 
 
