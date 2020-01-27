@@ -19,8 +19,7 @@ router
   .post(projectController.pushSong)
 
   router
-  .route("/api/projects/:id/songs/:songId")
-  .post(projectController.pushInstruments)
+  .route("/song/arrangement/:id")
   .put(projectController.update)
 
 router

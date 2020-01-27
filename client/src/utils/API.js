@@ -18,6 +18,7 @@ export default {
   removeNote: function (id, noteData) {
     return axios.put("/api/projects/note/remove/" + id, noteData);
   },
+
   saveProject: function(projectData) {
     return axios.post("/api/projects", projectData);
   },
@@ -27,8 +28,8 @@ export default {
   deleteProject: function(id){
     return axios.delete("/api/projects/" + id)
   },
-  saveInstruments: function (instrumentData, id, songId){
-    return axios.post("/api/projects" + id + "/songs/" + songId, instrumentData)
+  saveInstruments: function (instrumentData, id){
+    return axios.post("/api/projects/song/arrangement/" + id , instrumentData)
   },
 
   spotifyPreview: function (song){

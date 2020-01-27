@@ -68,12 +68,22 @@ module.exports = {
     const songBpm = req.body.song_bpm;
     const songLyrics = req.body.song_lyrics;
     const songReferences = req.body.song_references;
+    const songArrangement = req.body.song_arrangements;
+    let songStatus =[];
+    
+for (let i=0; i<songArrangement;i++){
+songStatus.push({[songArrangement[i]]:"incomplete"})
+console.log(songArrangement[i])
+};
+
     const newSong = {
       song_title: songTitle,
       song_key: songKey,
       song_bpm: songBpm,
       song_lyrics: songLyrics,
-      song_references: songReferences
+      song_references: songReferences,
+      song_arrangements: songArrangement,
+      song_status : songStatus
      };
     
     Project
@@ -86,18 +96,8 @@ module.exports = {
     })
     .then(dbModel => res.json(dbModel))
     .catch(err => res.status(422).json(err));
-  },
-
-  pushInstruments: function(req, res){
-    let newInstruments = req.body.instruments
-    Project.
-  findOneAndUpdate({ _id: req.body.id }).
-  where(song._id).equals(req.body.songId).
-  $push({song_arrangements:newInstruments})
-  
-  .then(dbModel => res.json(dbModel))
-  .catch(err => res.status(422).json(err));
   }
+
 
 
 };
