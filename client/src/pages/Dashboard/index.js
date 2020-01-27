@@ -111,7 +111,7 @@ export class ProjectForm extends React.Component {
        {this.state.members.map(member => (
             <div className="form-row">
               <ul>
-          <li>{member} ><span>X</span></li>
+          <li>{member}<span>X</span></li>
           </ul>
           </div>
                         ))
@@ -439,10 +439,10 @@ class Dashboard extends Component {
 
     //Add data to column array
     // First column of song title
-    var tempCol = [];
-    var columnObj = {
+    let tempCol = [];
+    let columnObj = {
       key: "songTitle", name: "Song Title", resizable: true, events: {
-        onDoubleClick: (ev, args) => {
+        onClick: (ev, args) => {
           let rowIndex = args.rowIdx;
           this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
           this.setState({ songID: this.state.rows[rowIndex].idx, showNotes: true });
@@ -585,12 +585,17 @@ class Dashboard extends Component {
   index: songIndex
   }
   API.addNote(this.state.idForContent, dataObj)
-  .then(res => {
-    console.log("successfully added new note", res);
-    this.loadProjects();
-  })
+  .then(res => this.refreshNotes())
+  
   .catch(err => console.log(err));
   };
+
+
+  refreshNotes = () => {
+    this.renderGrid();
+    this.forceUpdate();
+    
+  }
 
   removeNote = (id) => {
   let songIndex = this.findSongIndex();
@@ -603,7 +608,6 @@ class Dashboard extends Component {
   API.removeNote(this.state.idForContent, dataObj)
   .then(res => {
     console.log("successfully removed a note", res);
-    this.loadProjects();
   })
   .catch(err => console.log(err));
   };
@@ -737,7 +741,7 @@ class Dashboard extends Component {
                     {/* {this.displayNewNotes} */}
                     {this.state.showNotes ? (
                       <div>
-                                              <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                                              <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote() && this.loadProjects()}>New Note</Button>
                       <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
                       <Form.Group id="formGroup" className="noteComponents">
                         {this.state.songNotes && this.state.songNotes.map((note, index) => (
