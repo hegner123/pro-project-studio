@@ -46,7 +46,7 @@ const projectSeed = [
           ]
           },
         ],
-    members: ["things 1", "thing2"],
+    members: ["things 1", "hegner123@gmail.com"],
     total_arrangements: 3,
     companyName: "ABC"
   },
