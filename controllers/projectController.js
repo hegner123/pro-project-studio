@@ -3,9 +3,10 @@ const Project = require("../models/Project");
 // Defining methods for the booksController
 module.exports = {
   findAll: function(req, res) {
+    console.log("param for findall: ", req.params.id)
     Project
-      .find(req.query)
-      .sort({ date: -1 })
+      .find({members: req.params.id})
+      // .sort({ date: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
@@ -45,12 +46,12 @@ module.exports = {
   },
 
 
-  update: function(req, res) {
-    Project
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
+  // update: function(req, res) {
+  //   Project
+  //     .findOneAndUpdate({ _id: req.params.id }, req.body)
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // },
 
   remove: function(req, res) {
     Project
