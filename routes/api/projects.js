@@ -2,10 +2,15 @@ const router = require("express").Router();
 const projectController = require("../../controllers/projectController");
 const User = require("../../models/User");
 
+
+// Matches with "/" to creat projects
+router.route("/")
+  .get(projectController.findAll)
+  .post(projectController.create)
 // Matches with "/api/projects/userprojects"
 router.route("/userprojects/:id")
   .get(projectController.findAll)
-  .post(projectController.create);
+  .post(projectController.create)
 
 // Matches with "/api/projects/:id"
 router
