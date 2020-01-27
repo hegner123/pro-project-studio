@@ -543,16 +543,23 @@ class Dashboard extends Component {
   saveNotes = () => {
     //Update the project variable with song notes
     let updatedProjectDetails = this.state.projectDetail;
+    let songIndex;
+    let id;
     updatedProjectDetails.songs.forEach((song, index) => {
       if (song._id === this.state.songID) {
         //console.log("found matching song ID", index);
         song.song_notes = this.state.songNotes;
+        songIndex = index;
+        id = song._id;
       }
     })
 
     API.updateProject(this.state.idForContent, updatedProjectDetails)
       .then(res => {
         console.log("successfully status updated");
+        this.displayNotes(this.state.songID, songIndex);
+        this.setState({ songID: id });
+        
       })
       .catch(err => console.log(err));
 
@@ -560,6 +567,7 @@ class Dashboard extends Component {
 
   addNewNote = () => {
     let songIndex = this.findSongIndex();
+    let id = this.state.songID;
     var dataObj = {
       newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
       index: songIndex
@@ -567,7 +575,8 @@ class Dashboard extends Component {
     API.addNote(this.state.idForContent, dataObj)
       .then(res => {
         console.log("successfully added new note", res);
-        this.loadProjects();
+        // this.displayNotes(this.state.songID, songIndex);
+        // this.setState({ songID: id });
       })
       .catch(err => console.log(err));
   };
