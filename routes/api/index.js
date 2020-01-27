@@ -5,7 +5,6 @@ const spotify = require("./spotify")
 
 // Project routes
 router.use("/projects", projectRoutes);
-
 router.use("/song-preview", spotify)
 router.use("/users", userRoutes);
 

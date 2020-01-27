@@ -7,12 +7,10 @@ import ContentPane from "../../components/ContentPane";
 // import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
-
-
 import Note from "../../components/Note";
-import MoreDetails from "../../components/MoreDetails";
+
 // import bootstrap components
-import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown} from 'react-bootstrap';
+import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
@@ -29,16 +27,16 @@ export const Addproject = (props) => {
       </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Add Project</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <ProjectForm/>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectForm />
 
         </Modal.Body>
 
       </Modal>
-      </div>
+    </div>
 
   )
 };
@@ -46,11 +44,12 @@ export class ProjectForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-    title: "",
-    song: [],
-    members: [],
-    total_arrangements: 0,
-    companyName: ""};
+      title: "",
+      song: [],
+      members: [],
+      total_arrangements: 0,
+      companyName: ""
+    };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -78,7 +77,8 @@ export class ProjectForm extends React.Component {
     API.saveProject(projectData);
     API.saveSong(songData)
       .then(res => {
-        this.componentDidMount()
+        //this.componentDidMount()
+        this.loadProjects();
         console.log(res);
       })
 
@@ -90,26 +90,26 @@ export class ProjectForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="form-row">
-        <label className="form-label">
-          Title:
-          <input  type="text" className="form-control" name={"title"}
-          value={this.state.title}
-          onChange={this.handleInputChange} />
-        </label>
+          <label className="form-label">
+            Title:
+          <input type="text" className="form-control" name={"title"}
+              value={this.state.title}
+              onChange={this.handleInputChange} />
+          </label>
         </div>
-        <div className ="form-row">
-        <label>Members:
+        <div className="form-row">
+          <label>Members:
         <input type="text" className="form-control" name={"members"}
-        value={this.state.members}
-        onChange={this.handleInputChange} />
-        </label>
+              value={this.state.members}
+              onChange={this.handleInputChange} />
+          </label>
         </div>
-        <div className ="form-row">
-        <label>Company:
+        <div className="form-row">
+          <label>Company:
         <input type="text" className="form-control" name={"companyName"}
-        value={this.state.companyName}
-        onChange={this.handleInputChange} />
-        </label>
+              value={this.state.companyName}
+              onChange={this.handleInputChange} />
+          </label>
         </div>
         <input className="btn-primary" type="submit" value="Submit" />
       </form>
@@ -121,18 +121,18 @@ export class SongForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    songTitle:"",
-    songLyrics:"",
-    songKey:"",
-    songBpm:"",
-    songReferences:"",
-    instruments:[]
+      songTitle: "",
+      songLyrics: "",
+      songKey: "",
+      songBpm: "",
+      songReferences: "",
+      instruments: []
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  searchSong (){
+  searchSong() {
     API.spotifyPreview("Blink 182").then(res => {
       console.log(res);
     })
@@ -145,25 +145,25 @@ export class SongForm extends Component {
     this.setState({
       [name]: value
     });
-    }
+  }
 
-    handleSubmit(e) {
-      e.preventDefault();
-      let songData = {
-        song_title: this.state.songTitle,
-        song_key: this.state.songKey,
-        song_bpm: this.state.songBpm,
-        song_lyrics: this.state.songLyrics,
-        song_references:this.state.songReferences,
-        song_arrangements:this.state.instruments
-      }
-      console.log(songData)
-      API.saveSong(songData, this.props.id)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => console.log(err));
-      };
+  handleSubmit(e) {
+    e.preventDefault();
+    let songData = {
+      song_title: this.state.songTitle,
+      song_key: this.state.songKey,
+      song_bpm: this.state.songBpm,
+      song_lyrics: this.state.songLyrics,
+      song_references: this.state.songReferences,
+      song_arrangements: this.state.instruments
+    }
+    console.log(songData)
+    API.saveSong(songData, this.props.id)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => console.log(err));
+  };
 
 
   render() {
@@ -171,44 +171,44 @@ export class SongForm extends Component {
     return (
       <div className="container">
         <div className="row">
-        <div className="col-6">
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-row">
-        <label className="form-label">
-          Song Title
+          <div className="col-6">
+            <form onSubmit={this.handleSubmit}>
+              <div className="form-row">
+                <label className="form-label">
+                  Song Title
           <input type="text" className="form-control" name="songTitle" onChange={this.handleInputChange} />
-        </label>
-        </div>
-        <div className ="form-row">
-        <label>Song Key
+                </label>
+              </div>
+              <div className="form-row">
+                <label>Song Key
         <input type="text" className="form-control" name="songKey" onChange={this.handleInputChange} />
-        </label>
-        </div>
-        <div className ="form-row">
-        <label>Song BPM
+                </label>
+              </div>
+              <div className="form-row">
+                <label>Song BPM
         <input type="text" className="form-control" name="songBpm" onChange={this.handleInputChange} />
-        </label>
-        </div>
-        <div className ="form-row">
-        <label>Lyrics
+                </label>
+              </div>
+              <div className="form-row">
+                <label>Lyrics
         <textarea type="text" className="form-control" name="songLyrics" onChange={this.handleInputChange} />
-        </label>
-        </div>
-        <div className ="form-row">
-        <label>Song References
+                </label>
+              </div>
+              <div className="form-row">
+                <label>Song References
         <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
-        <Button onClick={this.searchSong}>Seach in the console</Button>
-        </label>
+                  <Button onClick={this.searchSong}>Seach in the console</Button>
+                </label>
+              </div>
+
+
+              <input className="btn-primary" type="submit" value="Submit" />
+            </form>
+          </div>
+          <div className="col-6">
+            <AddInstrument />
+          </div>
         </div>
-
-
-        <input className="btn-primary" type="submit" value="Submit" />
-      </form>
-      </div>
-      <div className="col-6">
-        <AddInstrument/>
-      </div>
-      </div>
       </div>
     );
   }
@@ -233,82 +233,79 @@ export const AddSong = (props) => {
           <Modal.Title>Add Song</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <SongForm id={props.id}/>
+          <SongForm id={props.id} />
         </Modal.Body>
 
       </Modal>
-      </div>
+    </div>
 
   )
 };
 
 export class AddInstrument extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-      instrumentForm:"",
-      instruments:[]
-      }
-      this.handleInputChange = this.handleInputChange.bind(this);
-      this.saveInstruments = this.saveInstruments.bind(this);
-      this.handleAdd = this.handleAdd.bind(this)
+  constructor(props) {
+    super(props);
+    this.state = {
+      instrumentForm: "",
+      instruments: []
     }
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.saveInstruments = this.saveInstruments.bind(this);
+    this.handleAdd = this.handleAdd.bind(this)
+  }
 
-    saveInstruments() {
-      let instrumentData = this.state.instruments
-      console.log(instrumentData)
-      API.saveInstruments(instrumentData, this.props.id)
-        .then(res => {
-          console.log(res);
-        })
+  saveInstruments() {
+    let instrumentData = this.state.instruments
+    console.log(instrumentData)
+    API.saveInstruments(instrumentData, this.props.id)
+      .then(res => {
+        console.log(res);
+      })
 
-        .catch(err => console.log(err));
-      console.log(this.state)
-      }
-      handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        this.setState({
-          [name]: value
-        });
-        console.log(this.state)
-        console.log(this.state.instrumentForm)
-        }
+      .catch(err => console.log(err));
+    console.log(this.state)
+  }
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    this.setState({
+      [name]: value
+    });
+    console.log(this.state)
+    console.log(this.state.instrumentForm)
+  }
 
-    handleAdd() {
-        this.setState(prevState => ({
-          instruments: [...prevState.instruments, this.state.instrumentForm]
-        }));
-        console.log(this.state)
-        this.setState({instrumentForm :""})
-        //console.log(("project array" + JSON.stringify(this.state.projects)));
-      }
-
-
-    render(props) {
-
-      return (
-
-        <div>
-           {this.state.instruments.map(instrument => (
-             <div> {instrument}</div>
-                        ))
-                        }
-        <form>
-        <label>instruments
-          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
-        </label>
-        <Button  onClick={() => this.handleAdd(props)}>Add Instruments</Button>
-
-        </form>
-        </div>
-      )
-    }
+  handleAdd() {
+    this.setState(prevState => ({
+      instruments: [...prevState.instruments, this.state.instrumentForm]
+    }));
+    console.log(this.state)
+    this.setState({ instrumentForm: "" })
+    //console.log(("project array" + JSON.stringify(this.state.projects)));
   }
 
 
+  render(props) {
 
+    return (
+
+      <div>
+        {this.state.instruments.map(instrument => (
+          <div> {instrument}</div>
+        ))
+        }
+        <form>
+          <label>instruments
+          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm} />
+          </label>
+          <Button onClick={() => this.handleAdd(props)}>Add Instruments</Button>
+
+        </form>
+      </div>
+    )
+  }
+}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -329,8 +326,10 @@ class Dashboard extends Component {
       rowCount: 0,
       songNotes: [],
       songID: "",
+      userEmail: "",
+      projectMembers: "",
       //displayNewNotes: [],
-      showNewNotes: this.displayNewNotes
+      showNotes: false
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
@@ -338,12 +337,15 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log("user info: ", this.props.auth);
-    this.loadProjects();
+    console.log("user info: ", this.props.auth.user.email);
+    this.setState({ userEmail: this.props.auth.user.email }, () => {
+      this.loadProjects();
+    })
+
   };
 
   loadProjects = () => {
-    API.getProjects()
+    API.getProjects(this.state.userEmail)
       .then(res => {
         this.setState({ projects: res.data, });
         //console.log(("project array" + JSON.stringify(this.state.projects)));
@@ -362,20 +364,25 @@ class Dashboard extends Component {
   };
 
   generateContent = (id) => {
-    this.setState({ idForContent: id }, () => {
+    this.setState({ idForContent: id , showNotes: false}, () => {
       //console.log("id: " + this.state.idForContent)
       this.loadSongDetails()
-    }
-    )
+    })
   };
-
 
   //Get song details for grid
   loadSongDetails = () => {
     API.getProjectDetails(this.state.idForContent)
       .then(res => {
         this.setState({ projectDetail: res.data });
-        //console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
+        //console.log("project Details: " + JSON.stringify(this.state.projectDetail.members.join(", ")));
+        var members = "";
+        this.state.projectDetail.members.forEach((member, index) => {
+          members += member + ", ";
+        })
+
+        this.setState({ projectMembers: members })
+        //console.log("p members: " , this.state.projectMembers);
         let allSongs = [];
 
         this.state.projectDetail.songs.forEach((song, index) => {
@@ -384,8 +391,7 @@ class Dashboard extends Component {
 
         this.setState({ songsDetails: allSongs }, () => {
           this.renderGrid();
-        }
-        )
+        })
       })
       .catch(err => console.log(err));
   };
@@ -420,22 +426,17 @@ class Dashboard extends Component {
         onDoubleClick: (ev, args) => {
           let rowIndex = args.rowIdx;
           this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
-          this.setState({ songID: this.state.rows[rowIndex].idx });
+          this.setState({ songID: this.state.rows[rowIndex].idx, showNotes: true });
         }
       }
     };
-    // tempCol.push(columnObj);
-    // // Add remaning columns
-    // inst.forEach((instrument, index) => {
-    //   columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
-    // }
+
     tempCol.push(columnObj);
     // Add remaning columns
     inst.forEach((instrument, index) => {
       columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
       tempCol.push(columnObj);
     });
-
 
     this.setState({ columns: tempCol }, () => { })
 
@@ -452,11 +453,11 @@ class Dashboard extends Component {
       inst.forEach((ins, index) => {
         row[ins] = "N/A"
       })
-      // const merged = Object.assign(row, status[index]);
+      const merged = Object.assign(row, status[index]);
     });
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
-  }
+  };
 
   displayNotes = (songID, rowIndex) => {
     if (this.state.songsDetails[rowIndex]._id === songID) {
@@ -470,119 +471,44 @@ class Dashboard extends Component {
     }
   };
 
-onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-        let property = Object.keys(updated)[0];
-        const rowsVar = this.state.rows.slice();
+  onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+    let property = Object.keys(updated)[0];
+    const rowsVar = this.state.rows.slice();
 
-        //Only if a cell is applicable, then continute to update the object
-        if (!(this.state.rows[fromRow][property] === "N/A")) {
-          console.log("it's applicable");
+    //Only if a cell is applicable, then continute to update the object
+    if (!(this.state.rows[fromRow][property] === "N/A")) {
+      console.log("it's applicable");
 
-          for (let i = fromRow; i <= toRow; i++) {
-            rowsVar[i] = { ...rowsVar[i], ...updated };
-          }
+      for (let i = fromRow; i <= toRow; i++) {
+        rowsVar[i] = { ...rowsVar[i], ...updated };
+      }
 
-          this.setState({ rows: rowsVar }, () => {
-            //Once rows in state has been updated, update the object to pass on to the database
-            var updatedProjectDetails = this.state.projectDetail;
-            updatedProjectDetails.songs[fromRow].song_status[property] = Object.values(updated)[0]
+      this.setState({ rows: rowsVar }, () => {
+        //Once rows in state has been updated, update the object to pass on to the database
+        var updatedProjectDetails = this.state.projectDetail;
+        updatedProjectDetails.songs[fromRow].song_status[property] = Object.values(updated)[0]
 
-            console.log("updated Project detail", JSON.stringify(updatedProjectDetails));
-            this.updateStatus(updatedProjectDetails);
-          }
-          )
-        }
-        else {
-          console.log("N/A");
-        }
+        console.log("updated Project detail", JSON.stringify(updatedProjectDetails));
+        this.updateStatus(updatedProjectDetails);
+      }
+      )
+    }
+    else {
+      console.log("N/A");
+    }
   };
 
-      updateStatus = (updatedObj) => {
-        let id = this.state.idForContent;
-        console.log("inside update status func ", updatedObj)
-        API.updateProject(id, updatedObj)
-          .then(res => {
-            console.log("successfully status updated");
-
-          })
-          .catch(err => console.log(err));
-
-      }
-
-      checkCellEditable = ({ column, row }) => {
-        //console.log("editable function", row)
-        // if (row.id === 1) {
-
-        // }
-        return (false)
-      }
-      rowSelected = (index) => {
-        // console.log("cell clicked is read");
-        //console.log("row info " + row.songTitle)
-        console.log(this.state.rows[index].idx)
-        // if ()
-      }
-      // getCellActions = (column, row) => {
-      //   //console.log("column info " + JSON.stringify(row))
-      //   //console.log("view note icon:  " + JSON.stringify(this.state.viewNoteAction))
-      //   const cellActions = {
-      //     songTitle: this.state.viewNoteAction
-      //   };
-      //   //console.log("row id" + row.songTitle)
-      //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
-      // }
-      handleNoteChange = (event) => {
-        let tempArray = this.state.songNotes;
-        const target = event.target;
-        const index = tempArray.findIndex(x => x._id === target.id);
-        const value = target.value;
-        const name = target.name;
-
-        tempArray[index].noteBody = value;
-
-        this.setState({
-          [name]: tempArray
-        }, () => {
-          //console.log("updated song notes value: ", this.state.songNotes)
-        });
-      };
-
-      handleNoteTitleChange = (event) => {
-        let tempArray = this.state.songNotes;
-        const target = event.target;
-        const index = tempArray.findIndex(x => x._id === target.id);
-        const value = target.value;
-        const name = target.name;
-
-        tempArray[index].noteTitle = value;
-
-        this.setState({
-          [name]: tempArray
-        }, () => {
-          //console.log("updated song notes value: ", this.state.songNotes)
-        });
-      };
-
-      saveNotes = () => {
-        //Update the project variable with song notes
-        let updatedProjectDetails = this.state.projectDetail;
-        updatedProjectDetails.songs.forEach((song, index) => {
-          if (song._id === this.state.songID) {
-            //console.log("found matching song ID", index);
-            song.song_notes = this.state.songNotes;
-          }
-        })
-
-        API.updateProject(this.state.idForContent, updatedProjectDetails)
-          .then(res => {
-            console.log("successfully status updated");
-          })
-          .catch(err => console.log(err));
-
-  };
+  updateStatus = (updatedObj) => {
+    let id = this.state.idForContent;
+    console.log("inside update status func ", updatedObj)
+    API.updateProject(id, updatedObj)
+      .then(res => {
+        console.log("successfully status updated");
+      })
+      .catch(err => console.log(err));
+  }
 
   handleNoteChange = (event) => {
-    let songIndex = this.findSongIndex();
     let tempArray = this.state.songNotes;
     const target = event.target;
     const index = tempArray.findIndex(x => x._id === target.id);
@@ -591,25 +517,12 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 
     tempArray[index].noteBody = value;
 
-        // var newNoteObj = {
-        //   "_id": "new ObjectId()",
-        //   "noteTitle": "Note Title",
-        //   "noteBody": "Note Body"
-        // };
-
-        let noteObj = '{$push: {"songs.' + songIndex + '.song_notes": {_id: new ObjectId(), "noteStatus": "N/A", noteTitle": "Note Title", "noteBody": "Note Body"}}}'
-        console.log("stringformat: " + noteObj);
-        // var newnoteObj = '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'
-        let dataObj = {
-          newNote: {newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}'},
-          index: songIndex
-        }
-        API.addNote(this.state.idForContent, dataObj)
-        .then(res => {
-          console.log("successfully added new note", res);
-          this.loadProjects();
-        })
-        .catch(err => console.log(err));}
+    this.setState({
+      [name]: tempArray
+    }, () => {
+      //console.log("updated song notes value: ", this.state.songNotes)
+    });
+  };
 
   handleNoteTitleChange = (event) => {
     let tempArray = this.state.songNotes;
@@ -620,8 +533,30 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 
     tempArray[index].noteTitle = value;
 
+    this.setState({
+      [name]: tempArray
+    }, () => {
+      //console.log("updated song notes value: ", this.state.songNotes)
+    });
+  };
+
+  saveNotes = () => {
+    //Update the project variable with song notes
+    let updatedProjectDetails = this.state.projectDetail;
+    updatedProjectDetails.songs.forEach((song, index) => {
+      if (song._id === this.state.songID) {
+        //console.log("found matching song ID", index);
+        song.song_notes = this.state.songNotes;
       }
-  
+    })
+
+    API.updateProject(this.state.idForContent, updatedProjectDetails)
+      .then(res => {
+        console.log("successfully status updated");
+      })
+      .catch(err => console.log(err));
+
+  };
 
   addNewNote = () => {
     let songIndex = this.findSongIndex();
@@ -665,29 +600,29 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     return (songIndex);
   };
 
-    deleteProject = (id) => {
-      API.deleteProject(id)
-      .then( res => this.loadProjects());
-    }
+  deleteProject = (id) => {
+    API.deleteProject(id)
+      .then(res => this.loadProjects());
+  }
 
-  render(){
+  render() {
     const { user } = this.props.auth;
 
     return (
       <div className="container-fluid p-5 text-black">
         <div className="dashboard-bg">
-        <div className="row">
-          <div className=" col-6">
-            <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
-          </div>
-          <div className="col-6 btn-align">
-            <div className="cust-btn-group">
-            <Addproject/>
-            <AddSong id={this.state.idForContent}/>
+          <div className="row">
+            <div className=" col-6">
+              <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
+            </div>
+            <div className="col-6 btn-align">
+              <div className="cust-btn-group">
+                <Addproject />
+                <AddSong id={this.state.idForContent} />
+              </div>
             </div>
           </div>
-          </div>
-
+          {this.state.projects.length ? (
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
               <Row>
                 <Col sm={2}>
@@ -698,109 +633,120 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
                           <Popover.Title as="h3">{project.title}</Popover.Title>
                           <Popover.Content>
                             <p>Client Name: {project.companyName}</p>
-                            <p>Members: {project.members}</p>
+                            <p>Members: {this.state.projectMembers}}</p>
                           </Popover.Content>
                         </Popover>} >
                         <ListGroup.Item action
                           href={" #" + project._id}
                           key={project._id}
-                          onClick={()=> this.generateContent(project._id)}
-                          >
+                          onClick={() => this.generateContent(project._id)}
+                        >
 
-                            <div className="row">
-                              <div className="col-6">
-                          {project.title}
-                          </div>
-                          <div className="col-6 btn-align">
+                          <div className="row">
+                            <div className="col-6">
+                              {project.title}
+                            </div>
+                            <div className="col-6 btn-align">
 
-                          <Dropdown bsPrefix={"myparentDropdown"}>
-                            <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
-                              ...
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-
-                              <Dropdown.Item onClick={()=> this.editProject(project._id)}>Edit Project</Dropdown.Item>
-                              <Dropdown.Item onClick={()=> this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                          </div>
+                              <Dropdown bsPrefix={"myparentDropdown"}>
+                                <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
+                                  ...
+                                      </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item onClick={() => this.editProject(project._id)}>Edit Project</Dropdown.Item>
+                                  <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </div>
                           </div>
                         </ListGroup.Item>
 
-                    </OverlayTrigger>
+                      </OverlayTrigger>
                     ))
                     }
                   </ListGroup>
 
                 </Col>
 
-                <Col xs={8} className="contentSection">
-                <ContentPane
-                  id={this.state.title}
-                />
-                  <div>
-                  <ReactDataGrid
-                    columns={this.state.columns}
-                    rowGetter={i => this.state.rows[i]}
-                    rowsCount={this.state.rowCount}
-                    // onCheckCellIsEditable={this.state.checkCellEditable}
-                    onGridRowsUpdated={this.onGridRowsUpdated}
-                    enableCellSelect={true}
+                <Col sm={8} className="contentSection">
+                  <ContentPane
+                    id={this.state.title}
                   />
-                </div>
+                  <div>
+                    <ReactDataGrid
+                      columns={this.state.columns}
+                      rowGetter={i => this.state.rows[i]}
+                      rowsCount={this.state.rowCount}
+                      onGridRowsUpdated={this.onGridRowsUpdated}
+                      enableCellSelect={true}
+                    />
+                  </div>
 
-                <div className="moreDetailsDiv">
-                  <Accordion>
-                    <Card>
-                      <Card.Header>
-                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                          More Details!
-                        </Accordion.Toggle>
-                      </Card.Header>
-                      <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                          <h3>Client Name: {this.state.projectDetail.companyName}</h3>
-                        </Card.Body>
-                      </Accordion.Collapse>
-        </Card>
-                  </Accordion>
-                </div>
+                  <div className="moreDetailsDiv">
+                    <Accordion>
+                      <Card>
+                        <Card.Header>
+                          <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                            More Details!
+                                  </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                          <Card.Body>
+                            <h3>Client Name: {this.state.projectDetail.companyName}</h3>
+                            <h3>Member: {this.state.projectMembers}</h3>
+                            {this.state.projectDetail.songs && this.state.projectDetail.songs.map((song, index) => (
+                              <div>
+                                <h5>{song.song_title}</h5>
+                                <p>Song Key: {song.song_key}</p>
+                                <p>Song BPM: {song.song_bpm}</p>
+                              </div>
+                            ))}
 
-                {/* <MoreDetails
-                  // project = {this.state.projectDetail}
-                  // companyName = {this.state.projectDetail.companyName}
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  </div>
+                </Col>
+                <Col sm={2} className="notesSection">
+                  <div>
+                    <h3>Notes Section</h3>
+                    {/* {this.displayNewNotes} */}
+                    {this.state.showNotes ? (
+                      <div>
+                                              <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                      <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
+                      <Form.Group id="formGroup" className="noteComponents">
+                        {this.state.songNotes && this.state.songNotes.map((note, index) => (
+                          <Note
+                            key={index}
+                            noteId={note._id}
+                            titleValue={this.state.songNotes[index].noteTitle}
+                            titleOnChange={this.handleNoteTitleChange}
+                            name={"songNotes"}
+                            bodyValue={this.state.songNotes[index].noteBody}
+                            bodyOnChange={this.handleNoteChange}
+                            removeNote={this.removeNote}
+                          />
+                        ))}
+                      </Form.Group>
+                      </div>
 
-                /> */}
-              </Col>
-              <Col sm={2} className="notesSection">
-                <div>
-                  <h3>Notes Section</h3>
-                  {this.displayNewNotes}
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
-                  <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
-                    {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                      <Note
-                        key={index}
-                        noteId={note._id}
-                        titleValue={this.state.songNotes[index].noteTitle}
-                        titleOnChange={this.handleNoteTitleChange}
-                        name={"songNotes"}
-                        bodyValue={this.state.songNotes[index].noteBody}
-                        bodyOnChange={this.handleNoteChange}
-                        removeNote={this.removeNote}
-                      />
-                    ))}
-                  </Form.Group>
-                </div>
-              </Col>
+                            ) : (null)}
+
+                  </div>
+                </Col>
               </Row>
             </Tab.Container>
-          </div>
-          </div>
-      )
-                    }}
+          ) : (
+              <h3>No Projects to Display. Please Add a Project!</h3>
+            )}
+
+        </div>
+      </div>
+    )
+  }
+}
 
 
 Dashboard.propTypes = {
