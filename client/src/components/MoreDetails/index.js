@@ -18,7 +18,7 @@ function MoreDetails(props) {
               <Card.Body>
                   <h3>Client Name: {props.companyname}</h3>
                   <h3> Project Members: </h3>
-                  {/* <h4></h4> */}
+                  <h3>Member: {this.state.projectDetail.members.join(", ")}</h3>
               </Card.Body>
             </Accordion.Collapse>
         </Card>

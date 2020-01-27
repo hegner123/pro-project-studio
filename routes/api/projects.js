@@ -12,6 +12,7 @@ router
   .route("/:id")
   .get(projectController.findById)
   .delete(projectController.remove)
+  .put(projectController.update)
   
 //   .put(booksController.update)
 //   .delete(booksController.remove);
@@ -21,7 +22,7 @@ router
   .post(projectController.pushSong)
 
   router
-  .route("/api/projects/:id/songs/:songId")
+  .route("/song/arrangement/:id")
   .post(projectController.pushInstruments)
   .put(projectController.update)
 

@@ -89,14 +89,12 @@ module.exports = {
 
   pushInstruments: function(req, res){
     let newInstruments = req.body.instruments
-    Project.
-  findOneAndUpdate({ _id: req.body.id }).
-  where(song._id).equals(req.body.songId).
-  $push({song_arrangements:newInstruments})
-  
-  .then(dbModel => res.json(dbModel))
-  .catch(err => res.status(422).json(err));
+    Project
+    .findOneAndUpdate({ _id: req.params.id},{$push: {["songs." + [req.body.index] + ".song_arrangements"]: newInstruments}})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => res.status(422).json(err));
   }
+
 
 
 };

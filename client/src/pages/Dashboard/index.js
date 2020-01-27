@@ -10,7 +10,7 @@ import API from "../../utils/API";
 
 
 import Note from "../../components/Note";
-import MoreDetails from "../../components/MoreDetails";
+
 // import bootstrap components
 import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown} from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
@@ -121,6 +121,7 @@ export class SongForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+    songID:"",
     songTitle:"",
     songLyrics:"",
     songKey:"",
@@ -159,12 +160,25 @@ export class SongForm extends Component {
       }
       console.log(songData)
       API.saveSong(songData, this.props.id)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => console.log(err));
-      };
-
+        .then(res => { 
+          API.getProjectDetails(this.props.id)
+          .then(res1 => {this.setState()})
+          .catch(err => console.log(err))
+        }).catch(err => console.log(err));
+      }
+      // saveInstruments(id) {
+      //   for (let j=0; j<this.state.instruments.length; j++){
+      //     console.log("pancakes")
+      //     let instrumentData = this.state.instruments[j];
+      //     API.saveInstruments(id, instrumentData )
+      //     .then(res => {
+      //       console.log(res);
+      //     })
+  
+      //     .catch(err => console.log(err));
+      //   console.log(this.state)
+      //   }
+      //   }
 
   render() {
 
@@ -206,7 +220,8 @@ export class SongForm extends Component {
       </form>
       </div>
       <div className="col-6">
-        <AddInstrument/>
+        <AddInstrument 
+        id ={this.state.songId}/>
       </div>
       </div>
       </div>
@@ -250,21 +265,9 @@ export class AddInstrument extends React.Component {
       instruments:[]
       }
       this.handleInputChange = this.handleInputChange.bind(this);
-      this.saveInstruments = this.saveInstruments.bind(this);
+      // this.saveInstruments = this.saveInstruments.bind(this);
       this.handleAdd = this.handleAdd.bind(this)
     }
-
-    saveInstruments() {
-      let instrumentData = this.state.instruments
-      console.log(instrumentData)
-      API.saveInstruments(instrumentData, this.props.id)
-        .then(res => {
-          console.log(res);
-        })
-
-        .catch(err => console.log(err));
-      console.log(this.state)
-      }
       handleInputChange(event) {
         const target = event.target;
         const value = target.value;
@@ -300,15 +303,12 @@ export class AddInstrument extends React.Component {
           <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
         </label>
         <Button  onClick={() => this.handleAdd(props)}>Add Instruments</Button>
-
+        <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button>
         </form>
         </div>
       )
     }
-  }
-
-
-
+}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -470,114 +470,99 @@ class Dashboard extends Component {
     }
   };
 
-onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-        let property = Object.keys(updated)[0];
-        const rowsVar = this.state.rows.slice();
+  onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
+          let property = Object.keys(updated)[0];
+          const rowsVar = this.state.rows.slice();
 
-        //Only if a cell is applicable, then continute to update the object
-        if (!(this.state.rows[fromRow][property] === "N/A")) {
-          console.log("it's applicable");
+          //Only if a cell is applicable, then continute to update the object
+          if (!(this.state.rows[fromRow][property] === "N/A")) {
+            console.log("it's applicable");
 
-          for (let i = fromRow; i <= toRow; i++) {
-            rowsVar[i] = { ...rowsVar[i], ...updated };
+            for (let i = fromRow; i <= toRow; i++) {
+              rowsVar[i] = { ...rowsVar[i], ...updated };
+            }
+
+            this.setState({ rows: rowsVar }, () => {
+              //Once rows in state has been updated, update the object to pass on to the database
+              var updatedProjectDetails = this.state.projectDetail;
+              updatedProjectDetails.songs[fromRow].song_status[property] = Object.values(updated)[0]
+
+              console.log("updated Project detail", JSON.stringify(updatedProjectDetails));
+              this.updateStatus(updatedProjectDetails);
+            }
+            )
           }
-
-          this.setState({ rows: rowsVar }, () => {
-            //Once rows in state has been updated, update the object to pass on to the database
-            var updatedProjectDetails = this.state.projectDetail;
-            updatedProjectDetails.songs[fromRow].song_status[property] = Object.values(updated)[0]
-
-            console.log("updated Project detail", JSON.stringify(updatedProjectDetails));
-            this.updateStatus(updatedProjectDetails);
+          else {
+            console.log("N/A");
           }
-          )
-        }
-        else {
-          console.log("N/A");
-        }
+    };
+
+  updateStatus = (updatedObj) => {
+  let id = this.state.idForContent;
+  console.log("inside update status func ", updatedObj)
+  API.updateProject(id, updatedObj)
+  .then(res => {
+    console.log("successfully status updated");
+
+  })
+  .catch(err => console.log(err));
+
+  }
+
+  checkCellEditable = ({ column, row }) => {
+  //console.log("editable function", row)
+  // if (row.id === 1) {
+
+  // }
+  return (false)
+  }
+  rowSelected = (index) => {
+  // console.log("cell clicked is read");
+  //console.log("row info " + row.songTitle)
+  console.log(this.state.rows[index].idx)
+  // if ()
+  }
+  // getCellActions = (column, row) => {
+  //   //console.log("column info " + JSON.stringify(row))
+  //   //console.log("view note icon:  " + JSON.stringify(this.state.viewNoteAction))
+  //   const cellActions = {
+  //     songTitle: this.state.viewNoteAction
+  //   };
+  //   //console.log("row id" + row.songTitle)
+  //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
+  // }
+
+  handleNoteTitleChange = (event) => {
+    let tempArray = this.state.songNotes;
+    const target = event.target;
+    const index = tempArray.findIndex(x => x._id === target.id);
+    const value = target.value;
+    const name = target.name;
+
+    tempArray[index].noteTitle = value;
+
+    this.setState({
+      [name]: tempArray
+    }, () => {
+      //console.log("updated song notes value: ", this.state.songNotes)
+    });
   };
 
-      updateStatus = (updatedObj) => {
-        let id = this.state.idForContent;
-        console.log("inside update status func ", updatedObj)
-        API.updateProject(id, updatedObj)
-          .then(res => {
-            console.log("successfully status updated");
-
-          })
-          .catch(err => console.log(err));
-
+  saveNotes = () => {
+    //Update the project variable with song notes
+    let updatedProjectDetails = this.state.projectDetail;
+    updatedProjectDetails.songs.forEach((song, index) => {
+      if (song._id === this.state.songID) {
+        //console.log("found matching song ID", index);
+        song.song_notes = this.state.songNotes;
       }
+    })
 
-      checkCellEditable = ({ column, row }) => {
-        //console.log("editable function", row)
-        // if (row.id === 1) {
-
-        // }
-        return (false)
-      }
-      rowSelected = (index) => {
-        // console.log("cell clicked is read");
-        //console.log("row info " + row.songTitle)
-        console.log(this.state.rows[index].idx)
-        // if ()
-      }
-      // getCellActions = (column, row) => {
-      //   //console.log("column info " + JSON.stringify(row))
-      //   //console.log("view note icon:  " + JSON.stringify(this.state.viewNoteAction))
-      //   const cellActions = {
-      //     songTitle: this.state.viewNoteAction
-      //   };
-      //   //console.log("row id" + row.songTitle)
-      //   return row.songTitle ? cellActions[column.key] : cellActions[column.key];
-      // }
-      handleNoteChange = (event) => {
-        let tempArray = this.state.songNotes;
-        const target = event.target;
-        const index = tempArray.findIndex(x => x._id === target.id);
-        const value = target.value;
-        const name = target.name;
-
-        tempArray[index].noteBody = value;
-
-        this.setState({
-          [name]: tempArray
-        }, () => {
-          //console.log("updated song notes value: ", this.state.songNotes)
-        });
-      };
-
-      handleNoteTitleChange = (event) => {
-        let tempArray = this.state.songNotes;
-        const target = event.target;
-        const index = tempArray.findIndex(x => x._id === target.id);
-        const value = target.value;
-        const name = target.name;
-
-        tempArray[index].noteTitle = value;
-
-        this.setState({
-          [name]: tempArray
-        }, () => {
-          //console.log("updated song notes value: ", this.state.songNotes)
-        });
-      };
-
-      saveNotes = () => {
-        //Update the project variable with song notes
-        let updatedProjectDetails = this.state.projectDetail;
-        updatedProjectDetails.songs.forEach((song, index) => {
-          if (song._id === this.state.songID) {
-            //console.log("found matching song ID", index);
-            song.song_notes = this.state.songNotes;
-          }
-        })
-
-        API.updateProject(this.state.idForContent, updatedProjectDetails)
-          .then(res => {
-            console.log("successfully status updated");
-          })
-          .catch(err => console.log(err));
+    API.updateProject(this.state.idForContent, updatedProjectDetails)
+      .then(res => {
+        console.log("successfully status updated");
+      })
+      .catch(err => console.log(err));
 
   };
 
@@ -587,7 +572,7 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     const target = event.target;
     const index = tempArray.findIndex(x => x._id === target.id);
     const value = target.value;
-    const name = target.name;
+    
 
     tempArray[index].noteBody = value;
 
@@ -609,66 +594,56 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
           console.log("successfully added new note", res);
           this.loadProjects();
         })
-        .catch(err => console.log(err));}
+        .catch(err => console.log(err));
+  }
 
-  handleNoteTitleChange = (event) => {
-    let tempArray = this.state.songNotes;
-    const target = event.target;
-    const index = tempArray.findIndex(x => x._id === target.id);
-    const value = target.value;
-    const name = target.name;
-
-    tempArray[index].noteTitle = value;
-
-      }
-  
 
   addNewNote = () => {
-    let songIndex = this.findSongIndex();
-    var dataObj = {
-      newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
-      index: songIndex
-    }
-    API.addNote(this.state.idForContent, dataObj)
-      .then(res => {
-        console.log("successfully added new note", res);
-        this.loadProjects();
-      })
-      .catch(err => console.log(err));
+  let songIndex = this.findSongIndex();
+  var dataObj = {
+  newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
+  index: songIndex
+  }
+  API.addNote(this.state.idForContent, dataObj)
+  .then(res => {
+    console.log("successfully added new note", res);
+    this.loadProjects();
+  })
+  .catch(err => console.log(err));
   };
 
   removeNote = (id) => {
-    let songIndex = this.findSongIndex();
-    console.log("remove note button click");
+  let songIndex = this.findSongIndex();
+  console.log("remove note button click");
 
-    var dataObj = {
-      id: id,
-      index: songIndex
-    }
-    API.removeNote(this.state.idForContent, dataObj)
-      .then(res => {
-        console.log("successfully removed a note", res);
-        this.loadProjects();
-      })
-      .catch(err => console.log(err));
+  var dataObj = {
+  id: id,
+  index: songIndex
+  }
+  API.removeNote(this.state.idForContent, dataObj)
+  .then(res => {
+    console.log("successfully removed a note", res);
+    this.loadProjects();
+  })
+  .catch(err => console.log(err));
   };
 
   findSongIndex = () => {
-    var songIndex;
+  var songIndex;
 
-    this.state.projectDetail.songs.forEach((song, index) => {
-      if (song._id === this.state.songID) {
-        console.log("found matching song ID index", index);
-        songIndex = index;
-      }
-    })
-    return (songIndex);
+  this.state.projectDetail.songs.forEach((song, index) => {
+  if (song._id === this.state.songID) {
+    console.log("found matching song ID index", index);
+    songIndex = index;
+  }
+  })
+  return (songIndex);
   };
 
-    deleteProject = (id) => {
-      API.deleteProject(id)
-      .then( res => this.loadProjects());
-    }
+  deleteProject = (id) => {
+  API.deleteProject(id)
+  .then( res => this.loadProjects());
+  };
 
   render(){
     const { user } = this.props.auth;
@@ -754,31 +729,26 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
                   <Accordion>
                     <Card>
                       <Card.Header>
-                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                          More Details!
+                        <Accordion.Toggle as={Button} bsPrefix={"btn"} eventKey="0">
+                          More Details
                         </Accordion.Toggle>
                       </Card.Header>
                       <Accordion.Collapse eventKey="0">
                         <Card.Body>
                           <h3>Client Name: {this.state.projectDetail.companyName}</h3>
+                         <h3> {this.state.members}</h3>
                         </Card.Body>
                       </Accordion.Collapse>
         </Card>
                   </Accordion>
                 </div>
-
-                {/* <MoreDetails
-                  // project = {this.state.projectDetail}
-                  // companyName = {this.state.projectDetail.companyName}
-
-                /> */}
               </Col>
               <Col sm={2} className="notesSection">
-                <div>
+                <div style={{"display":"flex"}}>
                   <h3>Notes Section</h3>
                   {this.displayNewNotes}
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
+                  <Button id="saveNotesButton"  bsPrefix={'sm-btn btn btn-outline-primary ml-auto'} onClick={() => this.addNewNote()}>New Note</Button>
+                  <Button id="saveNotesButton" bsPrefix={'sm-btn btn btn-outline-primary'} onClick={this.saveNotes}>Save All Notes</Button>
                   <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
                     {this.state.songNotes && this.state.songNotes.map((note, index) => (
                       <Note
@@ -800,7 +770,8 @@ onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
           </div>
           </div>
       )
-                    }}
+    }
+};
 
 
 Dashboard.propTypes = {
