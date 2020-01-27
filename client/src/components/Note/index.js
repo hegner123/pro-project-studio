@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap';
 function Note(props) {
   return (
     <div key={props.index} className="noteDiv">
-    
+    <span className="removeNote" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>𝘅</span>
     <Form.Control type="text" 
       id={props.noteId}
       value={props.titleValue}
@@ -20,7 +20,7 @@ function Note(props) {
       value={props.bodyValue}
       onChange={props.bodyOnChange}
       name={props.name} />
-    <span className="removeNote" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>𝘅</span>
+    
   </div>
   )
 }

@@ -3,8 +3,9 @@ const Project = require("../models/Project");
 // Defining methods for the booksController
 module.exports = {
   findAll: function(req, res) {
+    console.log("param for findall: ", req.params.id)
     Project
-      .find(req.query)
+      .find({members: req.params.id})
       // .sort({ date: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));

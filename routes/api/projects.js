@@ -2,8 +2,8 @@ const router = require("express").Router();
 const projectController = require("../../controllers/projectController");
 const User = require("../../models/User");
 
-// Matches with "/api/projects"
-router.route("/")
+// Matches with "/api/projects/userprojects"
+router.route("/userprojects/:id")
   .get(projectController.findAll)
   .post(projectController.create);
 
@@ -12,7 +12,8 @@ router
   .route("/:id")
   .get(projectController.findById)
   .delete(projectController.remove)
-
+  .put(projectController.update)
+  
 router
   .route("/:id/songs")
   .post(projectController.pushSong)

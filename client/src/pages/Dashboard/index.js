@@ -7,19 +7,10 @@ import ContentPane from "../../components/ContentPane";
 // import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
-
-<<<<<<< HEAD
 import Note from "../../components/Note";
-import MoreDetails from "../../components/MoreDetails";
-// import bootstrap components
-import { Button, Dropdown, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card } from 'react-bootstrap';
-=======
 
-import Note from "../../components/Note";
-import MoreDetails from "../../components/MoreDetails";
 // import bootstrap components
-import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown} from 'react-bootstrap';
->>>>>>> 93186d57169a8d4bbe675d919198d97ff1eaf595
+import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
 
@@ -316,9 +307,6 @@ export class AddInstrument extends React.Component {
   }
 }
 
-
-
-
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -338,8 +326,10 @@ class Dashboard extends Component {
       rowCount: 0,
       songNotes: [],
       songID: "",
+      userEmail: "",
+      projectMembers: "",
       //displayNewNotes: [],
-      showNewNotes: this.displayNewNotes
+      showNotes: false
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
@@ -347,12 +337,15 @@ class Dashboard extends Component {
   }
 
   componentDidMount() {
-    console.log("user info: ", this.props.auth);
-    this.loadProjects();
+    console.log("user info: ", this.props.auth.user.email);
+    this.setState({ userEmail: this.props.auth.user.email }, () => {
+      this.loadProjects();
+    })
+
   };
 
   loadProjects = () => {
-    API.getProjects()
+    API.getProjects(this.state.userEmail)
       .then(res => {
         this.setState({ projects: res.data, });
         //console.log(("project array" + JSON.stringify(this.state.projects)));
@@ -371,11 +364,10 @@ class Dashboard extends Component {
   };
 
   generateContent = (id) => {
-    this.setState({ idForContent: id }, () => {
+    this.setState({ idForContent: id , showNotes: false}, () => {
       //console.log("id: " + this.state.idForContent)
       this.loadSongDetails()
-    }
-    )
+    })
   };
 
   //Get song details for grid
@@ -383,7 +375,14 @@ class Dashboard extends Component {
     API.getProjectDetails(this.state.idForContent)
       .then(res => {
         this.setState({ projectDetail: res.data });
-        //console.log("project Detail Song: " + JSON.stringify(this.state.projectDetail.songs));
+        //console.log("project Details: " + JSON.stringify(this.state.projectDetail.members.join(", ")));
+        var members = "";
+        this.state.projectDetail.members.forEach((member, index) => {
+          members += member + ", ";
+        })
+
+        this.setState({ projectMembers: members })
+        //console.log("p members: " , this.state.projectMembers);
         let allSongs = [];
 
         this.state.projectDetail.songs.forEach((song, index) => {
@@ -392,8 +391,7 @@ class Dashboard extends Component {
 
         this.setState({ songsDetails: allSongs }, () => {
           this.renderGrid();
-        }
-        )
+        })
       })
       .catch(err => console.log(err));
   };
@@ -428,22 +426,17 @@ class Dashboard extends Component {
         onDoubleClick: (ev, args) => {
           let rowIndex = args.rowIdx;
           this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
-          this.setState({ songID: this.state.rows[rowIndex].idx });
+          this.setState({ songID: this.state.rows[rowIndex].idx, showNotes: true });
         }
       }
     };
-    // tempCol.push(columnObj);
-    // // Add remaning columns
-    // inst.forEach((instrument, index) => {
-    //   columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
-    // }
+
     tempCol.push(columnObj);
     // Add remaning columns
     inst.forEach((instrument, index) => {
       columnObj = { key: instrument, name: instrument, editor: IssueTypeEditor }
       tempCol.push(columnObj);
     });
-
 
     this.setState({ columns: tempCol }, () => { })
 
@@ -460,7 +453,7 @@ class Dashboard extends Component {
       inst.forEach((ins, index) => {
         row[ins] = "N/A"
       })
-      // const merged = Object.assign(row, status[index]);
+      const merged = Object.assign(row, status[index]);
     });
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
@@ -477,7 +470,6 @@ class Dashboard extends Component {
       });
     }
   };
-
 
   onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
     let property = Object.keys(updated)[0];
@@ -512,10 +504,8 @@ class Dashboard extends Component {
     API.updateProject(id, updatedObj)
       .then(res => {
         console.log("successfully status updated");
-
       })
       .catch(err => console.log(err));
-
   }
 
   handleNoteChange = (event) => {
@@ -632,116 +622,126 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
+          {this.state.projects.length ? (
+            <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
+              <Row>
+                <Col sm={2}>
+                  <ListGroup>
+                    {this.state.projects.map(project => (
+                      <OverlayTrigger placement="top" key={project.id} overlay={
+                        <Popover id="popover-basic">
+                          <Popover.Title as="h3">{project.title}</Popover.Title>
+                          <Popover.Content>
+                            <p>Client Name: {project.companyName}</p>
+                            <p>Members: {this.state.projectMembers}}</p>
+                          </Popover.Content>
+                        </Popover>} >
+                        <ListGroup.Item action
+                          href={" #" + project._id}
+                          key={project._id}
+                          onClick={() => this.generateContent(project._id)}
+                        >
 
-          <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
-            <Row>
-              <Col sm={2}>
-                <ListGroup>
-                  {this.state.projects.map(project => (
-                    <OverlayTrigger placement="top" key={project.id} overlay={
-                      <Popover id="popover-basic">
-                        <Popover.Title as="h3">{project.title}</Popover.Title>
-                        <Popover.Content>
-                          <p>Client Name: {project.companyName}</p>
-                          <p>Members: {project.members}</p>
-                        </Popover.Content>
-                      </Popover>} >
-                      <ListGroup.Item action
-                        href={" #" + project._id}
-                        key={project._id}
-                        onClick={() => this.generateContent(project._id)}
-                      >
+                          <div className="row">
+                            <div className="col-6">
+                              {project.title}
+                            </div>
+                            <div className="col-6 btn-align">
 
-                        <div className="row">
-                          <div className="col-6">
-                            {project.title}
+                              <Dropdown bsPrefix={"myparentDropdown"}>
+                                <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
+                                  ...
+                                      </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <Dropdown.Item onClick={() => this.editProject(project._id)}>Edit Project</Dropdown.Item>
+                                  <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </div>
                           </div>
-                          <div className="col-6 btn-align">
+                        </ListGroup.Item>
 
-                            <Dropdown bsPrefix={"myparentDropdown"}>
-                              <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
-                                ...
-                            </Dropdown.Toggle>
+                      </OverlayTrigger>
+                    ))
+                    }
+                  </ListGroup>
 
-                              <Dropdown.Menu>
+                </Col>
 
-                                <Dropdown.Item onClick={() => this.editProject(project._id)}>Edit Project</Dropdown.Item>
-                                <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </div>
-                        </div>
-                      </ListGroup.Item>
-
-                    </OverlayTrigger>
-                  ))
-                  }
-                </ListGroup>
-
-              </Col>
-
-              <Col xs={8} className="contentSection">
-                <ContentPane
-                  id={this.state.title}
-                />
-                <div>
-                  <ReactDataGrid
-                    columns={this.state.columns}
-                    rowGetter={i => this.state.rows[i]}
-                    rowsCount={this.state.rowCount}
-                    // onCheckCellIsEditable={this.state.checkCellEditable}
-                    onGridRowsUpdated={this.onGridRowsUpdated}
-                    enableCellSelect={true}
+                <Col sm={8} className="contentSection">
+                  <ContentPane
+                    id={this.state.title}
                   />
-                </div>
+                  <div>
+                    <ReactDataGrid
+                      columns={this.state.columns}
+                      rowGetter={i => this.state.rows[i]}
+                      rowsCount={this.state.rowCount}
+                      onGridRowsUpdated={this.onGridRowsUpdated}
+                      enableCellSelect={true}
+                    />
+                  </div>
 
-                <div className="moreDetailsDiv">
-                  <Accordion>
-                    <Card>
-                      <Card.Header>
-                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                          More Details!
-                        </Accordion.Toggle>
-                      </Card.Header>
-                      <Accordion.Collapse eventKey="0">
-                        <Card.Body>
-                          <h3>Client Name: {this.state.projectDetail.companyName}</h3>
-                        </Card.Body>
-                      </Accordion.Collapse>
-                    </Card>
-                  </Accordion>
-                </div>
+                  <div className="moreDetailsDiv">
+                    <Accordion>
+                      <Card>
+                        <Card.Header>
+                          <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                            More Details!
+                                  </Accordion.Toggle>
+                        </Card.Header>
+                        <Accordion.Collapse eventKey="0">
+                          <Card.Body>
+                            <h3>Client Name: {this.state.projectDetail.companyName}</h3>
+                            <h3>Member: {this.state.projectMembers}</h3>
+                            {this.state.projectDetail.songs && this.state.projectDetail.songs.map((song, index) => (
+                              <div>
+                                <h5>{song.song_title}</h5>
+                                <p>Song Key: {song.song_key}</p>
+                                <p>Song BPM: {song.song_bpm}</p>
+                              </div>
+                            ))}
 
-                {/* <MoreDetails
-                  // project = {this.state.projectDetail}
-                  // companyName = {this.state.projectDetail.companyName}
+                          </Card.Body>
+                        </Accordion.Collapse>
+                      </Card>
+                    </Accordion>
+                  </div>
+                </Col>
+                <Col sm={2} className="notesSection">
+                  <div>
+                    <h3>Notes Section</h3>
+                    {/* {this.displayNewNotes} */}
+                    {this.state.showNotes ? (
+                      <div>
+                                              <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                      <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
+                      <Form.Group id="formGroup" className="noteComponents">
+                        {this.state.songNotes && this.state.songNotes.map((note, index) => (
+                          <Note
+                            key={index}
+                            noteId={note._id}
+                            titleValue={this.state.songNotes[index].noteTitle}
+                            titleOnChange={this.handleNoteTitleChange}
+                            name={"songNotes"}
+                            bodyValue={this.state.songNotes[index].noteBody}
+                            bodyOnChange={this.handleNoteChange}
+                            removeNote={this.removeNote}
+                          />
+                        ))}
+                      </Form.Group>
+                      </div>
 
-                /> */}
-              </Col>
-              <Col sm={2} className="notesSection">
-                <div>
-                  <h3>Notes Section</h3>
-                  {this.displayNewNotes}
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
-                  <Button id="saveNotesButton" variant="outline-primary" onClick={this.saveNotes}>Save All Notes</Button>
-                  <Form.Group controlId="exampleForm.ControlTextarea1" id="formGroup">
-                    {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                      <Note
-                        key={index}
-                        noteId={note._id}
-                        titleValue={this.state.songNotes[index].noteTitle}
-                        titleOnChange={this.handleNoteTitleChange}
-                        name={"songNotes"}
-                        bodyValue={this.state.songNotes[index].noteBody}
-                        bodyOnChange={this.handleNoteChange}
-                        removeNote={this.removeNote}
-                      />
-                    ))}
-                  </Form.Group>
-                </div>
-              </Col>
-            </Row>
-          </Tab.Container>
+                            ) : (null)}
+
+                  </div>
+                </Col>
+              </Row>
+            </Tab.Container>
+          ) : (
+              <h3>No Projects to Display. Please Add a Project!</h3>
+            )}
+
         </div>
       </div>
     )
