@@ -12,7 +12,7 @@ const ProjectSchema = new Schema({
             song_lyrics: String,
             song_key: String,
             song_bpm: Number,
-            song_reference: String,
+            song_references:  {type: Array, default: []},
             song_notes: [new Schema ({
                   noteTitle: String,
                   noteBody: String,

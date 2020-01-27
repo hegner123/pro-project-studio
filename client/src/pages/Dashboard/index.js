@@ -33,7 +33,9 @@ export const Addproject = (props) => {
         <Modal.Title>Add Project</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <ProjectForm/>
+        <ProjectForm
+        close={handleClose}
+        refresh={props.refresh}/>
 
         </Modal.Body>
 
@@ -78,7 +80,7 @@ export class ProjectForm extends React.Component {
     API.saveProject(projectData);
     API.saveSong(songData)
       .then(res => {
-        this.componentDidMount()
+        
         console.log(res);
       })
 
@@ -111,7 +113,7 @@ export class ProjectForm extends React.Component {
         onChange={this.handleInputChange} />
         </label>
         </div>
-        <input className="btn-primary" type="submit" value="Submit" />
+        <input className="btn-primary" type="submit" value="Submit" onClick={this.props.close, this.props.refresh} />
       </form>
     );
   }
@@ -126,16 +128,22 @@ export class SongForm extends Component {
     songLyrics:"",
     songKey:"",
     songBpm:"",
-    songReferences:"",
-    instruments:[]
+    songReferences:[],
+    instrumentForm:"",
+    instruments:[],
+    searchSong:"",
+    results:[]
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAdd = this.handleAdd.bind(this)
+    
   }
 
-  searchSong (){
-    API.spotifyPreview("Blink 182").then(res => {
-      console.log(res);
+  searchSong (search){
+    API.spotifyPreview(search).then(res => {
+      this.setState({results: res.data.results});
+      console.log(res.data.results)
     })
   }
 
@@ -158,13 +166,12 @@ export class SongForm extends Component {
         song_references:this.state.songReferences,
         song_arrangements:this.state.instruments
       }
-      console.log(songData)
       API.saveSong(songData, this.props.id)
-        .then(res => { 
-          API.getProjectDetails(this.props.id)
-          .then(res1 => {this.setState()})
-          .catch(err => console.log(err))
-        }).catch(err => console.log(err));
+        .then(res => { console.log(res);
+          this.props.close()
+        })
+        .catch(err => console.log(err));
+       
       }
       // saveInstruments(id) {
       //   for (let j=0; j<this.state.instruments.length; j++){
@@ -180,12 +187,29 @@ export class SongForm extends Component {
       //   }
       //   }
 
+      handleAdd() {
+        this.setState(prevState => ({
+          instruments: [...prevState.instruments, this.state.instrumentForm]
+        }));
+        console.log(this.state)
+        this.setState({instrumentForm :""})
+        //console.log(("project array" + JSON.stringify(this.state.projects)));
+      }
+
+      addReference(song){
+        this.setState(prevState => ({
+          songReferences: [...prevState.songReferences, song]
+        }));
+      }
+
+   
+
   render() {
 
     return (
       <div className="container">
         <div className="row">
-        <div className="col-6">
+        <div className="col-12">
       <form onSubmit={this.handleSubmit}>
         <div className="form-row">
         <label className="form-label">
@@ -210,21 +234,38 @@ export class SongForm extends Component {
         </div>
         <div className ="form-row">
         <label>Song References
-        <input type="text" className="form-control" name="songReferences" onChange={this.handleInputChange} />
-        <Button onClick={this.searchSong}>Seach in the console</Button>
+        <input type="text" className="form-control" name="searchSong" onChange={this.handleInputChange} />
+        <Button onClick={()=>this.searchSong(this.state.searchSong)}>Search for References</Button>
+        <div>
+        {this.state.results.map(song => (
+          <div>
+  <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name}</p>
+  <Button bsPrefix={"sm-btn btn"} onClick={()=>this.addReference(song.name)}>Add to References</Button>
+             </div>
+                        ))
+                        }
+
+                        </div>
         </label>
         </div>
 
-
-        <input className="btn-primary" type="submit" value="Submit" />
+        <div>
+           {this.state.instruments.map(instrument => (
+             <div> {instrument}</div>
+                        ))
+                        }
+        <label>instruments
+          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
+        </label>
+        <Button  onClick={() => this.handleAdd()}>Add Instruments</Button>
+        {/* <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button> */}
+        </div>
+        <input className="btn-primary" type="submit" value="Submit"/>
       </form>
       </div>
-      <div className="col-6">
-        <AddInstrument 
-        id ={this.state.songId}/>
       </div>
       </div>
-      </div>
+
     );
   }
 };
@@ -235,7 +276,7 @@ export const AddSong = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-
+  
 
   return (
     <div className="ml-auto">
@@ -248,7 +289,10 @@ export const AddSong = (props) => {
           <Modal.Title>Add Song</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <SongForm id={props.id}/>
+          <div className="row">
+          <SongForm id={props.id}
+          close={handleClose}/>
+          </div>
         </Modal.Body>
 
       </Modal>
@@ -256,59 +300,6 @@ export const AddSong = (props) => {
 
   )
 };
-
-export class AddInstrument extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-      instrumentForm:"",
-      instruments:[]
-      }
-      this.handleInputChange = this.handleInputChange.bind(this);
-      // this.saveInstruments = this.saveInstruments.bind(this);
-      this.handleAdd = this.handleAdd.bind(this)
-    }
-      handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = target.name;
-        this.setState({
-          [name]: value
-        });
-        console.log(this.state)
-        console.log(this.state.instrumentForm)
-        }
-
-    handleAdd() {
-        this.setState(prevState => ({
-          instruments: [...prevState.instruments, this.state.instrumentForm]
-        }));
-        console.log(this.state)
-        this.setState({instrumentForm :""})
-        //console.log(("project array" + JSON.stringify(this.state.projects)));
-      }
-
-
-    render(props) {
-
-      return (
-
-        <div>
-           {this.state.instruments.map(instrument => (
-             <div> {instrument}</div>
-                        ))
-                        }
-        <form>
-        <label>instruments
-          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
-        </label>
-        <Button  onClick={() => this.handleAdd(props)}>Add Instruments</Button>
-        <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button>
-        </form>
-        </div>
-      )
-    }
-}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -644,6 +635,9 @@ class Dashboard extends Component {
   API.deleteProject(id)
   .then( res => this.loadProjects());
   };
+
+
+
 
   render(){
     const { user } = this.props.auth;

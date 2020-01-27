@@ -23,7 +23,6 @@ router
 
   router
   .route("/song/arrangement/:id")
-  .post(projectController.pushInstruments)
   .put(projectController.update)
 
 //   .delete(booksController.remove);
