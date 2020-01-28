@@ -406,7 +406,7 @@ class Dashboard extends Component {
 
     const { DropDownEditor } = Editors;
     const issueTypes = [
-      { id: "incomplete", value: "Incomplete" },
+      { id: "incomplete", value: "Incomplete"},
       { id: "complete", value: "Complete" },
     ];
     const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
@@ -685,7 +685,6 @@ class Dashboard extends Component {
                                   <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
                                 </Dropdown.Menu>
                               </Dropdown>
-                              
                             </div>
                           </div>
                         </ListGroup.Item>

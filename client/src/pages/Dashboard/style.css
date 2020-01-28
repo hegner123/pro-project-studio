@@ -59,6 +59,10 @@ body {
   background: white;
   padding:1rem;
 }
+.react-grid-Cell{
+  background:red !important;
+  z-index: 100;
+}
 
 
 
