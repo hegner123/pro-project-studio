@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./style.css";
+
 import Image from "./images/Image1.svg";
 
 
@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import Container from "react-bootstrap/Container";
+import "./style.css";
 
 
 class Landing extends Component {
