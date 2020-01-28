@@ -743,6 +743,7 @@ class Dashboard extends Component {
                                 <h5>{song.song_title}</h5>
                                 <p>Song Key: {song.song_key}</p>
                                 <p>Song BPM: {song.song_bpm}</p>
+                            <p>{song.song_references}</p>
                               </div>
                             ))}
 
