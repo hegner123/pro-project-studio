@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import ContentPane from "../../components/ContentPane";
-import "./style.css";
 import API from "../../utils/API";
 import Note from "../../components/Note";
+import Notification from "../../components/Notification";
 
 // import bootstrap components
 import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
 import { Editors } from "react-data-grid-addons";
-
+import "./style.css";
 
 export const Addproject = (props) => {
   const [show, setShow] = React.useState(false);
@@ -178,7 +178,7 @@ export class SongForm extends Component {
 
     let songStatus = {};
     this.state.instruments.forEach(inst => {
-      songStatus[inst] = "Incomplete"
+      songStatus[inst] = "\u2717"
     })
 
     let songData = {
@@ -336,7 +336,9 @@ class Dashboard extends Component {
       userEmail: "",
       projectMembers: "",
       showNotes: false,
-      showEditProjectModal: false
+      showNotification: false,
+      notificationTitle: "",
+      notificationBody: ""
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
@@ -406,8 +408,8 @@ class Dashboard extends Component {
 
     const { DropDownEditor } = Editors;
     const issueTypes = [
-      { id: "incomplete", value: "Incomplete"},
-      { id: "complete", value: "Complete" },
+      { id: "incomplete", value: "\u2717" },
+      { id: "complete", value: 	"\u2714" },
     ];
     const IssueTypeEditor = <DropDownEditor options={issueTypes} />;
 
@@ -568,7 +570,7 @@ class Dashboard extends Component {
       .then(res => {
         console.log("successfully status updated");
         this.displayNotes(this.state.songID, songIndex);
-        this.setState({ songID: id });
+        this.setState({ songID: id, showNotification: true, notificationTitle: "Notes successfully updated!" });
 
       })
       .catch(err => console.log(err));
@@ -608,6 +610,7 @@ class Dashboard extends Component {
       .then(res => {
         console.log("successfully removed a note", res);
         this.loadProjects();
+        this.setState({ showNotification: true, notificationTitle: "Note Deleted!", notificationBody: "Please refresh the page" });
       })
       .catch(err => console.log(err));
   };
@@ -628,6 +631,9 @@ class Dashboard extends Component {
     API.deleteProject(id)
       .then(res => this.loadProjects());
   };
+  hideNotification = () => {
+    this.setState({ showNotification: false, notificationTitle: "", notificationBody: ""})
+  }
 
   render() {
     const { user } = this.props.auth;
@@ -649,6 +655,14 @@ class Dashboard extends Component {
               </div>
             </div>
           </div>
+          {this.state.showNotification ? (
+            <Notification 
+              title = {this.state.notificationTitle}
+              body = {this.state.notificationBody}
+              show = {this.state.showNotification}
+              onHide = {this.hideNotification}
+            />
+          ) : (null)}
 
           {this.state.projects.length ? (
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
@@ -705,6 +719,7 @@ class Dashboard extends Component {
                       rowsCount={this.state.rowCount}
                       onGridRowsUpdated={this.onGridRowsUpdated}
                       enableCellSelect={true}
+                     
                     />
                   </div>
 

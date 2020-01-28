@@ -8,8 +8,8 @@ import { Form } from 'react-bootstrap';
 function Note(props) {
   return (
     <div key={props.index} className="noteDiv">
-    <span className="removeNote" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>𝘅</span>
-    <Form.Control type="text" 
+    <span className="removeNote badge" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>𝘅</span>
+    <Form.Control bsPrefix={"cust-input form-control"} type="text" 
       id={props.noteId}
       value={props.titleValue}
       onChange={props.titleOnChange}

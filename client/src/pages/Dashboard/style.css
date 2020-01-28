@@ -59,12 +59,17 @@ body {
   background: white;
   padding:1rem;
 }
-.react-grid-Cell{
-  background:red !important;
-  z-index: 100;
+
+
+
+.react-grid-Row .react-grid-Cell ~[value~="\u2717"]{
+  background-color: yellow;
+  text-align: center;
+
 }
 
-
-
-
+.react-grid-Row .react-grid-Cell[value~=\u2714] {
+background-color:green;
+  text-align: center;
+}
 
