@@ -3,8 +3,6 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import ContentPane from "../../components/ContentPane";
-
-// import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
 import Note from "../../components/Note";
@@ -27,16 +25,14 @@ export const Addproject = (props) => {
       </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
-      <Modal.Header closeButton>
-        <Modal.Title>Add Project</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <ProjectForm
-        close={handleClose}
-        refresh={props.refresh}/>
-
+        <Modal.Header closeButton>
+          <Modal.Title>Add Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ProjectForm
+            close={handleClose}
+            refresh={props.refresh} />
         </Modal.Body>
-
       </Modal>
     </div>
 
@@ -50,7 +46,7 @@ export class ProjectForm extends React.Component {
       song: [],
       members: [],
       total_arrangements: 0,
-      companyName: ""
+      companyName: "",
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -67,23 +63,18 @@ export class ProjectForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    let songData = {
-      song_arrangements: this.state.instruments
-    }
+
     let projectData = {
       title: this.state.title,
       members: this.state.members,
       companyName: this.state.companyName
     }
     console.log(projectData)
-    API.saveProject(projectData);
-    API.saveSong(songData)
+    API.saveProject(projectData)
       .then(res => {
-        //this.componentDidMount()
-        this.loadProjects();
-        console.log(res);
+        console.log("created project");
+        this.props.close()
       })
-
       .catch(err => console.log(err));
   };
 
@@ -113,7 +104,9 @@ export class ProjectForm extends React.Component {
               onChange={this.handleInputChange} />
           </label>
         </div>
-        <input className="btn-primary" type="submit" value="Submit" onClick={this.props.close, this.props.refresh} />
+        <input className="btn-primary" type="submit" value="Submit"
+        // onClick={this.props.close, this.props.refresh} 
+        />
       </form>
     );
   }
@@ -123,26 +116,25 @@ export class SongForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    songID:"",
-    songTitle:"",
-    songLyrics:"",
-    songKey:"",
-    songBpm:"",
-    songReferences:[],
-    instrumentForm:"",
-    instruments:[],
-    searchSong:"",
-    results:[]
+      songID: "",
+      songTitle: "",
+      songLyrics: "",
+      songKey: "",
+      songBpm: "",
+      songReferences: [],
+      instrumentForm: "",
+      instruments: [],
+      searchSong: "",
+      results: [],
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAdd = this.handleAdd.bind(this)
-    
   }
 
-  searchSong (search){
+  searchSong(search) {
     API.spotifyPreview(search).then(res => {
-      this.setState({results: res.data.results});
+      this.setState({ results: res.data.results });
       console.log(res.data.results)
     })
   }
@@ -156,64 +148,59 @@ export class SongForm extends Component {
     });
   }
 
-    handleSubmit(e) {
-      e.preventDefault();
-      let songData = {
-        song_title: this.state.songTitle,
-        song_key: this.state.songKey,
-        song_bpm: this.state.songBpm,
-        song_lyrics: this.state.songLyrics,
-        song_references:this.state.songReferences,
-        song_arrangements:this.state.instruments
-      }
-      API.saveSong(songData, this.props.id)
-        .then(res => { console.log(res);
-          this.props.close()
-        })
-        .catch(err => console.log(err));
-       
-      }
-      // saveInstruments(id) {
-      //   for (let j=0; j<this.state.instruments.length; j++){
-      //     console.log("pancakes")
-      //     let instrumentData = this.state.instruments[j];
-      //     API.saveInstruments(id, instrumentData )
-      //     .then(res => {
-      //       console.log(res);
-      //     })
-  
-      //     .catch(err => console.log(err));
-      //   console.log(this.state)
-      //   }
-      //   }
+  handleSubmit(e) {
+    e.preventDefault();
 
-      handleAdd() {
-        this.setState(prevState => ({
-          instruments: [...prevState.instruments, this.state.instrumentForm]
-        }));
-        console.log(this.state)
-        this.setState({instrumentForm :""})
-        //console.log(("project array" + JSON.stringify(this.state.projects)));
-      }
+    let songStatus = {};
+    this.state.instruments.forEach(inst => {
+      songStatus[inst] = "Incomplete"
+    })
 
-      addReference(song){
-        this.setState(prevState => ({
-          songReferences: [...prevState.songReferences, song]
-        }));
-      }
+    let songData = {
+      song_title: this.state.songTitle,
+      song_key: this.state.songKey,
+      song_bpm: this.state.songBpm,
+      song_lyrics: this.state.songLyrics,
+      song_references: this.state.songReferences,
+      song_arrangements: this.state.instruments,
+      song_status: songStatus
+    }
+    console.log("song data: ", songData);
+    API.saveSong(songData, this.props.id)
+      .then(res => {
+        console.log(res);
+        this.props.close()
+      })
+      .catch(err => console.log(err));
 
-   
+  }
+
+  handleAdd() {
+    this.setState(prevState => ({
+      instruments: [...prevState.instruments, this.state.instrumentForm]
+    }));
+    console.log(this.state)
+    this.setState({ instrumentForm: "" })
+  }
+
+  addReference(song) {
+    this.setState(prevState => ({
+      songReferences: [...prevState.songReferences, song]
+    }));
+  }
+
+
 
   render() {
 
     return (
       <div className="container">
         <div className="row">
-        <div className="col-12">
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-row">
-        <label className="form-label">
-          Song Title
+          <div className="col-12">
+            <form onSubmit={this.handleSubmit}>
+              <div className="form-row">
+                <label className="form-label">
+                  Song Title
           <input type="text" className="form-control" name="songTitle" onChange={this.handleInputChange} />
                 </label>
               </div>
@@ -230,40 +217,40 @@ export class SongForm extends Component {
               <div className="form-row">
                 <label>Lyrics
         <textarea type="text" className="form-control" name="songLyrics" onChange={this.handleInputChange} />
-        </label>
-        </div>
-        <div className ="form-row">
-        <label>Song References
+                </label>
+              </div>
+              <div className="form-row">
+                <label>Song References
         <input type="text" className="form-control" name="searchSong" onChange={this.handleInputChange} />
-        <Button onClick={()=>this.searchSong(this.state.searchSong)}>Search for References</Button>
-        <div>
-        {this.state.results.map(song => (
-          <div>
-  <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name}</p>
-  <Button bsPrefix={"sm-btn btn"} onClick={()=>this.addReference(song.name)}>Add to References</Button>
-             </div>
-                        ))
-                        }
+                  <Button onClick={() => this.searchSong(this.state.searchSong)}>Search for References</Button>
+                  <div>
+                    {this.state.results.map(song => (
+                      <div>
+                        <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name}</p>
+                        <Button bsPrefix={"sm-btn btn"} onClick={() => this.addReference(song.name)}>Add to References</Button>
+                      </div>
+                    ))
+                    }
 
-                        </div>
-        </label>
-        </div>
+                  </div>
+                </label>
+              </div>
 
-        <div>
-           {this.state.instruments.map(instrument => (
-             <div> {instrument}</div>
-                        ))
-                        }
-        <label>instruments
-          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm}/>
-        </label>
-        <Button  onClick={() => this.handleAdd()}>Add Instruments</Button>
-        {/* <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button> */}
+              <div>
+                {this.state.instruments.map(instrument => (
+                  <div> {instrument}</div>
+                ))
+                }
+                <label>instruments
+          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm} />
+                </label>
+                <Button onClick={() => this.handleAdd()}>Add Instruments</Button>
+                {/* <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button> */}
+              </div>
+              <input className="btn-primary" type="submit" value="Submit" />
+            </form>
+          </div>
         </div>
-        <input className="btn-primary" type="submit" value="Submit"/>
-      </form>
-      </div>
-      </div>
       </div>
 
     );
@@ -276,7 +263,7 @@ export const AddSong = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  
+
 
   return (
     <div className="ml-auto">
@@ -290,8 +277,8 @@ export const AddSong = (props) => {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-          <SongForm id={props.id}
-          close={handleClose}/>
+            <SongForm id={props.id}
+              close={handleClose} />
           </div>
         </Modal.Body>
 
@@ -322,12 +309,11 @@ class Dashboard extends Component {
       songID: "",
       userEmail: "",
       projectMembers: "",
-      //displayNewNotes: [],
-      showNotes: false
+      showNotes: false,
+      showEditProjectModal: false
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
-    //this.addNewNote = this.addNewNote.bind(this);
   }
 
   componentDidMount() {
@@ -358,7 +344,7 @@ class Dashboard extends Component {
   };
 
   generateContent = (id) => {
-    this.setState({ idForContent: id , showNotes: false}, () => {
+    this.setState({ idForContent: id, showNotes: false }, () => {
       //console.log("id: " + this.state.idForContent)
       this.loadSongDetails()
     })
@@ -417,10 +403,13 @@ class Dashboard extends Component {
     var tempCol = [];
     var columnObj = {
       key: "songTitle", name: "Song Title", resizable: true, events: {
-        onDoubleClick: (ev, args) => {
+        onClick: (ev, args) => {
           let rowIndex = args.rowIdx;
-          this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
-          this.setState({ songID: this.state.rows[rowIndex].idx, showNotes: true });
+          this.setState({ songNotes: [] }, () => {
+            this.displayNotes(this.state.rows[rowIndex].idx, rowIndex);
+            this.setState({ songID: this.state.rows[rowIndex].idx, showNotes: true });
+          })
+
         }
       }
     };
@@ -447,7 +436,7 @@ class Dashboard extends Component {
       inst.forEach((ins, index) => {
         row[ins] = "N/A"
       })
-      // const merged = Object.assign(row, status[index]);
+      const merged = Object.assign(row, status[index]);
     });
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
@@ -500,7 +489,7 @@ class Dashboard extends Component {
         console.log("successfully status updated");
       })
       .catch(err => console.log(err));
-  }
+  };
 
   handleNoteChange = (event) => {
     let tempArray = this.state.songNotes;
@@ -508,7 +497,6 @@ class Dashboard extends Component {
     const index = tempArray.findIndex(x => x._id === target.id);
     const value = target.value;
     const name = target.name;
-    
 
     tempArray[index].noteBody = value;
 
@@ -536,69 +524,77 @@ class Dashboard extends Component {
   };
 
   saveNotes = () => {
+
     //Update the project variable with song notes
     let updatedProjectDetails = this.state.projectDetail;
+    let songIndex;
+    let id;
     updatedProjectDetails.songs.forEach((song, index) => {
       if (song._id === this.state.songID) {
         //console.log("found matching song ID", index);
         song.song_notes = this.state.songNotes;
+        songIndex = index;
+        id = song._id;
       }
     })
 
     API.updateProject(this.state.idForContent, updatedProjectDetails)
       .then(res => {
         console.log("successfully status updated");
+        this.displayNotes(this.state.songID, songIndex);
+        this.setState({ songID: id });
+
       })
       .catch(err => console.log(err));
 
   };
 
   addNewNote = () => {
-  let songIndex = this.findSongIndex();
-  var dataObj = {
-  newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
-  index: songIndex
-  }
-  API.addNote(this.state.idForContent, dataObj)
-  .then(res => {
-    console.log("successfully added new note", res);
-    this.loadProjects();
-  })
-  .catch(err => console.log(err));
+    let songIndex = this.findSongIndex();
+    let id = this.state.songID;
+    var dataObj = {
+      newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
+      index: songIndex
+    }
+    API.addNote(this.state.idForContent, dataObj)
+      .then(res => {
+        console.log("successfully added new note", res);
+      })
+      .catch(err => console.log(err));
   };
 
   removeNote = (id) => {
-  let songIndex = this.findSongIndex();
-  console.log("remove note button click");
+    let songIndex = this.findSongIndex();
+    console.log("remove note button click");
 
-  var dataObj = {
-  id: id,
-  index: songIndex
-  }
-  API.removeNote(this.state.idForContent, dataObj)
-  .then(res => {
-    console.log("successfully removed a note", res);
-    this.loadProjects();
-  })
-  .catch(err => console.log(err));
+    var dataObj = {
+      id: id,
+      index: songIndex
+    }
+    API.removeNote(this.state.idForContent, dataObj)
+      .then(res => {
+        console.log("successfully removed a note", res);
+        this.loadProjects();
+      })
+      .catch(err => console.log(err));
   };
 
   findSongIndex = () => {
-  var songIndex;
+    var songIndex;
 
-  this.state.projectDetail.songs.forEach((song, index) => {
-  if (song._id === this.state.songID) {
-    console.log("found matching song ID index", index);
-    songIndex = index;
-  }
-  })
-  return (songIndex);
+    this.state.projectDetail.songs.forEach((song, index) => {
+      if (song._id === this.state.songID) {
+        console.log("found matching song ID index", index);
+        songIndex = index;
+      }
+    })
+    return (songIndex);
   };
 
   deleteProject = (id) => {
     API.deleteProject(id)
       .then(res => this.loadProjects());
-  }
+  };
 
   render() {
     const { user } = this.props.auth;
@@ -612,11 +608,12 @@ class Dashboard extends Component {
             </div>
             <div className="col-6 btn-align">
               <div className="cust-btn-group">
-                <Addproject />
+                <Addproject userEmail={this.state.userEmail} />
                 <AddSong id={this.state.idForContent} />
               </div>
             </div>
           </div>
+
           {this.state.projects.length ? (
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
               <Row>
@@ -646,21 +643,20 @@ class Dashboard extends Component {
                               <Dropdown bsPrefix={"myparentDropdown"}>
                                 <Dropdown.Toggle bsPrefix={"myDropdown"} id="dropdown-basic">
                                   ...
-                                      </Dropdown.Toggle>
+                                </Dropdown.Toggle>
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={() => this.editProject(project._id)}>Edit Project</Dropdown.Item>
                                   <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
                                 </Dropdown.Menu>
                               </Dropdown>
+                              
                             </div>
                           </div>
                         </ListGroup.Item>
-
                       </OverlayTrigger>
                     ))
                     }
                   </ListGroup>
-
                 </Col>
 
                 <Col sm={8} className="contentSection">
@@ -683,7 +679,7 @@ class Dashboard extends Component {
                         <Card.Header>
                           <Accordion.Toggle as={Button} variant="link" eventKey="0">
                             More Details!
-                                  </Accordion.Toggle>
+                          </Accordion.Toggle>
                         </Card.Header>
                         <Accordion.Collapse eventKey="0">
                           <Card.Body>
@@ -709,25 +705,25 @@ class Dashboard extends Component {
                     {/* {this.displayNewNotes} */}
                     {this.state.showNotes ? (
                       <div>
-                                              <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
-                      <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
-                      <Form.Group id="formGroup" className="noteComponents">
-                        {this.state.songNotes && this.state.songNotes.map((note, index) => (
-                          <Note
-                            key={index}
-                            noteId={note._id}
-                            titleValue={this.state.songNotes[index].noteTitle}
-                            titleOnChange={this.handleNoteTitleChange}
-                            name={"songNotes"}
-                            bodyValue={this.state.songNotes[index].noteBody}
-                            bodyOnChange={this.handleNoteChange}
-                            removeNote={this.removeNote}
-                          />
-                        ))}
-                      </Form.Group>
+                        <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                        <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
+                        <Form.Group id="formGroup" className="noteComponents">
+                          {this.state.songNotes && this.state.songNotes.map((note, index) => (
+                            <Note
+                              key={index}
+                              noteId={note._id}
+                              titleValue={this.state.songNotes[index].noteTitle}
+                              titleOnChange={this.handleNoteTitleChange}
+                              name={"songNotes"}
+                              bodyValue={this.state.songNotes[index].noteBody}
+                              bodyOnChange={this.handleNoteChange}
+                              removeNote={this.removeNote}
+                            />
+                          ))}
+                        </Form.Group>
                       </div>
 
-                            ) : (null)}
+                    ) : (null)}
 
                   </div>
                 </Col>
@@ -739,7 +735,7 @@ class Dashboard extends Component {
 
         </div>
       </div>
-    )
+    );
   }
 }
 
