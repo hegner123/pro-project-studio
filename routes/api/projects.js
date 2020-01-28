@@ -20,7 +20,7 @@ router
   .put(projectController.update)
   
 router
-  .route("/:id/songs")
+  .route("/userprojects/:id/songs")
   .post(projectController.pushSong)
 
   router

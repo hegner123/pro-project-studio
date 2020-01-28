@@ -19,16 +19,16 @@ export default {
     return axios.put("/api/projects/note/remove/" + id, noteData);
   },
 
-  saveProject: function(projectData) {
-    return axios.post("/api/projects", projectData);
+  saveProject: function(id,projectData) {
+    return axios.post("/api/projects/userprojects/" + id, projectData);
   },
-  saveSong: function(songData, id) {
-    return axios.post("/api/projects/" + id +"/songs", songData);
+  saveSong: function(id, songData) {
+    return axios.post("/api/projects/userprojects/" + id +"/songs", songData);
   },
   deleteProject: function(id){
     return axios.delete("/api/projects/" + id)
   },
-  saveInstruments: function (instrumentData, id){
+  saveInstruments: function (id, instrumentData){
     return axios.post("/api/projects/song/arrangement/" + id , instrumentData)
   },
 

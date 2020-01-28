@@ -6,7 +6,6 @@ module.exports = {
     //console.log("param for findall: ", req.params.id)
     Project
       .find({members: req.params.id})
-      // .sort({ date: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

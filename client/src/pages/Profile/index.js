@@ -10,9 +10,7 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        images: [],
-        imageUrls: [],
-        message: ''
+        
     }   
 }
 
@@ -55,53 +53,19 @@ class Profile extends Component {
     const { user } = this.props.auth;
 
     return (
-      <div style={{ height: "75vh" }} className="container valign-wrapper">
+      <div style={{ height: "75vh" }} className={"container"}>
         <div className="row">
-          <div className="landing-copy col s12 center-align">
-            <h4>
-              <b>Hey there,</b> {user.firstName.split(" ")[0]}
-              <p className="flow-text grey-text text-darken-1">
-                You are now at profile page!
-              </p>
-            </h4>
-            <button
-              style={{
-                width: "150px",
-                borderRadius: "3px",
-                letterSpacing: "1.5px",
-                marginTop: "1rem"
-              }}
-              onClick={this.onLogoutClick}
-              className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-            >
-              Logout
-            </button>
+          <div className="col-12 m-5">
+    <h1 className="text-white">{user.firstName} {user.lastName}</h1>
           </div>
         </div>
-        <row>
-        <div className="col-sm-12">
-                <h1>Image Uploader</h1><hr/>
-                <div className="col-sm-4">
-                    <input className="form-control " type="file" onChange={this.selectImages} multiple/>
-                </div>
-                <p className="text-info">{this.state.message}</p>
-                <br/><br/><br/>
-                <div className="col-sm-4">
-                    <button className="btn btn-primary" value="Submit" onClick={this.uploadImages}>Submit</button>
-                </div>
-            </div>
+        <div className="row">
+          <div className="col-12">
+          
+          </div>
 
-
-            <div className="row col-lg-12">
-                {
-                this.state.imageUrls.map((url, i) => (
-                <div className="col-lg-2" key={i}>
-                    <img src={BASE_URL + url} className="img-rounded img-responsive" alt="not available"/><br/>
-                </div>
-                ))
-                }
-            </div>
-        </row>
+        </div>
+  
       </div>
     );
   }

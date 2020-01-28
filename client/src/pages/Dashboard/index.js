@@ -25,13 +25,16 @@ export const Addproject = (props) => {
       </Button>
 
       <Modal show={show} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Add Project</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <ProjectForm
-            close={handleClose}
-            refresh={props.refresh} />
+      <Modal.Header closeButton>
+        <Modal.Title>Add Project</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <ProjectForm
+        close={handleClose}
+        id={props.id}
+        refresh={props.refresh()}
+        email={props.email}/>
+
         </Modal.Body>
       </Modal>
     </div>
@@ -44,9 +47,10 @@ export class ProjectForm extends React.Component {
     this.state = {
       title: "",
       song: [],
-      members: [],
+      members: [ this.props.email],
       total_arrangements: 0,
       companyName: "",
+      memberForm:""
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -60,20 +64,26 @@ export class ProjectForm extends React.Component {
       [name]: value
     });
   }
+  addMember(member){
+    this.setState(prevState => ({
+      members: [...prevState.members, member]
+    }));
+  }
+
+  
 
   handleSubmit(e) {
     e.preventDefault();
-
     let projectData = {
       title: this.state.title,
       members: this.state.members,
       companyName: this.state.companyName
     }
     console.log(projectData)
-    API.saveProject(projectData)
-      .then(res => {
-        console.log("created project");
-        this.props.close()
+    API.saveProject(this.props.id,projectData).then(res => {
+        this.props.refresh();
+        this.props.close();
+        console.log(res);
       })
       .catch(err => console.log(err));
   };
@@ -90,13 +100,28 @@ export class ProjectForm extends React.Component {
               onChange={this.handleInputChange} />
           </label>
         </div>
+        <div className="members-box">
         <div className="form-row">
-          <label>Members:
-        <input type="text" className="form-control" name={"members"}
-              value={this.state.members}
-              onChange={this.handleInputChange} />
-          </label>
+        <h6>Accounts with access</h6>
         </div>
+       {this.state.members.map(member => (
+            <div className="form-row" key={member}>
+              <ul>
+          <li>{member}<span>X</span></li>
+          </ul>
+          </div>
+                        ))
+                        }
+                        </div>
+                        <div className="form-row">
+          <label>Members:
+        <input type="email" className="form-control"
+        name={"memberForm"}
+              value={this.state.memberForm}
+              onChange={this.handleInputChange} />
+              <Button onClick={()=> this.addMember(this.state.memberForm) }>Add Members</Button>
+          </label>
+          </div>
         <div className="form-row">
           <label>Company:
         <input type="text" className="form-control" name={"companyName"}
@@ -148,8 +173,8 @@ export class SongForm extends Component {
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit() {
+    
 
     let songStatus = {};
     this.state.instruments.forEach(inst => {
@@ -166,7 +191,7 @@ export class SongForm extends Component {
       song_status: songStatus
     }
     console.log("song data: ", songData);
-    API.saveSong(songData, this.props.id)
+    API.saveSong(this.props.id, songData)
       .then(res => {
         console.log(res);
         this.props.close()
@@ -177,7 +202,7 @@ export class SongForm extends Component {
 
   handleAdd() {
     this.setState(prevState => ({
-      instruments: [...prevState.instruments, this.state.instrumentForm]
+      instruments: [...prevState.instruments, this.state.instrumentForm.toUpperCase()]
     }));
     console.log(this.state)
     this.setState({ instrumentForm: "" })
@@ -225,7 +250,7 @@ export class SongForm extends Component {
                   <Button onClick={() => this.searchSong(this.state.searchSong)}>Search for References</Button>
                   <div>
                     {this.state.results.map(song => (
-                      <div>
+                      <div key={song}>
                         <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name}</p>
                         <Button bsPrefix={"sm-btn btn"} onClick={() => this.addReference(song.name)}>Add to References</Button>
                       </div>
@@ -247,7 +272,7 @@ export class SongForm extends Component {
                 <Button onClick={() => this.handleAdd()}>Add Instruments</Button>
                 {/* <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button> */}
               </div>
-              <input className="btn-primary" type="submit" value="Submit" />
+              <Button className="btn-primary" onClick={()=> this.handleSubmit()}>Submit</Button>
             </form>
           </div>
         </div>
@@ -277,8 +302,9 @@ export const AddSong = (props) => {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <SongForm id={props.id}
-              close={handleClose} />
+          <SongForm id={props.id}
+          close={handleClose}
+          refresh={props.refresh()}/>
           </div>
         </Modal.Body>
 
@@ -356,7 +382,7 @@ class Dashboard extends Component {
       .then(res => {
         this.setState({ projectDetail: res.data });
         //console.log("project Details: " + JSON.stringify(this.state.projectDetail.members.join(", ")));
-        var members = "";
+        let members = "";
         this.state.projectDetail.members.forEach((member, index) => {
           members += member + ", ";
         })
@@ -400,8 +426,8 @@ class Dashboard extends Component {
 
     //Add data to column array
     // First column of song title
-    var tempCol = [];
-    var columnObj = {
+    let tempCol = [];
+    let columnObj = {
       key: "songTitle", name: "Song Title", resizable: true, events: {
         onClick: (ev, args) => {
           let rowIndex = args.rowIdx;
@@ -436,7 +462,7 @@ class Dashboard extends Component {
       inst.forEach((ins, index) => {
         row[ins] = "N/A"
       })
-      const merged = Object.assign(row, status[index]);
+      Object.assign(row, status[index]);
     });
 
     this.setState({ rows: tempRow, rowCount: tempRow.length }, () => { });
@@ -551,7 +577,7 @@ class Dashboard extends Component {
 
   addNewNote = () => {
     let songIndex = this.findSongIndex();
-    let id = this.state.songID;
+    // let id = this.state.songID;
     var dataObj = {
       newNote: { newNote: '{_id: new ObjectId(), noteStatus: "N/A", noteTitle: "Note Title", noteBody: "Note Body"}' },
       index: songIndex
@@ -562,6 +588,13 @@ class Dashboard extends Component {
       })
       .catch(err => console.log(err));
   };
+
+
+  refreshNotes = () => {
+    this.renderGrid();
+    this.forceUpdate();
+    
+  }
 
   removeNote = (id) => {
     let songIndex = this.findSongIndex();
@@ -608,8 +641,11 @@ class Dashboard extends Component {
             </div>
             <div className="col-6 btn-align">
               <div className="cust-btn-group">
-                <Addproject userEmail={this.state.userEmail} />
-                <AddSong id={this.state.idForContent} />
+                <Addproject id={this.state.idForContent}
+                refresh={()=> this.loadProjects}
+                email={this.props.auth.user.email}/>
+                <AddSong id={this.state.idForContent}
+                refresh={()=> this.loadProjects} />
               </div>
             </div>
           </div>
@@ -625,7 +661,7 @@ class Dashboard extends Component {
                           <Popover.Title as="h3">{project.title}</Popover.Title>
                           <Popover.Content>
                             <p>Client Name: {project.companyName}</p>
-                            <p>Members: {this.state.projectMembers}}</p>
+                            <p>Members: {this.state.projectMembers}</p>
                           </Popover.Content>
                         </Popover>} >
                         <ListGroup.Item action
@@ -659,7 +695,7 @@ class Dashboard extends Component {
                   </ListGroup>
                 </Col>
 
-                <Col sm={8} className="contentSection">
+                <Col xs={8} className="content-section">
                   <ContentPane
                     id={this.state.title}
                   />
@@ -730,7 +766,7 @@ class Dashboard extends Component {
               </Row>
             </Tab.Container>
           ) : (
-              <h3>No Projects to Display. Please Add a Project!</h3>
+              <h3 className="text-white">We couldn't find any Projects. Click Add Project to get Started.</h3>
             )}
 
         </div>
@@ -745,9 +781,11 @@ Dashboard.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
+
 const mapStateToProps = state => ({
   auth: state.auth
 });
+
 
 export default connect(
   mapStateToProps,
