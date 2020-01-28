@@ -61,6 +61,13 @@ body {
 }
 
 
+[title~="Incomplete"] {
+  background-color: yellow;
+  text-align: center;
+}
 
-
+[title~="\2714"] {
+  content: "\2714";
+  text-align: center;
+}
 
