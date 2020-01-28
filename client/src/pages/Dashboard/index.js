@@ -3,13 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authActions";
 import ContentPane from "../../components/ContentPane";
-
-
-// import Table from "../../components/Table";
 import "./style.css";
 import API from "../../utils/API";
 import Note from "../../components/Note";
-//import EditProject from "../../components/EditProject";
+
 // import bootstrap components
 import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
@@ -67,11 +64,6 @@ export class ProjectForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    //Under project form?
-    // let songData = {
-    //   song_arrangements: this.state.instruments
-    // }
-
     let projectData = {
       title: this.state.title,
       members: this.state.members,
@@ -84,16 +76,6 @@ export class ProjectForm extends React.Component {
         this.props.close()
       })
       .catch(err => console.log(err));
-
-    //Under project form?
-    // API.saveSong(songData)
-    //   .then(res => {
-    //     //this.componentDidMount()
-    //     this.loadProjects();
-    //     console.log(res);
-    //   })
-
-    //   .catch(err => console.log(err));
   };
 
 
@@ -148,7 +130,6 @@ export class SongForm extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleAdd = this.handleAdd.bind(this)
-
   }
 
   searchSong(search) {
@@ -193,19 +174,6 @@ export class SongForm extends Component {
       .catch(err => console.log(err));
 
   }
-  // saveInstruments(id) {
-  //   for (let j=0; j<this.state.instruments.length; j++){
-  //     console.log("pancakes")
-  //     let instrumentData = this.state.instruments[j];
-  //     API.saveInstruments(id, instrumentData )
-  //     .then(res => {
-  //       console.log(res);
-  //     })
-
-  //     .catch(err => console.log(err));
-  //   console.log(this.state)
-  //   }
-  //   }
 
   handleAdd() {
     this.setState(prevState => ({
@@ -213,7 +181,6 @@ export class SongForm extends Component {
     }));
     console.log(this.state)
     this.setState({ instrumentForm: "" })
-    //console.log(("project array" + JSON.stringify(this.state.projects)));
   }
 
   addReference(song) {
@@ -342,14 +309,11 @@ class Dashboard extends Component {
       songID: "",
       userEmail: "",
       projectMembers: "",
-      //displayNewNotes: [],
       showNotes: false,
       showEditProjectModal: false
     };
 
     this.handleNoteChange = this.handleNoteChange.bind(this);
-    this.handleEditProjectChange = this.handleEditProjectChange.bind(this);
-    //this.addNewNote = this.addNewNote.bind(this);
   }
 
   componentDidMount() {
@@ -559,45 +523,6 @@ class Dashboard extends Component {
     });
   };
 
-  handleEditProjectChange = (event) => {
-    console.log("tesging123asfdas; ", this.state.projectDetail);
-
-   
-    const target = event.target;
-    console.log("tesging123; ", target.id);
-    const value = target.value;
-    const name = target.name;
-    let tempArray = [];
-    if (name === "projectDetail.title") {
-      tempArray = this.state.projectDetail;
-      tempArray.title = value;
-      console.log("temp array: ", tempArray);
-      this.setState({
-        projectDetail: tempArray 
-      }, () => {
-        console.log("testing title: ", this.state.projectDetail);
-      });
-    }
-    else if (name === "projectDetail.companyName") {
-      tempArray = this.state.projectDetail;
-      tempArray.companyName = value;
-      this.setState({
-        projectDetail: tempArray 
-      }, () => {
-        console.log("testing comp: ", this.state.projectDetail);
-      });
-    }
-    else {
-      this.setState({
-        [name]: value
-      }, () => {
-        console.log("testing mem: ", this.state.projectMembers);
-      });
-    }
- 
-
-  };
-
   saveNotes = () => {
 
     //Update the project variable with song notes
@@ -624,11 +549,6 @@ class Dashboard extends Component {
 
   };
 
-  refreshPage = () => {
-    window.location.reload(false);
-    console.log("this.state: " , this.state);
-  };
-
   addNewNote = () => {
     let songIndex = this.findSongIndex();
     let id = this.state.songID;
@@ -639,13 +559,6 @@ class Dashboard extends Component {
     API.addNote(this.state.idForContent, dataObj)
       .then(res => {
         console.log("successfully added new note", res);
-        this.refreshPage();
-        // this.loadProjects();
-        // this.generateContent(this.state.idForContent);
-    //     this.displayNotes(this.state.songID, 1);
-    // this.setState({showNotes: true});
-       
-        // this.setState({ songID: id });
       })
       .catch(err => console.log(err));
   };
@@ -682,38 +595,6 @@ class Dashboard extends Component {
     API.deleteProject(id)
       .then(res => this.loadProjects());
   };
-  editProject = (id) => {
-    console.log("edit project button read");
-    this.setState({ showEditProjectModal: true })
-  }
-  hideEditProject = () => {
-    this.setState({ showEditProjectModal: false })
-  }
-  saveEditProject = () => {
-    this.setState({ showEditProjectModal: false })
-        //Update the project variable with updated project info
-        let updatedProjectDetails = this.state.projectDetail;
-        let songIndex;
-        let id;
-        updatedProjectDetails.songs.forEach((song, index) => {
-          if (song._id === this.state.songID) {
-            //console.log("found matching song ID", index);
-            song.song_notes = this.state.songNotes;
-            songIndex = index;
-            id = song._id;
-          }
-        })
-    
-        API.updateProject(this.state.idForContent, updatedProjectDetails)
-          .then(res => {
-            console.log("successfully status updated");
-            this.displayNotes(this.state.songID, songIndex);
-            this.setState({ songID: id });
-    
-          })
-          .catch(err => console.log(err));
-
-  }
 
   render() {
     const { user } = this.props.auth;
@@ -766,16 +647,6 @@ class Dashboard extends Component {
                                 <Dropdown.Menu>
                                   <Dropdown.Item onClick={() => this.editProject(project._id)}>Edit Project</Dropdown.Item>
                                   <Dropdown.Item onClick={() => this.deleteProject(project._id)}>Delete Project</Dropdown.Item>
-                                  {/* <EditProject 
-                                    id={project._id} 
-                                    show={this.state.showEditProjectModal}
-                                    onHide={this.hideEditProject}
-                                    title={this.state.projectDetail.title}
-                                    members={this.state.projectMembers}
-                                    companyName={this.state.projectDetail.companyName}
-                                    handleChange= {this.handleEditProjectChange}
-                                    save={this.saveEditProject}
-                                    /> */}
                                 </Dropdown.Menu>
                               </Dropdown>
                               
