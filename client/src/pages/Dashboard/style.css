@@ -49,8 +49,8 @@ body {
 }
 
 .sm-btn{
-  width:4rem;
-  font-size: 12px;
+  width:5rem;
+  font-size: 0.75rem;
   padding:0.3rem;
   
 }
@@ -61,13 +61,20 @@ body {
 }
 
 
-[title~="Incomplete"] {
-  background-color: yellow;
-  text-align: center;
-}
 
-[title~="\2714"] {
-  content: "\2714";
+[title~="✔"]{
+  background-color: rgb(78, 177, 78);
   text-align: center;
-}
+};
+
+[title~="✗"] {
+  
+  text-align: center;
+};
+
+[title~="N"]{
+  background-color:rgb(182, 145, 145);
+  text-align: center;
+};
+
 

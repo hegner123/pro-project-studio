@@ -1,14 +1,21 @@
 .noteDiv > .removeNote {
-    color: #ff1744;
-    font-size: 30px;
-    /* position: absolute;
-    top: -20px;
-    right: 5px; */
+    color: #64222f;
+    border: 1px solid #64222f;
+    border-radius: 3px;;
+    padding: 3px;
+    margin-top:10px;
     cursor: pointer;
-    float: right;
+    float: left;
   }
   
   .noteDiv > .removeNote:hover {
-    color: #d50000;
+    color: #ff0000;
+    border: 1px solid #ff0000;
+  }
+
+  .cust-input{
+    width:70%;
+    margin-top:10px;
+    margin-bottom:10px;
   }
 
