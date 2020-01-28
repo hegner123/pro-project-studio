@@ -3,10 +3,9 @@ const Project = require("../models/Project");
 // Defining methods for the booksController
 module.exports = {
   findAll: function(req, res) {
-    console.log("param for findall:", req.params.id)
+    //console.log("param for findall: ", req.params.id)
     Project
       .find({members: req.params.id})
-      // .sort({ date: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
@@ -29,10 +28,10 @@ module.exports = {
     .catch(err => res.status(422).json(err));
   },
   removeNote: function(req, res) {
-    console.log("req.body.id: ", req.params.id)
-    console.log("req.body.index: ", req.body.index)
-    console.log("req.body.query: ", req.body.id)
-    console.log("songs." + [req.body.index] + ".song_notes");
+    //console.log("req.body.id: ", req.params.id)
+    //console.log("req.body.index: ", req.body.index)
+    // onsole.log("req.body.query: ", req.body.id)
+    //console.log("songs." + [req.body.index] + ".song_notes");
     Project
     .findOneAndUpdate({ _id: req.params.id},{$pull: {["songs." + [req.body.index] + ".song_notes"]: {_id: req.body.id}}})
     .then(dbModel => res.json(dbModel))
@@ -69,12 +68,8 @@ module.exports = {
     const songLyrics = req.body.song_lyrics;
     const songReferences = req.body.song_references;
     const songArrangement = req.body.song_arrangements;
-    let songStatus =[];
+    const songStatus = req.body.song_status;
     
-for (let i=0; i<songArrangement;i++){
-songStatus.push({[songArrangement[i]]:"incomplete"})
-console.log(songArrangement[i])
-};
 
     const newSong = {
       song_title: songTitle,

@@ -23,7 +23,7 @@ export default {
     return axios.post("/api/projects/userprojects/" + id, projectData);
   },
   saveSong: function(id, songData) {
-    return axios.post("/api/projects/" + id +"/songs", songData);
+    return axios.post("/api/projects/userprojects/" + id +"/songs", songData);
   },
   deleteProject: function(id){
     return axios.delete("/api/projects/" + id)
