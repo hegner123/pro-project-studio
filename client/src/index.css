@@ -12,3 +12,84 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+body {
+  background: #1D1145;
+}
+
+.header{
+  margin-left: 20%;
+  margin-top:30%;
+}
+
+.col-1,.col-2,.col-3, .col-4,.col-5,.col-6{
+  display: flex;
+}
+
+.notesSection {
+  background-color: white;
+  padding-left: 15px;
+}
+
+
+.btn-xs {
+  height:2rem !important;
+  font-size: 0.75rem;
+}
+
+.dashboard-box{
+  width: 100%;
+  float: left;
+}
+
+.cust-btn-group{
+  display: inline-flex;
+  width:12rem;
+}
+
+.btn-align{
+  justify-content: flex-end;
+}
+
+.myparentDropdown{
+  border:none;
+}
+
+.myDropdown{
+  padding:0px !important;
+  background: none !important;
+  border: none;
+  color:black;
+  justify-self: flex-end;
+}
+
+.sm-btn{
+  width:5rem;
+  font-size: 0.75rem;
+  padding:0.3rem;
+  
+}
+
+.content-section{
+  background: white;
+  padding:1rem;
+}
+
+
+
+[title~="✔"]{
+  background-color: rgb(78, 177, 78);
+  text-align: center;
+};
+
+[title~="✗"] {
+  
+  text-align: center;
+};
+
+[title~="N"]{
+  background-color:rgb(182, 145, 145);
+  text-align: center;
+};
+
+
