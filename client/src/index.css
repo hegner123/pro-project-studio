@@ -14,7 +14,7 @@ code {
 }
 
 body {
-  background: #1D1145;
+  background: #1D1145 !important;
 }
 
 .header{
