@@ -10,8 +10,9 @@ import Notification from "../../components/Notification";
 // import bootstrap components
 import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
-import "./style.css";
+
 import { Editors } from "react-data-grid-addons";
+import "./style.css";
 
 
 export const Addproject = (props) => {
