@@ -119,7 +119,7 @@ export class ProjectForm extends React.Component {
         name={"memberForm"}
               value={this.state.memberForm}
               onChange={this.handleInputChange} />
-              <Button onClick={()=> this.addMember(this.state.memberForm) }>Add Members</Button>
+              <Button bsPrefix={"form-butn btn"} onClick={()=> this.addMember(this.state.memberForm) }>Add Members</Button>
           </label>
           </div>
         <div className="form-row">
@@ -129,9 +129,7 @@ export class ProjectForm extends React.Component {
               onChange={this.handleInputChange} />
           </label>
         </div>
-        <input className="btn-primary" type="submit" value="Submit"
-        // onClick={this.props.close, this.props.refresh} 
-        />
+        <button className="form-btn" type="submit" value="Submit">Submit</button>
       </form>
     );
   }
@@ -174,8 +172,6 @@ export class SongForm extends Component {
   }
 
   handleSubmit() {
-    
-
     let songStatus = {};
     this.state.instruments.forEach(inst => {
       songStatus[inst] = "\u2717"
@@ -642,7 +638,7 @@ class Dashboard extends Component {
       <div className="container-fluid p-5 text-black">
         <div className="dashboard-bg">
           <div className="row">
-            <div className=" col-6">
+            <div className="col-6">
               <h1 className="text-white">{user.firstName.split(" ")[0]}</h1>
             </div>
             <div className="col-6 btn-align">
@@ -667,7 +663,7 @@ class Dashboard extends Component {
           {this.state.projects.length ? (
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
               <Row>
-                <Col sm={2}>
+                <Col xs={12} md={2}>
                   <ListGroup>
                     {this.state.projects.map(project => (
                       <OverlayTrigger placement="top" key={project.id} overlay={
@@ -708,7 +704,7 @@ class Dashboard extends Component {
                   </ListGroup>
                 </Col>
 
-                <Col xs={8} className="content-section">
+                <Col xs={12} sm={8} className="content-section">
                   <ContentPane
                     id={this.state.title}
                   />

@@ -71,5 +71,6 @@ body {
 .react-grid-Row .react-grid-Cell[value~=\u2714] {
 background-color:green;
   text-align: center;
-}
+};
+
 
