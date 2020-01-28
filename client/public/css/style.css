@@ -8,3 +8,102 @@
 * {
   -ms-overflow-style: none;
 }
+
+body {
+  background: #1D1145;
+}
+
+.header{
+  margin-left: 20%;
+  margin-top:30%;
+}
+
+h1 {
+  color: black;
+}
+
+body {
+  background: #1D1145;
+}
+
+.header{
+  margin-left: 20%;
+  margin-top:30%;
+}
+
+.dashboard-box {
+  height: 75vh;
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 1rem;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+h3 {
+  color: black;
+}
+body {
+  background: #1D1145;
+}
+
+.header{
+  margin-left: 20%;
+  margin-top:30%;
+}
+
+.landing-page-img {
+  width:75%;
+}
+
+
+.full {
+  height: 60vh;
+}
+
+.custom{
+  margin-top: 50%;
+}
+
+.box-bg{
+  margin-top: 20vh;
+  background: url("images/Path2.svg") no-repeat center center !important;
+  width:100%;
+  height:100vh;
+  position: relative;
+  bottom:-100px;
+  
+}
+
+.margin{
+  margin-top: 25vh;
+}
+
+.box-body{
+  background:white;
+}
+
+.row-box{
+  
+  margin-top: 20vh;
+  height:100vh;
+}
+
+
+
+
+
