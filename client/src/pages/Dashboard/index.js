@@ -10,8 +10,9 @@ import Notification from "../../components/Notification";
 // import bootstrap components
 import { Button, Modal, Row, Tab, Col, ListGroup, OverlayTrigger, Popover, Form, Accordion, Card, Dropdown } from 'react-bootstrap';
 import ReactDataGrid from "react-data-grid";
-import { Editors } from "react-data-grid-addons";
 import "./style.css";
+import { Editors } from "react-data-grid-addons";
+
 
 export const Addproject = (props) => {
   const [show, setShow] = React.useState(false);
@@ -20,7 +21,7 @@ export const Addproject = (props) => {
 
   return (
     <div className="ml-auto">
-      <Button variant="light" onClick={handleShow} className="btn-xs">
+      <Button variant="light" onClick={handleShow} className="sm-btn">
         Add Project
       </Button>
 
@@ -70,7 +71,7 @@ export class ProjectForm extends React.Component {
     }));
   }
 
-  
+
 
   handleSubmit(e) {
     e.preventDefault();
@@ -92,44 +93,49 @@ export class ProjectForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <div className="form-row">
-          <label className="form-label">
+        <div className="row">
+          <label className="col-12">
             Title:
           <input type="text" className="form-control" name={"title"}
               value={this.state.title}
               onChange={this.handleInputChange} />
           </label>
         </div>
-        <div className="members-box">
-        <div className="form-row">
+        <div className="row">
+        <div className="col-12">
         <h6>Accounts with access</h6>
         </div>
        {this.state.members.map(member => (
-            <div className="form-row" key={member}>
+            <div className="member-box" key={member}>
               <ul>
-          <li>{member}<span>X</span></li>
+          <li>{member} <span>X</span></li>
           </ul>
           </div>
                         ))
                         }
                         </div>
-                        <div className="form-row">
-          <label>Members:
+                        <div className="row">
+
+          <label className="col-12">Members:
         <input type="email" className="form-control"
         name={"memberForm"}
               value={this.state.memberForm}
               onChange={this.handleInputChange} />
-              <Button bsPrefix={"form-butn btn"} onClick={()=> this.addMember(this.state.memberForm) }>Add Members</Button>
+        <div className="mt-1">
+              <Button  onClick={()=> this.addMember(this.state.memberForm) }>Add Members</Button>
+              </div>
           </label>
           </div>
-        <div className="form-row">
-          <label>Company:
+
+        <div className="row">
+          <label className="col-12">Company:
         <input type="text" className="form-control" name={"companyName"}
               value={this.state.companyName}
               onChange={this.handleInputChange} />
           </label>
         </div>
-        <button className="form-btn" type="submit" value="Submit">Submit</button>
+
+        <button className="btn btn-primary" type="submit" value="Submit">Submit</button>
       </form>
     );
   }
@@ -219,36 +225,35 @@ export class SongForm extends Component {
         <div className="row">
           <div className="col-12">
             <form onSubmit={this.handleSubmit}>
-              <div className="form-row">
-                <label className="form-label">
+              <div className="row">
+                <label className="col-12">
                   Song Title
           <input type="text" className="form-control" name="songTitle" onChange={this.handleInputChange} />
                 </label>
               </div>
-              <div className="form-row">
-                <label>Song Key
+              <div className="row">
+                <label className="col-12">Song Key
         <input type="text" className="form-control" name="songKey" onChange={this.handleInputChange} />
                 </label>
               </div>
-              <div className="form-row">
-                <label>Song BPM
+              <div className="row">
+                <label className="col-12">Song BPM
         <input type="text" className="form-control" name="songBpm" onChange={this.handleInputChange} />
                 </label>
               </div>
-              <div className="form-row">
-                <label>Lyrics
+              <div className="row">
+                <label className="col-12">Lyrics
         <textarea type="text" className="form-control" name="songLyrics" onChange={this.handleInputChange} />
                 </label>
               </div>
-              <div className="form-row">
-                <label>Song References
+              <div className="row">
+                <label className="col-12">Song References
         <input type="text" className="form-control" name="searchSong" onChange={this.handleInputChange} />
-                  <Button onClick={() => this.searchSong(this.state.searchSong)}>Search for References</Button>
-                  <div>
+                  <Button onClick={() => this.searchSong(this.state.searchSong)} className="mt-2">Search for References</Button>
+                  <div className="results-box row">
                     {this.state.results.map(song => (
-                      <div key={song}>
-                        <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name}</p>
-                        <Button bsPrefix={"sm-btn btn"} onClick={() => this.addReference(song.name)}>Add to References</Button>
+                      <div className="col-12"key={song}>
+                        <p> <a href={song.preview_url} target="_none">{song.name}</a> by {song.artists[0].name} <Button bsPrefix={"btn btn-primary p-1 mt-1"} onClick={() => this.addReference(song.name)}>Add to References</Button></p>
                       </div>
                     ))
                     }
@@ -257,15 +262,17 @@ export class SongForm extends Component {
                 </label>
               </div>
 
-              <div>
+              <div className="row">
+                <div className="col-12 results-box overflow-auto">
                 {this.state.instruments.map(instrument => (
                   <div> {instrument}</div>
                 ))
                 }
-                <label>instruments
-          <input name={"instrumentForm"} onChange={this.handleInputChange} value={this.state.instrumentForm} />
+                </div>
+                <label className="col-12">Instruments
+          <input name={"instrumentForm"} className="form-control" onChange={this.handleInputChange} value={this.state.instrumentForm} />
+          <Button bsPrefix={"btn btn-primary p-1 mt-1"} onClick={() => this.handleAdd()}>Add Instruments</Button>
                 </label>
-                <Button onClick={() => this.handleAdd()}>Add Instruments</Button>
                 {/* <Button  onClick={() => this.saveInstruments()}>saveInstruments Instruments</Button> */}
               </div>
               <Button className="btn-primary" onClick={()=> this.handleSubmit()}>Submit</Button>
@@ -288,7 +295,7 @@ export const AddSong = (props) => {
 
   return (
     <div className="ml-auto">
-      <Button variant="light" onClick={handleShow} className="btn-xs">
+      <Button variant="light" onClick={handleShow} className="sm-btn">
         Add Song
       </Button>
 
@@ -591,7 +598,7 @@ class Dashboard extends Component {
   refreshNotes = () => {
     this.renderGrid();
     this.forceUpdate();
-    
+
   }
 
   removeNote = (id) => {
@@ -652,7 +659,7 @@ class Dashboard extends Component {
             </div>
           </div>
           {this.state.showNotification ? (
-            <Notification 
+            <Notification
               title = {this.state.notificationTitle}
               body = {this.state.notificationBody}
               show = {this.state.showNotification}
@@ -663,7 +670,7 @@ class Dashboard extends Component {
           {this.state.projects.length ? (
             <Tab.Container id="list-group-tabs-example" defaultActiveKey={this.state.idForContent}>
               <Row>
-                <Col xs={12} md={2}>
+                <Col xs={12} md={2} className="my-2">
                   <ListGroup>
                     {this.state.projects.map(project => (
                       <OverlayTrigger placement="top" key={project.id} overlay={
@@ -715,7 +722,7 @@ class Dashboard extends Component {
                       rowsCount={this.state.rowCount}
                       onGridRowsUpdated={this.onGridRowsUpdated}
                       enableCellSelect={true}
-                     
+
                     />
                   </div>
 
@@ -747,12 +754,12 @@ class Dashboard extends Component {
                 </Col>
                 <Col sm={2} className="notesSection">
                   <div>
-                    <h3>Notes Section</h3>
+                    <h3 className="mt-3">Notes Section</h3>
                     {/* {this.displayNewNotes} */}
                     {this.state.showNotes ? (
-                      <div>
-                        <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
-                        <Button id="saveNotesButton" className="noteComponents" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
+                      <div className="row">
+                        <Button id="saveNotesButton" className="noteComponents p-1 mr-auto mt-1" variant="outline-primary" onClick={() => this.addNewNote()}>New Note</Button>
+                        <Button id="saveNotesButton" className="noteComponents p-1 mr-auto mt-1" variant="outline-primary" onClick={() => this.saveNotes()}>Save All Notes</Button>
                         <Form.Group id="formGroup" className="noteComponents">
                           {this.state.songNotes && this.state.songNotes.map((note, index) => (
                             <Note

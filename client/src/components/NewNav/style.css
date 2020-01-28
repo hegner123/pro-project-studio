@@ -3,9 +3,14 @@
 }
 
 .dropdown-menu{
-  left: -4.5rem !important;
+  left: -5rem !important;
 }
 
 .cust-link{
   text-decoration: none !important;
+  color:white;
+}
+
+.dropdown-item:hover{
+  background:rgb(185, 185, 185);
 }

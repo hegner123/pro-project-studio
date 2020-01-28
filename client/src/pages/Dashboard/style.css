@@ -49,8 +49,8 @@ body {
 }
 
 .sm-btn{
-  width:4rem;
-  font-size: 12px;
+  width:5rem;
+  font-size: 0.75rem;
   padding:0.3rem;
   
 }
@@ -62,14 +62,18 @@ body {
 
 
 
-.react-grid-Row .react-grid-Cell ~[value~="\u2717"]{
-  background-color: yellow;
+[title~="✔"]{
+  background-color: rgb(78, 177, 78);
   text-align: center;
+};
 
-}
+[title~="✗"] {
+  
+  text-align: center;
+};
 
-.react-grid-Row .react-grid-Cell[value~=\u2714] {
-background-color:green;
+[title~="N"]{
+  background-color:rgb(182, 145, 145);
   text-align: center;
 };
 

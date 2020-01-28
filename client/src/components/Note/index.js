@@ -8,19 +8,21 @@ import { Form } from 'react-bootstrap';
 function Note(props) {
   return (
     <div key={props.index} className="noteDiv">
-    <span className="removeNote badge" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>𝘅</span>
+   
     <Form.Control bsPrefix={"cust-input form-control"} type="text" 
       id={props.noteId}
       value={props.titleValue}
       onChange={props.titleOnChange}
-      name={props.name} />
+      name={props.name}
+      placeholder={"Title"} />
 
     <Form.Control as="textarea" rows="3"
       id={props.noteId}
       value={props.bodyValue}
       onChange={props.bodyOnChange}
-      name={props.name} />
-    
+      name={props.name} 
+      placeholder={"Note Body area"}/>
+     <span className="removeNote mt-1 ml-auto mr-1" value={props.noteId} onClick={() => props.removeNote(props.noteId)}>Delete Note</span>
   </div>
   )
 }
