@@ -7,14 +7,10 @@ const multer = require('multer');
 const cors = require('cors');
 require('dotenv').config()
 const keys = require('./keys')
-
-
-
 const users = require("./routes/api/users");
 const router = require("express").Router();
-
 const app = express();
-
+mongoose.set('useFindAndModify', false);
 app.use(express.static('public'))
 app.use(cors());
 
